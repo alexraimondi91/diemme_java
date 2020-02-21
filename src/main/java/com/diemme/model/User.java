@@ -1,7 +1,21 @@
 package com.diemme.model;
 
 import java.time.ZonedDateTime;
-import javax.persistence.*;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,12 +26,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user")
 @Data @NoArgsConstructor @AllArgsConstructor
-public class User {
+public class User extends BaseModel{
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;
+	
 	@Column(name = "name", nullable = false)
 	@NotBlank
 	private String name;
@@ -41,7 +52,64 @@ public class User {
 	@NotBlank
 	private String country;
 	@CreationTimestamp
+	@Column(name = "insertDate")
 	private ZonedDateTime insertDate;
 	@Column(name = "active", nullable = false)
 	private Boolean active;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
+	private List<UserChat> userChat;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "layout_id", nullable = true)
+	private Layout layout;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( 
+        name = "user_product_showcase", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "product_showcase_id", referencedColumnName = "id")) 
+	private List<ProductShowcase> productShowcase;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( 
+        name = "user_tecnology_showcase", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "tecnology_showcase_id", referencedColumnName = "id")) 
+	private List<TecnologyShowcase> tecnologyShowcase;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( 
+        name = "user_quotation_showcase", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "quotation_showcase_id", referencedColumnName = "id")) 
+	private List<QuotationShowcase> quotationShowcase;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( 
+        name = "user_contact_showcase", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "contact_showcase_id", referencedColumnName = "id")) 
+	private List<ContactShowcase> contactShowcase;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( 
+        name = "user_news_showcase", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "news_showcase_id", referencedColumnName = "id")) 
+	private List<NewsShowcase> newsShowcase;
+	
+	
+	
+	
 }

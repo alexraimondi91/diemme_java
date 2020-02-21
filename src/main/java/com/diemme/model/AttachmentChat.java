@@ -2,23 +2,21 @@ package com.diemme.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "layout")
+@Table(name = "user_chat")
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Layout extends BaseModel {
+public class AttachmentChat extends BaseModel{
 	
+	
+	@Column(name = "path", nullable = false)
+	private String path;
 	@Column(name = "name", nullable = false)
-	@NotBlank
 	private String name;
 
 }

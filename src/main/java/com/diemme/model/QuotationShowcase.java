@@ -13,12 +13,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "layout")
+@Table(name = "quotation_showcase")
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Layout extends BaseModel {
+public class QuotationShowcase extends BaseModel {
+	
 	
 	@Column(name = "name", nullable = false)
 	@NotBlank
-	private String name;
+	private String name;	
+	@Column(name = "description", nullable = false)
+	@NotBlank
+	private String description;	
 
 }
