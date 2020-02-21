@@ -1,17 +1,15 @@
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/diemme?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
+    url: jdbc:mysql://localhost:8889/diemme?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: user1
     password: 
     driver-class-name: com.mysql.cj.jdbc.Driver    
   jpa:
-    hibernate.ddl-auto: create
+    hibernate:
+      ddl-auto: update
     generate-ddl: true
     show-sql: true
   
 
-###############################################
-########### MYUNIVAQ PROPERTIES ###############
-###############################################
 

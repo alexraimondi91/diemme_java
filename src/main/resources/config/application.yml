@@ -5,14 +5,22 @@ server:
 spring:
   application:
     name: diemme
-  profiles:
-    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:8889/diemme?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: user1
+    password: 
+    driver-class-name: com.mysql.cj.jdbc.Driver    
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
   #jackson:
     #default-property-inclusion: NON_NULL
     #serialization:
       #write-dates-as-timestamps: true
   messages:
-    basename: i18n/common, i18n/myunivaq
+    basename: i18n/common, i18n/diemme
     encoding: UTF-8
     use-code-as-default-message: true
     
@@ -20,5 +28,5 @@ spring:
 ############# MYUNIVAQ PROPERTIES #############
 ###############################################
 
-myunivaq:
+diemme:
   dateformat: dd/MM/yyyy
