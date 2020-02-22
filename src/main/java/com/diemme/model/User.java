@@ -2,6 +2,7 @@ package com.diemme.model;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -56,9 +57,7 @@ public class User extends BaseModel{
 	private ZonedDateTime insertDate;
 	@Column(name = "active", nullable = false)
 	private Boolean active;
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
-	private List<UserChat> userChat;
+
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "layout_id", nullable = true)
@@ -71,7 +70,7 @@ public class User extends BaseModel{
           name = "user_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(
           name = "product_showcase_id", referencedColumnName = "id")) 
-	private List<ProductShowcase> productShowcase;
+	private Set<ProductShowcase> productShowcase;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 
@@ -80,7 +79,7 @@ public class User extends BaseModel{
           name = "user_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(
           name = "tecnology_showcase_id", referencedColumnName = "id")) 
-	private List<TecnologyShowcase> tecnologyShowcase;
+	private Set<TecnologyShowcase> tecnologyShowcase;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 
@@ -89,16 +88,8 @@ public class User extends BaseModel{
           name = "user_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(
           name = "quotation_showcase_id", referencedColumnName = "id")) 
-	private List<QuotationShowcase> quotationShowcase;
+	private Set<QuotationShowcase> quotationShowcase;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( 
-        name = "user_contact_showcase", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
-        inverseJoinColumns = @JoinColumn(
-          name = "contact_showcase_id", referencedColumnName = "id")) 
-	private List<ContactShowcase> contactShowcase;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 
@@ -107,7 +98,16 @@ public class User extends BaseModel{
           name = "user_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(
           name = "news_showcase_id", referencedColumnName = "id")) 
-	private List<NewsShowcase> newsShowcase;
+	private Set<NewsShowcase> newsShowcase;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( 
+        name = "user_contact_showcase", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "contact_showcase_id", referencedColumnName = "id")) 
+	private Set<ContactShowcase> contactShowcase;
 	
 	
 	

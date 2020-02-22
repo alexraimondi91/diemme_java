@@ -1,20 +1,16 @@
 package com.diemme.model;
 
-
 import java.time.ZonedDateTime;
 import java.util.Set;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-
 import org.hibernate.annotations.CreationTimestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +31,10 @@ public class Chat extends BaseModel {
 	@Column(name = "insertDate")
 	private ZonedDateTime insertDate;
 	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chat", orphanRemoval = true)
+	private Set<UserChat> userChat;
 	
 	@OneToMany(fetch = FetchType.LAZY,  mappedBy="chat")
-	@JoinColumn(name = "attachment_chat_id", nullable = true)
 	Set<AttachmentChat> attachmentChat;
 	
 }

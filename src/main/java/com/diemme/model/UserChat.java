@@ -20,9 +20,8 @@ import lombok.NoArgsConstructor;
 public class UserChat {
 	
 	@EmbeddedId
-	private UserChatID id;
-	
-	@Column(name = "id", updatable = false)
+	private UserChatID id;	
+	@Column(name = "is_sender", updatable = false)
 	private Boolean is_sender;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
