@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "user_chat")
+@Table(name = "attachment_chat")
 @Data @NoArgsConstructor @AllArgsConstructor
 public class AttachmentChat extends BaseModel{
 	
