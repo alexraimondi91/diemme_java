@@ -20,12 +20,16 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user")
+@JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User extends BaseModel{
 	
@@ -59,7 +63,7 @@ public class User extends BaseModel{
 	private Boolean active;
 
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "layout_id", nullable = true)
 	private Layout layout;
 	
@@ -67,48 +71,47 @@ public class User extends BaseModel{
     @JoinTable( 
         name = "user_product_showcase", 
         joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
+          name = "user_id", referencedColumnName = "id", nullable = true), 
         inverseJoinColumns = @JoinColumn(
           name = "product_showcase_id", referencedColumnName = "id")) 
-	private Set<ProductShowcase> productShowcase;
+	private Set<ProductShowcase> productShowcases;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 
         name = "user_tecnology_showcase", 
         joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
+          name = "user_id", referencedColumnName = "id", nullable = true), 
         inverseJoinColumns = @JoinColumn(
           name = "tecnology_showcase_id", referencedColumnName = "id")) 
-	private Set<TecnologyShowcase> tecnologyShowcase;
+	private Set<TecnologyShowcase> tecnologyShowcases;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 
         name = "user_quotation_showcase", 
         joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
+          name = "user_id", referencedColumnName = "id", nullable = true), 
         inverseJoinColumns = @JoinColumn(
           name = "quotation_showcase_id", referencedColumnName = "id")) 
-	private Set<QuotationShowcase> quotationShowcase;
+	private Set<QuotationShowcase> quotationShowcases;
 	
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 
         name = "user_news_showcase", 
         joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
+          name = "user_id", referencedColumnName = "id", nullable = true), 
         inverseJoinColumns = @JoinColumn(
           name = "news_showcase_id", referencedColumnName = "id")) 
-	private Set<NewsShowcase> newsShowcase;
+	private Set<NewsShowcase> newsShowcases;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 
         name = "user_contact_showcase", 
         joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
+          name = "user_id", referencedColumnName = "id", nullable = true), 
         inverseJoinColumns = @JoinColumn(
           name = "contact_showcase_id", referencedColumnName = "id")) 
-	private Set<ContactShowcase> contactShowcase;
-	
+	private Set<ContactShowcase> contactShowcases;
 	
 	
 	
