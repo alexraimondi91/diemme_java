@@ -14,13 +14,12 @@ import com.diemme.domain.NewsShowcase;
 
 
 @Controller
-@RequestMapping("/")
 public class IndexController {
 	
 	@Autowired 
 	private IndexService service;
 	
-	@GetMapping("news/")
+	@GetMapping("/")
 	public String listNewsShowcases (Model model) throws BusinessException {
 		List<NewsShowcase> showcases = service.findAllNewsShowcases();
 		model.addAttribute("showcases", showcases);

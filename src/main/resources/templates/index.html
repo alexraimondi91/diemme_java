@@ -73,46 +73,40 @@
     <!-- slider_area_start -->
     <div class="slider_area">
         <div class="slider_active owl-carousel">
-            <div style="background-image: url('img/consegnati/1.jpg')" class="single_slider overlay2 d-flex align-items-center justify-content-center">
+        <th:block th:each="showcase: ${showcases}">
+             <div style="background-image: src('data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUA
+    AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
+        9TXL0Y4OHwAAAABJRU5ErkJggg==')" class="single_slider overlay2 d-flex align-items-center justify-content-center"> 
+                <img src="=" />
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-12">
-                            <div class="slider_text text-center">
-                                <h3>Team Levante e il suo abbigliamento </h3>
-                           
-                                   
-								
-                                <p>Anche per quest'anno il team Levante ha scelto la linea Futuro di DiemmeSport</p>
-                                
+                            <div class="slider_text text-center">  
+                                   <h3 th:text="${showcase.name}"></h3>
+                                   <p th:text="${showcase.description}"></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="background-image: url('img/news/custom.jpg')" class="single_slider overlay2 d-flex align-items-center justify-content-center slider_bg_1">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="slider_text text-center">
-                                <h3>Custom</h3>
+<!--             <div style="background-image: url('img/news/custom.jpg')" class="single_slider overlay2 d-flex align-items-center justify-content-center slider_bg_1"> -->
+<!--                 <div class="container"> -->
+<!--                     <div class="row"> -->
+<!--                         <div class="col-xl-12"> -->
+<!--                             <div class="slider_text text-center"> -->
+<!--                                 <h3>Custom</h3> -->
 								
-                                <p>Il nostro brand fa della personalizzazione il suo cavallo di battaglia giuardando ad ogni dettaglio</p>
+<!--                                 <p>Il nostro brand fa della personalizzazione il suo cavallo di battaglia giuardando ad ogni dettaglio</p> -->
                                 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div> -->
+<!--             </div> -->
+            </th:block>
         </div>
     </div>
     <!-- slider_area_end -->
-    
-           
-<tr th:each="showcase: ${showcases}">
-    <td th:text="${showcase.id}" />
-    <td th:text="${showcase.name}" />
-</tr>
-
     <!-- about_area_start -->
     <div class="about_area">
         <div class="container">
