@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -25,12 +26,11 @@ public class NewsShowcase extends BaseModel {
 	@Column(name = "name", nullable = false)
 	@NotBlank
 	private String name;
-	@Column(name = "name_file", nullable = false)
-	@NotBlank
-	private String nameFile;
-	@Column(name = "path", nullable = false)
-	@NotBlank
-	private String path;
+	
+	@Lob
+	@Column(name= "content_img",length=100000, nullable = false)
+	private byte[] contentImg;
+	
 	@Column(name = "description", nullable = false)
 	@NotBlank
 	private String description;

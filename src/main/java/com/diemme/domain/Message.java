@@ -29,13 +29,9 @@ public class Message extends BaseModel {
 	@NotBlank
 	private String message;
 	
-	@Column(name = "path", nullable = true)
-	@NotBlank
-	private String path;
-	
-	@Column(name = "file_name", nullable = true)
-	@NotBlank
-	private String fileName;
+	@Lob
+	@Column(name= "content_img",length=100000, nullable = false)
+	private byte[] contentImg;
 	
 	@ManyToOne
     @JoinColumn(name="chat_id", nullable=false)
