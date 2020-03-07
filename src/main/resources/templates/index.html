@@ -33,38 +33,7 @@
 
     <!-- header-start -->
     <header>
-        <div class="header-area ">
-            <div id="sticky-header" class="main-header-area white-bg">
-                <div class="container-fluid p-0">
-                    <div class="row align-items-center justify-content-between no-gutters">
-                        <div class="col-xl-2 col-lg-2">
-                            <div class="logo-img">
-                                <a href="index.html" th:href="@{/}">
-                                    <img src="../../static/img/logo.png" alt="" th:href="@{static/img/logo.png}>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-xl-7 col-lg-7">
-                            <div class="main-menu  d-none d-lg-block">
-                                <nav>
-                                    <ul id="navigation">
-                                        <li><a class="active" href="index.html"  th:href="@{/}">Home</a></li>
-                                        <li><a href="prodotti.html">Prodotti</a></li>
-                                        <li><a href="tecnologie.html">Tecnologie</a></li>
-                                        <li><a href="preventivi.html">Preventivi</a></li>
-                                        <li><a href="contatti.html">Contatti</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="header-area "  th:replace="~{frontoffice/layout/header :: header}" ></div>
     </header>
     <!-- header-end -->
     
