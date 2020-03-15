@@ -33,3 +33,5 @@ build/
 .metadata/
 
 *.yml
+
+src/main/resources/templates/.DS_Store

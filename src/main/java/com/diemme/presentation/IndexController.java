@@ -22,11 +22,8 @@ public class IndexController {
 	@GetMapping("/")
 	public String listNewsShowcases (Model model) throws BusinessException {
 		List<NewsShowcase> showcases = service.findAllNewsShowcases();
-		System.out.println(showcases);
 		model.addAttribute("showcases", showcases);
-		return "index.html";
+		return "/frontoffice/home/home.html";
 		
 	}
-	
-
 }
