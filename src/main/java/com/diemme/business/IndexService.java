@@ -1,6 +1,6 @@
 package com.diemme.business;
 
-import com.diemme.domain.*;
+import com.diemme.domain.NewsShowcase;
 import java.util.List;
 
 

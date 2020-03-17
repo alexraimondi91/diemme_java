@@ -29,7 +29,5 @@ public class ProductShowcase extends BaseModel {
 	@Column(name = "description", nullable = false)
 	@NotBlank
 	private String description;
-	
-	private byte[] content;
 
 }

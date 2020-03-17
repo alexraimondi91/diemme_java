@@ -28,7 +28,7 @@ public class NewsShowcase extends BaseModel {
 	private String name;
 	
 	@Lob
-	@Column(name= "content_img",length=100000, nullable = false)
+	@Column(name= "content_img",length=1000000, nullable = false)
 	private byte[] contentImg;
 	
 	@Column(name = "description", nullable = false)
