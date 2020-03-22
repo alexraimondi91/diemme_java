@@ -21,7 +21,7 @@ public class ProductController {
 	private ProductService service;
 	
 	@GetMapping("/prodotti")
-	public String listProductShocase (Model model) throws BusinessException{
+	public String listProductShowcase (Model model) throws BusinessException{
 		List<ProductShowcase> products = service.findAllProductShowcases();
 		model.addAttribute("prods", products);
 		return "/frontoffice/prodotti/prodotti.html";
