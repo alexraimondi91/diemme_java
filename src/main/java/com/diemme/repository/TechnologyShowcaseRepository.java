@@ -7,6 +7,6 @@ import com.diemme.domain.TechnologyShowcase;
 
 
 @Repository("TecnologyShowcaseRepository")
-public interface TecnologyShowcaseRepository extends JpaRepository<TechnologyShowcase, Long> {
+public interface TechnologyShowcaseRepository extends JpaRepository<TechnologyShowcase, Long> {
 
 }

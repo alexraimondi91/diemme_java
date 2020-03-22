@@ -12,28 +12,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.ProductService;
+import com.diemme.business.TechnologyService;
 import com.diemme.domain.ProductShowcase;
+import com.diemme.domain.TechnologyShowcase;
 
 @Controller
-public class ProductController {
-
-	@Autowired 
-	private ProductService service;
+public class TechnologyController {
 	
-	@GetMapping("/prodotti")
-	public String listProductShocase (Model model) throws BusinessException{
-		List<ProductShowcase> products = service.findAllProductShowcases();
-		model.addAttribute("prods", products);
-		return "/frontoffice/prodotti/prodotti.html";
+	@Autowired 
+	private TechnologyService service;
+	
+	@GetMapping("/tecnologie")
+	public String listTechnologyShocases (Model model) throws BusinessException{
+		List<TechnologyShowcase> technologies = service.getAllTecnology();
+		model.addAttribute("techno", technologies);
+		return "/frontoffice/tecnologie/tecnologie.html";
 		
 	}
 	
-	@GetMapping("/prodotti/image/{id}")
+	@GetMapping("/tecnologie/image/{id}")
 	@ResponseBody
 	public byte[] getImage (@PathVariable Long id) throws BusinessException{
 		
-		Optional<ProductShowcase> product = service.findProductShowcase(id);
+		Optional<TechnologyShowcase> product = service.getTecnology(id);
 		byte[] imageProduct = product.get().getContentImg();
 		return imageProduct;
 	}
+
 }

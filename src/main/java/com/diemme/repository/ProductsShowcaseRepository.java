@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.diemme.domain.ProductShowcase;
 
 @Repository("ProducsShowcaseRepository")
-public interface ProducsShowcaseRepository extends JpaRepository<ProductShowcase, Long>{
+public interface ProductsShowcaseRepository extends JpaRepository<ProductShowcase, Long>{
 
 }

@@ -7,7 +7,8 @@
 		<div class="slider_area">
 			<div class="slider_active owl-carousel">
 				<div th:each="showcase : ${showcases}">
-					<div style="background-image: url('img/news/custom.jpg')"
+					<div style="background: url('../../dist/img/consegnati/4.jpg')"
+						th:style="'background-image: url(' + @{/showcase/{id}(id = ${showcase.id})} + ');'"
 						class="single_slider overlay2 d-flex align-items-center justify-content-center slider_bg_1">
 						<div class="container">
 							<div class="row">
@@ -15,6 +16,8 @@
 									<div class="slider_text text-center">
 										<h3 th:text="${showcase.name}">name</h3>
 										<p th:text="${showcase.description}">description</p>
+										
+
 									</div>
 								</div>
 							</div>
@@ -42,9 +45,9 @@
 							</div>
 							<p>DIEMMEsport si occupa di vestire lo sportivo con
 								tecnologie e prodotti di alta qualità senza lascaire nulla al
-								caso. Ogni prodotto inoltre è totalmente personalizzabile grazie
-								a Designer pronti ad occuparsi di ogni dettaglio stilistico
-								assecondando ogni desiderio del cliente.</p>
+								caso. Ogni prodotto inoltre è totalmente personalizzabile
+								grazie a Designer pronti ad occuparsi di ogni dettaglio
+								stilistico assecondando ogni desiderio del cliente.</p>
 						</div>
 					</div>
 				</div>
