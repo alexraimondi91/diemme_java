@@ -1,5 +1,6 @@
 package com.diemme.domain;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,6 +14,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -23,8 +26,16 @@ import lombok.NoArgsConstructor;
 @Table(name = "contact_showcase")
 @JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
-public class ContactShowcase extends BaseModel {
+public class ContactShowcase {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false)
+	private Long id;
+	
+	@CreationTimestamp
+	@Column(name = "insertDate", nullable = true)
+	private ZonedDateTime insertDate;	
 	
 	@Column(name = "name", nullable = false)
 	@NotBlank

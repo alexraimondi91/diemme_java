@@ -7,6 +7,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -25,7 +28,16 @@ import lombok.NoArgsConstructor;
 @Table(name = "chat")
 @JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Chat extends BaseModel {
+public class Chat {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false)
+	private Long id;
+	
+	@CreationTimestamp
+	@Column(name = "insertDate", nullable = true)
+	private ZonedDateTime insertDate;
 	
 	@Column(name = "name", nullable = false)
 	@NotBlank
@@ -38,8 +50,5 @@ public class Chat extends BaseModel {
 	@OneToMany(mappedBy="chat",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Message> messages;
 	
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chat", orphanRemoval = true)
-	private Set<UserChat> userChat;
 	
 }
