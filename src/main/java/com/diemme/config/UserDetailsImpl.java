@@ -1,19 +1,11 @@
 package com.diemme.config;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
-import com.diemme.domain.Role;
 import com.diemme.domain.User;
 
 
@@ -51,19 +43,19 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public boolean isAccountNonExpired() {
-        return user.isAccountNonExpired();
+        return true;
     }
 
     public boolean isAccountNonLocked() {
-        return user.isAccountNonLocked();
+        return true;
     }
 
     public boolean isCredentialsNonExpired() {
-        return user.isCredentialsNonExpired();
+        return true;
     }
 
     public boolean isEnabled() {
-        return user.isAccountEnabled();
+        return true;
     }
 
 	@Override
