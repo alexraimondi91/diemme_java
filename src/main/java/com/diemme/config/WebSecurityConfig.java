@@ -3,6 +3,7 @@ package com.diemme.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +18,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -31,14 +40,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.headers().disable().csrf().disable().formLogin().loginPage("/login").loginProcessingUrl("/login")
-				.failureUrl("/?error=invalidlogin").defaultSuccessUrl("/", false).and().logout()
-				.logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/login").and()
+		httpSecurity.headers().disable().csrf().disable()
+		.formLogin().loginPage("/login").loginProcessingUrl("/login").usernameParameter("email").passwordParameter("password").permitAll()
+				.failureUrl("/loginFailed").defaultSuccessUrl("/", false)
+				.and()
+				.logout()
+				.logoutSuccessUrl("/")
+				.and()
+				.exceptionHandling().accessDeniedPage("/login")
+				.and()
 				.authorizeRequests()
 				// Specificare le url che sono soggette ad autenticazione ed autorizzazione
-				.antMatchers("/login", "/static/", "/favicon.ico").permitAll().antMatchers("/common/").authenticated()
-				.antMatchers("/prodotti/", "/ssds/").hasAnyRole("admin")
-				.antMatchers("/preventivi/", "/ssds/").hasAnyRole("client");
+				.antMatchers("/login", "/static/", "/favicon.ico").permitAll()
+				.antMatchers("/common/**").authenticated()
+				.antMatchers("/prodotti/**", "/ssds/**").hasAnyRole("ADMIN")
+				.antMatchers("/preventivi/**", "/ssds/**").hasAnyRole("CLIENT");
 
 
 	}
