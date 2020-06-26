@@ -14,6 +14,8 @@ import com.diemme.repository.UserRepository;
 
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
+	
+	
 
 	@Autowired
 	private UserRepository userRepository;
@@ -28,5 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		System.out.println("loadUserByUsername() : {}" + email);
 		return new UserDetailsImpl(user);
 	}
+	
+	
 
 }

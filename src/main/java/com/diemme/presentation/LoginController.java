@@ -53,7 +53,7 @@ public class LoginController {
         User loggedInUser = ((UserDetailsImpl) authentication.getPrincipal()).getUserDetails();
         model.addAttribute("currentUser", loggedInUser.getEmail());
         session.setAttribute("userId", loggedInUser.getId());
-        return "redirect:/wallPage";
+        return "/frontoffice/home/home.html";
     }
     
     private void validatePrinciple(Object principal) {
