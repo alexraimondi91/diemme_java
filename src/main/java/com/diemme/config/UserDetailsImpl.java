@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,46 +19,55 @@ import com.diemme.domain.User;
 
 public class UserDetailsImpl implements UserDetails {	
 
-	private User user;
-    public UserDetailsImpl(User user) {
+
+    private static final long serialVersionUID = 1L;
+    private User user;
+
+    Set<GrantedAuthority> authorities=null;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
         this.user = user;
     }
-    @Override
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles().stream().map(authority -> new SimpleGrantedAuthority(authority.getName().toString())).collect(Collectors.toList());
+        return authorities;
     }
-    public Long getId() {
-        return user.getId();
+
+    public void setAuthorities(Set<GrantedAuthority> authorities)
+    {
+        this.authorities=authorities;
     }
-    @Override
+
     public String getPassword() {
         return user.getPassword();
     }
+
     public String getEmail() {
         return user.getEmail();
     }
-    @Override
+
     public boolean isAccountNonExpired() {
-        return true;
+        return user.isAccountNonExpired();
     }
-    @Override
+
     public boolean isAccountNonLocked() {
-        return true;
+        return user.isAccountNonLocked();
     }
-    @Override
+
     public boolean isCredentialsNonExpired() {
-        return true;
+        return user.isCredentialsNonExpired();
     }
-    @Override
+
     public boolean isEnabled() {
-        return true;
+        return user.isAccountEnabled();
     }
-    public User getUserDetails() {
-        return user;
-    }
+
 	@Override
 	public String getUsername() {
-		
-		return null;
+		return user.getEmail();
 	}
 }
