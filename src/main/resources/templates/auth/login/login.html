@@ -12,9 +12,9 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Accedi al tuo account</p>
 
-                <form action="#" th:attr ="action=@{/login}" method ="post">
+                <form action="#" th:action ="@{/postLogin}" method ="post">
                     <div class="input-group mb-3">
-                        <input type="text" name="username" class="form-control"
+                        <input type="text" name="email" class="form-control"
                             placeholder="Email">
                         <div class="input-group-append">
                             <div class="input-group-text">

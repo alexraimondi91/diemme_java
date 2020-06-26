@@ -1,34 +1,32 @@
 package com.diemme.config;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.diemme.business.UserService;
+
 import com.diemme.domain.User;
+import com.diemme.repository.UserRepository;
 
+
+@Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserService service;
-	
-	
+	private UserRepository userRepository;
 
+	@Transactional(readOnly = true)
 	@Override
-	public	UserDetails loadUserByUsername (String email) throws UsernameNotFoundException{
-	   Optional<User> user;
-	try {
-	   user = service.findByEmail (email);
-	} catch (UsernameNotFoundException e) {
-	   throw new UsernameNotFoundException ("utente non trovato");
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = userRepository.getUserByEmail(email);
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found.");
+		}
+		System.out.println("loadUserByUsername() : {}" + email);
+		return new UserDetailsImpl(user);
 	}
-	if(user == null ) {
-	   throw new UsernameNotFoundException ("utente non trovato");
-	}
-	return new UserDetailsImpl(user);
-}
 
 }
