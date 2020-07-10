@@ -34,17 +34,15 @@ public class TestUserCreate implements CommandLineRunner {
 		User userClient = new User();
 
 
-		if ((userRepository.getUserByEmail("alexraimondi91@gmail.com")) == null
-				&& (userRepository.getUserByEmail("ale_1994@gmail.com")) == null) {
-
-			roleAdmin.setName(RoleType.ROLE_ADMIN);
-			roleAdmin.setDescription("ROLE_ADMIN");
-			roleClient.setName(RoleType.ROLE_CLIENT);
-			roleClient.setDescription("ROLE_CLIENT");
-
+		if ((userRepository.findByEmail("alexraimondi91@gmail.com")) == null
+				&& (userRepository.findByEmail("ale_1994@gmail.com")) == null) {
+			
+			
+			roleAdmin.setRole("ADMIN");
 			Set<Role> roleListUser1Test = new HashSet<Role>();
 			roleListUser1Test.add(roleAdmin);
-
+			
+			roleClient.setRole("CLIENT");
 			Set<Role> roleListUser2Test = new HashSet<Role>();
 			roleListUser2Test.add(roleClient);
 			userAdmin.setActive(true);
@@ -54,6 +52,7 @@ public class TestUserCreate implements CommandLineRunner {
 			userAdmin.setPassword(passwordEncoder.encode("alex"));
 			userAdmin.setSurname("raimondi");
 			userAdmin.setRoles(roleListUser1Test);
+			userAdmin.setUserName("alexraimondi91@gmail.com");
 
 			userClient.setActive(true);
 			userClient.setCountry("Italy");
@@ -64,6 +63,7 @@ public class TestUserCreate implements CommandLineRunner {
 			userClient.setSurname("sallese");
 			userClient.setAddressShipment("via ciao ciao");
 			userClient.setRoles(roleListUser2Test);
+			userClient.setUserName("ale_1994@gmail.com");
 
 			userRepository.save(userClient);
 

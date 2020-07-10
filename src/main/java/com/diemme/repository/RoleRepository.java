@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 import com.diemme.domain.Role;
 import com.diemme.domain.RoleType;
 
-@Repository("RoleRepository")
+@Repository
 public interface RoleRepository extends JpaRepository<Role, Long>{
 	
-	Role getRoleByName(RoleType name);
+    Role findByRole(String role);
+
 
 }

@@ -34,10 +34,8 @@ public class QuotationShowcase {
 	private ZonedDateTime insertDate;
 	
 	@Column(name = "name", nullable = false)
-	@NotBlank
 	private String name;	
 	@Column(name = "description", nullable = false)
-	@NotBlank
 	private String description;	
 
 }

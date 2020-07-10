@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -41,8 +43,9 @@ public class User {
 	private Long id;
 	
 	@Column(name = "name", nullable = false)
-	@NotBlank
 	private String name;
+	@Column(name = "user_name")
+    private String userName;
 	@Column(name = "surname", nullable = false)
 	@NotBlank
 	private String surname;

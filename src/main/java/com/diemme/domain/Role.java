@@ -33,15 +33,10 @@ public class Role {
 	private Long id;
 	
 	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)
+	@Column(name = "insertDate")
 	private ZonedDateTime insertDate;
 	
-	@Column(name = "name", nullable = false)
-	@Enumerated(EnumType.STRING)
-    private RoleType name;
-	
-	@Column(name = "description", nullable = false)
-	@NotBlank
-	private String description;
+	@Column(name = "role")
+	private String role;;
 
 }

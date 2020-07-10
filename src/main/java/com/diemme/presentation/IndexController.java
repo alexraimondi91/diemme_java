@@ -25,7 +25,7 @@ public class IndexController {
 	@Autowired 
 	private IndexService service;
 	
-	@GetMapping("/")
+	@GetMapping("/index")
 	public String listNewsShowcases (Model model) throws BusinessException {
 		List<NewsShowcase> showcases = service.findAllNewsShowcases();
 		model.addAttribute("showcases", showcases);

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.ProductService;
@@ -25,6 +26,8 @@ public class TechnologyController {
 	@GetMapping("/tecnologie")
 	public String listTechnologyShocases (Model model) throws BusinessException{
 		List<TechnologyShowcase> technologies = service.getAllTecnology();
+		System.out.println("quotation: " + new ModelAndView("/frontoffice/tecnologie/tecnologie.html"));
+
 		model.addAttribute("techno", technologies);
 		return "/frontoffice/tecnologie/tecnologie.html";
 		
