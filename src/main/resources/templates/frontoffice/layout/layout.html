@@ -69,10 +69,19 @@
 								</nav>
 							</div>
 						</div>
-
-						<div class="col-12">
-							<div class="mobile_menu d-block d-lg-none"></div>
-						</div>
+                       
+                        <div class="get_in_tauch" sec:authorize="isAuthenticated()">
+                        <a th:href="@{/logout}" class="boxed-btn">logout</a>
+                        </div>
+                       
+                       
+                        <div class="get_in_tauch" sec:authorize="isAnonymous()">
+                            <a th:href="@{/login}" class="boxed-btn">Accedi</a>
+                        </div>
+                     
+                        <div class="col-12" >
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
 					</div>
 				</div>
 			</div>
