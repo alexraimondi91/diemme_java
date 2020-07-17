@@ -31,26 +31,10 @@ public class ContactShowcase {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", updatable = false)
-	private Long id;
-	
+	private Long id;	
 	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)
-	private ZonedDateTime insertDate;	
-	
-	@Column(name = "name", nullable = false)
-	@NotBlank
-	private String name;	
-	@Column(name = "text", nullable = false)
-	@NotBlank
-	@Lob
-	private String text;	
-	@Column(name = "email", nullable = false)
-	@Email
-	@NotBlank
-	private String email;	
-	@Column(name = "object", nullable = false)
-	@NotBlank
-	private String object;	
+	@Column(name = "insertDate", nullable = true)	
+	private ZonedDateTime insertDate;		
 	@Column(name = "info", nullable = false)
 	@NotBlank
 	private String info;
@@ -60,12 +44,6 @@ public class ContactShowcase {
 	@Column(name = "lon", nullable = true)
 	@NotBlank
 	private String lon;	
-	@Column(name = "who_is_name", nullable = false)
-	@NotBlank
-	private String whoIsName;
-	@Column(name = "who_is_description", nullable = false)
-	@NotBlank
-	private String whoIsDescription;
 
 
 }
