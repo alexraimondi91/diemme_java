@@ -29,10 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
 	}
 
+	
+	
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeRequests()
-			        .antMatchers("/","/login","/registration","/static/**").permitAll()
+			        .antMatchers("/","/login","/registration","/backoffice/**").permitAll()
 			        .antMatchers("/prodotti/**").hasAuthority("ADMIN")
 			        .antMatchers("/preventivi/**").hasAuthority("ADMIN").anyRequest()
 			        .authenticated()
@@ -51,9 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			        .accessDeniedPage("/access-denied");
 	}
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers( "/static/**", "/css/**", "/js/**", "/img/**", "/bootstrap/**");
-	}
+	
 
 }
