@@ -24,10 +24,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
     private UserService userService;
 
-    @Override
+    @SuppressWarnings("null")
+	@Override
     @Transactional
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userService.findUserByUserName(userName);
+        User user = userService.findUserByUserName(userName);   
+        if (user == null && user.getActive() == false) {
+            throw new UsernameNotFoundException("Username not found or not active");
+          }
         List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
         return buildUserForAuthentication(user, authorities);
     }

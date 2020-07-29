@@ -23,6 +23,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -43,27 +44,28 @@ public class User {
 	private Long id;
 	
 	@Column(name = "name", nullable = false)
+    @NotEmpty(message = "*Please provide your name")
 	private String name;
-	@Column(name = "user_name")
+	@Column(name = "user_name", nullable = false, unique = true)
+	@Length(min = 5, message = "*Your user name must have at least 5 characters")
+    @NotEmpty(message = "*Please provide a user name")
     private String userName;
 	@Column(name = "surname", nullable = false)
-	@NotBlank
+	@NotEmpty
 	private String surname;
-	@Column(name = "email", nullable = false, unique = true)
+	@Column(name = "email", nullable = false)
 	@Email 
-    @NotBlank
+	@Email(message = "*Please provide a valid Email")
+    @NotEmpty(message = "*Please provide an email")
 	private String email;
 	@Column(name = "password", nullable = false)
-	@NotBlank
-	private String password;
-	
-	@Column(name = "country", nullable = false)
-	@NotBlank
-	private String country;
+	@Length(min = 5, message = "*Your password must have at least 5 characters")
+    @NotEmpty(message = "*Please provide your password")
+	private String password;	
 	@CreationTimestamp
 	@Column(name = "insertDate")
 	private ZonedDateTime insertDate;
-	@Column(name = "active", nullable = false)
+	@Column(name = "active", nullable = true)
 	private Boolean active;
 	
 	@Column(name = "fiscal_code", nullable = true)

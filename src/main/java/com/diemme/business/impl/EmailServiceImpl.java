@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("alexraimondi91@gmail.com"));
 			message.setSubject("Gentile staff Diemme: hai un nuovo cliente da approvare!");
-			message.setText("Il cliente: " + sender + "ha richiesto l'accesso alla piattaforma Diemme" 
+			message.setText("Il cliente: " + sender + " ha richiesto l'accesso alla piattaforma Diemme" 
 							+ "\n\n Cordiali saluti,\n " + "\n\n Mail user: " + from);
 
 			Transport.send(message);

@@ -46,7 +46,7 @@ public class TestUserCreate implements CommandLineRunner {
 			Set<Role> roleListUser2Test = new HashSet<Role>();
 			roleListUser2Test.add(roleClient);
 			userAdmin.setActive(true);
-			userAdmin.setCountry("Italy");
+			
 			userAdmin.setEmail("alexraimondi91@gmail.com");
 			userAdmin.setName("alex");
 			userAdmin.setPassword(passwordEncoder.encode("alex"));
@@ -55,7 +55,6 @@ public class TestUserCreate implements CommandLineRunner {
 			userAdmin.setUserName("alexraimondi91@gmail.com");
 
 			userClient.setActive(true);
-			userClient.setCountry("Italy");
 			userClient.setEmail("ale_1994@gmail.com");
 			userClient.setFiscalCode("RMNLXA91A14E058I");
 			userClient.setName("alessandro");

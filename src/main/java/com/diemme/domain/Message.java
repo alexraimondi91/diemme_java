@@ -55,6 +55,10 @@ public class Message {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Chat> chat;
 	
+	@ManyToOne
+    @JoinColumn(name="user_id", nullable = true)
+    private User user;
+	
 
 
 }

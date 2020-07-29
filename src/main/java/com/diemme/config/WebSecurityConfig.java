@@ -32,16 +32,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeRequests()
-			        .antMatchers("/").permitAll()
-			        .antMatchers("/login").permitAll()
-			        .antMatchers("/registration").permitAll()
+			        .antMatchers("/","/login","/registration","/static/**").permitAll()
 			        .antMatchers("/prodotti/**").hasAuthority("ADMIN")
 			        .antMatchers("/preventivi/**").hasAuthority("ADMIN").anyRequest()
 			        .authenticated()
 			        .and()
 			        .csrf().disable().formLogin()
 			        .loginPage("/login").failureUrl("/login?error=true")
-			        .defaultSuccessUrl("/home",true)
+			        .defaultSuccessUrl("/index",true)
 			        .usernameParameter("user_name")
 			        .passwordParameter("password")
 			        .and()
@@ -55,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/templates/**", "/static/**", "/css/**", "/js/**", "/images/**");
+		web.ignoring().antMatchers( "/static/**", "/css/**", "/js/**", "/img/**", "/bootstrap/**");
 	}
 
 }
