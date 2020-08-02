@@ -26,8 +26,6 @@ public class TechnologyController {
 	@GetMapping("/tecnologie")
 	public String listTechnologyShocases (Model model) throws BusinessException{
 		List<TechnologyShowcase> technologies = service.getAllTecnology();
-		System.out.println("quotation: " + new ModelAndView("/frontoffice/tecnologie/tecnologie.html"));
-
 		model.addAttribute("techno", technologies);
 		return "/frontoffice/tecnologie/tecnologie.html";
 		
@@ -35,8 +33,7 @@ public class TechnologyController {
 	
 	@GetMapping("/tecnologie/image/{id}")
 	@ResponseBody
-	public byte[] getImage (@PathVariable Long id) throws BusinessException{
-		
+	public byte[] getImage (@PathVariable Long id) throws BusinessException{		
 		Optional<TechnologyShowcase> product = service.getTecnology(id);
 		byte[] imageProduct = product.get().getContentImg();
 		return imageProduct;

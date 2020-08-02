@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeRequests()
+
 			        .antMatchers("/","/login","/registration","/backoffice/**").permitAll()
 			        .antMatchers("/prodotti/**").hasAuthority("ADMIN")
 			        .antMatchers("/preventivi/**").hasAuthority("ADMIN").anyRequest()
@@ -53,6 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			        .accessDeniedPage("/access-denied");
 	}
 
-	
+
 
 }

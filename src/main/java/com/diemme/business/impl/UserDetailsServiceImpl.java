@@ -2,6 +2,7 @@ package com.diemme.business.impl;
 
 import java.util.Optional;
 
+import com.diemme.business.BusinessException;
 import com.diemme.domain.Role;
 import com.diemme.domain.User;
 
@@ -22,13 +23,18 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @SuppressWarnings("null")
 	@Override
     @Transactional
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userService.findUserByUserName(userName);   
+        User user = new User();
+		try {
+			user = userService.findUserByUserName(userName);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}   
         if (user == null && user.getActive() == false) {
             throw new UsernameNotFoundException("Username not found or not active");
           }

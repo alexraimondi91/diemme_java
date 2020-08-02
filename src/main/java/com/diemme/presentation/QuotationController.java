@@ -21,9 +21,7 @@ public class QuotationController {
 
 	@GetMapping("/preventivi")
 	public String listQuotationShowcase(Model model) throws BusinessException {
-		List<QuotationShowcase> quotation = service.findAllQuotationShowcases();
-		
-		System.out.println("quotation: " + new ModelAndView("frontoffice/preventivi/preventivi"));
+		List<QuotationShowcase> quotation = service.findAllQuotationShowcases();		
 		model.addAttribute("quotation", quotation);
 		return "/frontoffice/preventivi/preventivi";
 

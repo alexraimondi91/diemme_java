@@ -17,6 +17,7 @@ import com.diemme.business.EmailService;
 @Service
 public class EmailServiceImpl implements EmailService {
 
+	@Override
 	public void sendContact(String from, String object, String body, String sender) {
 
 		try {
@@ -36,6 +37,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 	
+	@Override
 	public void sendUserActive(String from, String sender) {
 
 		try {
