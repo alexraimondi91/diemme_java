@@ -39,4 +39,11 @@ public class TechnologyController {
 		return imageProduct;
 	}
 
+	@GetMapping("/dashboard/tecnologie/menage")
+	public String menageTechnologyShocases (Model model) throws BusinessException{
+		List<TechnologyShowcase> technologies = service.getAllTecnology();
+		model.addAttribute("techno", technologies);
+		return "/frontoffice/tecnologie/tecnologie.html";
+		
+	}
 }

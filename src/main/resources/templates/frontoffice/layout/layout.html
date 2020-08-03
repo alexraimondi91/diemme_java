@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title th:text="#{common.applicationtitle}">Diemme</title>
+<title>Diemme</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -60,7 +60,7 @@
 							<div class="main-menu  d-none d-lg-block">
 								<nav>
 									<ul id="navigation">
-										<li><a href="/home.html" th:href="@{/index}">Home</a></li>
+										<li><a href="/home.html" th:href="@{/home}">Home</a></li>
 										<li><a href="/prodotti.html" th:href="@{/prodotti}">Prodotti</a></li>
 										<li><a href="/tecnologie.html" th:href="@{/tecnologie}">Tecnologie</a></li>
 										<li><a href="/preventivi.html" th:href="@{/preventivi}">Preventivi</a></li>
@@ -69,19 +69,19 @@
 								</nav>
 							</div>
 						</div>
-                       
-                        <div class="get_in_tauch" sec:authorize="isAuthenticated()">
-                        <a th:href="@{/logout}" class="boxed-btn">logout</a>
-                        </div>
-                       
-                       
-                        <div class="get_in_tauch" sec:authorize="isAnonymous()">
-                            <a th:href="@{/login}" class="boxed-btn">Accedi</a>
-                        </div>
-                     
-                        <div class="col-12" >
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
+
+						<div class="get_in_tauch" sec:authorize="isAuthenticated()">
+							<a th:href="@{/dashboard}" class="boxed-btn">Dashboard</a>
+						</div>
+
+
+						<div class="get_in_tauch" sec:authorize="isAnonymous()">
+							<a th:href="@{/login}" class="boxed-btn">Accedi</a>
+						</div>
+
+						<div class="col-12">
+							<div class="mobile_menu d-block d-lg-none"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -102,8 +102,8 @@
 	<div layout:fragment="preventivi"></div>
 	<!-- preventivi_area_end -->
 	<div layout:fragment="contatti"></div>
-	
-	
+
+
 	<!-- footer_start -->
 	<footer class="footer"
 		style="background-image: linear-gradient(black, #1F1F1F)">
@@ -188,7 +188,7 @@
 		th:src="@{/dist/js/jquery.magnific-popup.min.js}"></script>
 	<script src="../../dist/js/plugins.js" th:src="@{/dist/js/plugins.js}"></script>
 
-	
+
 
 	<script src="../../dist/js/main.js" th:src="@{/dist/js/main.js}"></script>
 

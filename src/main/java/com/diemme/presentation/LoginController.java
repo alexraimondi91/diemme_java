@@ -32,7 +32,7 @@ public class LoginController {
 	@Autowired
 	EmailService emailService;
 
-    @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
+    @RequestMapping(value={ "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("auth/login/login");
@@ -86,7 +86,7 @@ public class LoginController {
         return modelAndView;
     }
 
-    @RequestMapping(value="/home", method = RequestMethod.GET)
+    @RequestMapping(value= {"/home"}, method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
