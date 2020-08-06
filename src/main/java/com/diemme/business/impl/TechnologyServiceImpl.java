@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
 import com.diemme.domain.TechnologyShowcase;
-import com.diemme.repository.ProductsShowcaseRepository;
 import com.diemme.repository.TechnologyShowcaseRepository;
 
 @Service
@@ -29,5 +28,11 @@ public class TechnologyServiceImpl implements TechnologyService{
 		
 		return technologyShowcaseRepository.findById(id);
 	}
+	
+	@Override
+	public  TechnologyService saveTechnology (TechnologyService technology) throws BusinessException{
+		
+        return technologyShowcaseRepository.save(technology);
+    }
 
 }

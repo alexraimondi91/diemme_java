@@ -35,7 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.authorizeRequests()
 
 			        .antMatchers("/","/login","/registration","/backoffice/**").permitAll()
-			        .antMatchers("/dashboard").authenticated()
+			        .antMatchers("/dashboard/**").authenticated()
+			        .antMatchers("/tecnologieCrea").hasAuthority("ADMIN") 
 			        //.antMatchers("/prodotti/", "/ssds/").hasAnyRole("admin")
 					//.antMatchers("/preventivi/", "/ssds/").hasAnyRole("client")
 			        .and()
@@ -52,7 +53,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		            .exceptionHandling()
 			        .accessDeniedPage("/access-denied");
 	}
-
-
 
 }

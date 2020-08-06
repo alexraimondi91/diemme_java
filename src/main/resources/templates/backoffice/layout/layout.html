@@ -72,11 +72,10 @@
 				</a>
 					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 						<div class="dropdown-divider"></div>
-						<a href="" th:href="@{/logout}"
-							class="dropdown-item"> <i class="fas fa-sign-out-alt mr-2"></i>
-							Logout
+						<a href="" th:href="@{/logout}" class="dropdown-item"> <i
+							class="fas fa-sign-out-alt mr-2"></i> Logout
 						</a>
-						
+
 					</div></li>
 			</ul>
 		</nav>
@@ -84,7 +83,8 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="{{route('index')}}" th:href="@{/home}" class="brand-link"> <img
+			<a href="{{route('index')}}" th:href="@{/home}" class="brand-link">
+				<img
 				src="https://scontent-mxp1-1.xx.fbcdn.net/v/t1.0-9/73078926_105557677537493_396295404041273344_n.png?_nc_cat=106&_nc_sid=09cbfe&_nc_ohc=RqssJtViHvcAX_uPpz4&_nc_ht=scontent-mxp1-1.xx&oh=545b71b9275c37d3aa829035f7391b0d&oe=5F4D5D34"
 				alt="Diemmelogo" class="brand-image img-circle elevation-3"
 				style="opacity: .8"> <span
@@ -107,12 +107,12 @@
 						<!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
 						<li class="nav-item has-treeview"><a
-							href="{{route('dashboard')}}" th:href="@{/dashboard}" class="nav-link"> <i
-								class="nav-icon fas fa-tachometer-alt"></i>
+							href="{{route('dashboard')}}" th:href="@{/dashboard}"
+							class="nav-link"> <i class="nav-icon fas fa-tachometer-alt"></i>
 								<p>Dashboard</p>
 						</a></li>
-
-						<li sec:authorize="hasAnyRole('ADMIN')"
+						<!-- sec:authorize="hasRole('amministratore')" non adatto -->
+						<li sec:authorize="hasAuthority('ADMIN')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-newspaper"></i>
 								<p>
@@ -130,7 +130,7 @@
 								</a></li>
 							</ul></li>
 
-						<li sec:authorize="hasRole('ADMIN')"
+						<li sec:authorize="hasAuthority('ADMIN')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-folder-plus"></i>
 								<p>
@@ -148,7 +148,7 @@
 								</a></li>
 							</ul></li>
 
-						<li sec:authorize="hasRole('ADMIN')"
+						<li sec:authorize="hasAuthority('ADMIN')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-project-diagram"></i>
 								<p>
@@ -166,7 +166,7 @@
 								</a></li>
 							</ul></li>
 
-						<li sec:authorize="hasRole('ADMIN')"
+						<li sec:authorize="hasAuthority('ADMIN')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-folder-plus"></i>
 								<p>
@@ -174,9 +174,9 @@
 								</p>
 						</a>
 							<ul class="nav nav-treeview">
-								<li class="nav-item"><a
-									href="{{route('createTechnology')}}" class="nav-link"> <i
-										class="far fa-circle nav-icon"></i>
+								<li class="nav-item"><a href="#"
+									th:href="@{/tecnologieCrea}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
 										<p>Aggiungi tecnologie</p>
 								</a></li>
 								<li class="nav-item"><a
@@ -184,9 +184,10 @@
 										class="far fa-circle nav-icon"></i>
 										<p>Gestione tecnologie</p>
 								</a></li>
-							</ul></li>
+							</ul>
+					  </li>
 
-						<li sec:authorize="hasRole('ADMIN')"
+						<li sec:authorize="hasAuthority('ADMIN')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-info"></i>
 								<p>
@@ -200,7 +201,7 @@
 								</a></li>
 							</ul></li>
 
-						<li sec:authorize="hasRole('DESIGNER')"
+						<li sec:authorize="hasAuthority('DESIGNER')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-pencil-ruler"></i>
 								<p>
@@ -218,28 +219,28 @@
 								</a></li>
 							</ul></li>
 
-						<li sec:authorize="hasRole('DESIGNER')"
+						<li sec:authorize="hasAuthority('DESIGNER')"
 							class="nav-item has-treeview"><a
 							href="{{route('showLayouts')}}" class="nav-link"> <i
 								class="nav-icon fas fa-image"></i>
 								<p>Progetto Layout</p>
 						</a></li>
 
-						<li sec:authorize="hasRole('ADMIN')"
+						<li sec:authorize="hasAuthority('DESIGNER')"
 							class="nav-item has-treeview"><a
 							href="{{route('statusOrder')}}" class="nav-link"> <i
 								class="nav-icon fas fa-list"></i>
 								<p>Status ordini</p>
 						</a></li>
 
-						<li sec:authorize="hasRole('USER')"
+						<li sec:authorize="hasAuthority('CLIENT')"
 							class="nav-item has-treeview"><a
 							href="{{route('statusOrderCustomer')}}" class="nav-link"> <i
 								class="nav-icon fas fa-list"></i>
 								<p>Status Ordini</p>
 						</a></li>
 
-						<li sec:authorize="hasRole('FACTORY')"
+						<li sec:authorize="hasAuthority('FACTORY')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-industry"></i>
 								<p>
@@ -272,12 +273,13 @@
 									Inizia chat <i class="fas fa-angle-left right"></i>
 								</p>
 						</a>
-							<ul sec:authorize="hasRole('ROLE_USER')" class="nav nav-treeview">
+							<ul sec:authorize="hasAuthority('CLIENT')"
+								class="nav nav-treeview">
 								<li class="nav-item"><a href="{{route('chatCreate')}}"
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>Inizia chat Progetto</p>
 								</a></li>
-								<li sec:authorize="hasRole('ROLE_DESIGNER')" class="nav-item">
+								<li sec:authorize="hasAuthority('DEISGNER')" class="nav-item">
 									<a href="{{route('chatCreateFactory')}}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
 										<p>Inizia chat Produttore</p>
