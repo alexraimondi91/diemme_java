@@ -1,5 +1,7 @@
 package com.diemme.presentation;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
@@ -51,8 +55,23 @@ public class TechnologyController {
 	}
 	
 	@PostMapping("/tecnologieCrea")
-	public String  create(@Valid @ModelAttribute("tecnology_showcase")  TechnologyShowcase technologies, Errors errors) throws BusinessException{
-		return "/backoffice/technologyDashboard/create.html";
+	public ModelAndView  create(@Valid @ModelAttribute("tecnology_showcase")  TechnologyShowcase technologies, Errors errors, @RequestParam("contentImg") MultipartFile contentImg) throws BusinessException{
+        ModelAndView modelAndView = new ModelAndView();
+		byte[] bytes = new byte[(int) contentImg.getSize()];
+		try {
+			bytes = contentImg.getBytes();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
+        modelAndView.setViewName("/backoffice/technologyDashboard/create.html");
+
+
+		technologies.setContentImg(bytes);
+		System.out.println("\n\n\n technologies con file: "+ technologies);
+		service.saveTechnology(technologies);
+		return modelAndView;
 	}
 	
 }

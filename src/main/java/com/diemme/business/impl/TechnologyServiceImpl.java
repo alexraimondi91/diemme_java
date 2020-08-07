@@ -30,7 +30,7 @@ public class TechnologyServiceImpl implements TechnologyService{
 	}
 	
 	@Override
-	public  TechnologyService saveTechnology (TechnologyService technology) throws BusinessException{
+	public  TechnologyShowcase saveTechnology (TechnologyShowcase technology) throws BusinessException{
 		
         return technologyShowcaseRepository.save(technology);
     }

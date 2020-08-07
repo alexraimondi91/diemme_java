@@ -11,6 +11,6 @@ public interface TechnologyService {
 	
 	public Optional<TechnologyShowcase> getTecnology (Long id) throws BusinessException;
 	
-	TechnologyService saveTechnology (TechnologyService technology) throws BusinessException;
+	TechnologyShowcase saveTechnology (TechnologyShowcase technology) throws BusinessException;
 
 }

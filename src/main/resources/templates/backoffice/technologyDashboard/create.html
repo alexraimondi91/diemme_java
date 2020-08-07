@@ -24,8 +24,9 @@
 		</section>
 		<!-- Main content -->
 		<section class="content">
-			<form method="POST" action="" th:action="@{/tecnologieCrea}" modelAttribute="tecnology_showcase"
-				th:object="${tecnology_showcase}" id="myForm"
+			<form method="POST" action="" th:action="@{/tecnologieCrea}"
+				th:object="${tecnology_showcase}"
+				id="myForm"
 				enctype="multipart/form-data">
 				<div class="row">
 					<div class="alert alert-success alert-dismissible"
@@ -52,7 +53,7 @@
 
 							<div class="form-group  @error('title') has-error @enderror">
 								<label for="inputName">Titolo</label> <input required
-									 th:field="*{name}" type="text" id="inputName"
+									th:field="*{name}" type="text" id="inputName"
 									class="form-control">
 							</div>
 							<div
@@ -62,7 +63,7 @@
 									<div class="custom-file">
 										<label class="custom-file-label" for="principalImage">Scegli
 											immagine max 1MB</label> <input required type="file"
-											onchange="check()" name="content_img"
+											onchange="check()" name="contentImg"
 											th:field="*{contentImg}" class="custom-file-input"
 											id="exampleInputFile">
 									</div>
@@ -79,18 +80,21 @@
 					</div>
 					<!-- /.card -->
 				</div>
+
+				<div class="row">
+					<div class="col-12">
+						<a href="javascript:document.getElementById('myForm').reset();"
+							class="btn btn-secondary">Annulla</a>
+						<button type="submit" class="btn btn-primary btn-block">Salva</button>
+					</div>
+				</div>
+				<h2>
+					<span class="text-success" th:utext="${successMessage}"></span>
+				</h2>
+			</form>
+		</section>
+		<!-- /.content -->
 	</div>
-	<div class="row">
-		<div class="col-12">
-			<a href="javascript:document.getElementById('myForm').reset();"
-				class="btn btn-secondary">Annulla</a> <input type="submit"
-				value="Aggiungi" class="btn btn-success float-right">
-		</div>
-	</div>
-	</form>
-	</section>
 	<!-- /.content -->
-</div>
-<!-- /.content -->
 </div>
 </html>
