@@ -1,6 +1,5 @@
 package com.diemme.presentation;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
 import com.diemme.domain.TechnologyShowcase;
-import com.diemme.domain.User;
 
 @Controller
 public class TechnologyController {
@@ -66,8 +64,6 @@ public class TechnologyController {
 		}
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
         modelAndView.setViewName("/backoffice/technologyDashboard/create.html");
-
-
 		technologies.setContentImg(bytes);
 		System.out.println("\n\n\n technologies con file: "+ technologies);
 		service.saveTechnology(technologies);
