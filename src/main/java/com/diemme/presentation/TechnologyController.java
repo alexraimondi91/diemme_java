@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
 import com.diemme.domain.TechnologyShowcase;
+import com.diemme.domain.User;
 
 @Controller
 public class TechnologyController {
@@ -43,6 +45,9 @@ public class TechnologyController {
 	
 	@GetMapping("/tecnologieCrea")
 	public String createTechnologyShocases(Model model) throws BusinessException {
+		ModelAndView modelAndView = new ModelAndView();
+		TechnologyShowcase technologyShowcase = new TechnologyShowcase();
+        modelAndView.addObject("tecnology_showcase", technologyShowcase);
 		return "/backoffice/technologyDashboard/create.html";
 	}
 	
