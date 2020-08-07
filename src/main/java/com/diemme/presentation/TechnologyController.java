@@ -45,14 +45,13 @@ public class TechnologyController {
 	
 	@GetMapping("/tecnologieCrea")
 	public String createTechnologyShocases(Model model) throws BusinessException {
-		ModelAndView modelAndView = new ModelAndView();
 		TechnologyShowcase technologyShowcase = new TechnologyShowcase();
-        modelAndView.addObject("tecnology_showcase", technologyShowcase);
+		model.addAttribute("tecnology_showcase", technologyShowcase);
 		return "/backoffice/technologyDashboard/create.html";
 	}
 	
 	@PostMapping("/tecnologieCrea")
-	public String  create(@Valid @ModelAttribute("createTechnology")  TechnologyShowcase technologies, Errors errors) throws BusinessException{
+	public String  create(@Valid @ModelAttribute("tecnology_showcase")  TechnologyShowcase technologies, Errors errors) throws BusinessException{
 		return "/backoffice/technologyDashboard/create.html";
 	}
 	
