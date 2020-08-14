@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.diemme.business.BusinessException;
@@ -24,6 +26,12 @@ public class TechnologyServiceImpl implements TechnologyService{
 	}
 	
 	@Override
+	public Page<TechnologyShowcase> getAllTecnologyPageable (Integer page, Integer size) throws BusinessException{
+		
+		return technologyShowcaseRepository.findAll(PageRequest.of(page,size));
+	}
+	
+	@Override
 	public Optional<TechnologyShowcase> getTecnology (Long id) throws BusinessException{
 		
 		return technologyShowcaseRepository.findById(id);
@@ -34,5 +42,7 @@ public class TechnologyServiceImpl implements TechnologyService{
 		
         return technologyShowcaseRepository.save(technology);
     }
+	
+	
 
 }

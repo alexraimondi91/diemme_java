@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
+import com.diemme.component.PageModel;
 import com.diemme.domain.TechnologyShowcase;
 
 @Controller
@@ -28,12 +30,27 @@ public class TechnologyController {
 
 	@Autowired
 	private TechnologyService service;
+    @Autowired
+    private PageModel pageModel;
 
 	@GetMapping("/tecnologie")
 	public String listTechnologyShocases(Model model) throws BusinessException {
 		List<TechnologyShowcase> technologies = service.getAllTecnology();
 		model.addAttribute("techno", technologies);
 		return "/frontoffice/tecnologie/tecnologie.html";
+
+	}
+	
+	@SuppressWarnings("static-access")
+	@GetMapping("/tecnologieGestione")
+	public String manageTechnologyShocases(Model model) throws BusinessException {
+		pageModel.setSIZE(2);
+	    pageModel.initPageAndSize();
+		
+		Page<TechnologyShowcase> technologies = service.getAllTecnologyPageable(pageModel.getPAGE(), pageModel.getSIZE());
+
+		model.addAttribute("techno", technologies);
+		return "/backoffice/technologyDashboard/manage.html";
 
 	}
 
