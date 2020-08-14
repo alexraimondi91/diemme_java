@@ -12,49 +12,51 @@
 						<h1>Gestione tecnologie</h1>
 					</div>
 					<div class="col-sm-6">
-				    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{route('manageTechnology')}}">Gestione tecnologie</a></li>
-                        <li class="breadcrumb-item active">Gestione Tecnologie</li>
-                    </ol>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+							<li class="breadcrumb-item"><a
+								href="{{route('manageTechnology')}}">Gestione tecnologie</a></li>
+							<li class="breadcrumb-item active">Gestione Tecnologie</li>
+						</ol>
 					</div>
 				</div>
 			</div>
 			<!-- /.container-fluid -->
 		</section>
-		
- <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Lista Tecnologie</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                        <div th:each="tech : ${techno}">
-                        
-                            <table class="table table-bordered">
-                                <thead>
-                                
-                                    <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>Nome</th>
-                                        <th>descrizione</th>
-                                        <th>data creazione</th>
-                                        <th style="width: 40px">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    <tr>
-                                        <td th:utext="${tech.id}"> </td>
-                                        <td th:utext="${tech.name}"> </td>
-								        <td th:utext="${tech.description}"> </td>
-								        <td th:text="${#temporals.format(tech.insertDate, 'dd-MMM-yyyy')}"></td>
-                                        <!-- <td>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">Lista Tecnologie</h3>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								<div th:each="tech : ${techno}">
+
+									<table class="table table-bordered">
+										<thead>
+
+											<tr>
+												<th style="width: 10px">#</th>
+												<th>Nome</th>
+												<th>descrizione</th>
+												<th>data creazione</th>
+												<th style="width: 40px">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr>
+												<td th:utext="${tech.id}"></td>
+												<td th:utext="${tech.name}"></td>
+												<td th:utext="${tech.description}"></td>
+												<td
+													th:text="${#temporals.format(tech.insertDate, 'dd-MMM-yyyy')}"></td>
+												<!-- <td>
                                             <form method="POST" action="{{route('deleteTechnology')}}">
                                                 
                                                 <input name="id" hidden value="{{$item->id}}">
@@ -71,52 +73,57 @@
                                                 </button>
                                             </form>
                                         </td> -->
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                 
-                            
-                        </div>
-                        </div>
-                        <!-- /.card-body -->
-                                  <div class="row">
-                <div class="col">
-                    <!-- directors pagination -->
-                    <nav aria-label="Pagination" th:if="${techno.totalPages gt 0}">
-                        <ul class="pagination justify-content-center font-weight-bold">
-                            <li class="page-item" th:classappend="${techno.number eq 0} ? 'disabled'">
-                                <a class="page-link"
-                                   th:href="@{/tecnologieGestione?page={id}(id=${techno.number lt 2 ? 1 : techno.number})}"
-                                   aria-label="Previous" title="Previous Page" data-toggle="tooltip">
-                                    <span aria-hidden="true">&laquo;</span> 
-                                </a>
-                            </li>
-                            <li class="page-item" th:classappend="${i eq techno.number + 1} ? 'active'"
-                                th:each="i : ${#numbers.sequence( 1, techno.totalPages, 1)}">
-                                <a class="page-link" th:href="@{/tecnologieGestione?page={id}(id=${i})}" th:text="${i}"
-                                   th:title="${'Page '+ i}" data-toggle="tooltip"></a>
-                            </li>
-                            <li class="page-item" th:classappend="${techno.number + 1 eq techno.totalPages} ? 'disabled'">
-                                 <a class="page-link"
-                                   th:href="@{/tecnologieGestione?page={id}(id=${techno.number + 2})}"
-                                   aria-label="Next" title="Next Page" data-toggle="tooltip">
-                                    <span aria-hidden="true">&raquo;</span> 
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-</div>
+											</tr>
+
+										</tbody>
+									</table>
+
+
+								</div>
+							</div>
+							<!-- /.card-body -->
+							<div class="row">
+								<div class="col">
+									<!-- directors pagination -->
+									<nav aria-label="Pagination" th:if="${techno.totalPages gt 0}">
+										<ul class="pagination justify-content-center font-weight-bold">
+											<li class="page-item"
+												th:classappend="${techno.number eq 0} ? 'disabled'"><a
+												class="page-link"
+												th:href="@{/tecnologieGestione?page={id}(id=${techno.number lt 2 ? 1 : techno.number})}"
+												aria-label="Previous" title="Previous Page"
+												data-toggle="tooltip"> <span aria-hidden="true">&laquo;</span>
+											</a></li>
+											<li class="page-item"
+												th:classappend="${i eq techno.number + 1} ? 'active'"
+												th:each="i : ${#numbers.sequence( 1, techno.totalPages, 1)}">
+												<a class="page-link"
+												th:href="@{/tecnologieGestione?page={id}(id=${i})}"
+												th:text="${i}" th:title="${'Page '+ i}"
+												data-toggle="tooltip"></a>
+											</li>
+											<li class="page-item"
+												th:classappend="${techno.number + 1 eq techno.totalPages} ? 'disabled'">
+												<a class="page-link"
+												th:href="@{/tecnologieGestione?page={id}(id=${techno.number + 2})}"
+												aria-label="Next" title="Next Page" data-toggle="tooltip">
+													<span aria-hidden="true">&raquo;</span>
+											</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+						<!-- /.card -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+		<!-- /.content -->
+	</div>
 </div>
 <!-- /.content-wrapper -->
