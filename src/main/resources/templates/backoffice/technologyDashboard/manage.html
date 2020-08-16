@@ -14,9 +14,7 @@
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
-							<li class="breadcrumb-item"><a
-								href="{{route('manageTechnology')}}">Gestione tecnologie</a></li>
-							<li class="breadcrumb-item active">Gestione Tecnologie</li>
+							<li class="breadcrumb-item active">Gestione tecnologie</li>
 						</ol>
 					</div>
 				</div>
@@ -35,28 +33,26 @@
 							</div>
 							<!-- /.card-header -->
 							<div class="card-body">
-								<div th:each="tech : ${techno}">
+								<table class="table table-bordered">
+									<thead>
 
-									<table class="table table-bordered">
-										<thead>
+										<tr>
+											<th style="width: 10px">#</th>
+											<th>Nome</th>
+											<th>Descrizione</th>
+											<th>Data creazione</th>
+											<th style="width: 40px">Action</th>
+										</tr>
+									</thead>
+									<tbody>
 
-											<tr>
-												<th style="width: 10px">#</th>
-												<th>Nome</th>
-												<th>descrizione</th>
-												<th>data creazione</th>
-												<th style="width: 40px">Action</th>
-											</tr>
-										</thead>
-										<tbody>
-
-											<tr>
-												<td th:utext="${tech.id}"></td>
-												<td th:utext="${tech.name}"></td>
-												<td th:utext="${tech.description}"></td>
-												<td
-													th:text="${#temporals.format(tech.insertDate, 'dd-MMM-yyyy')}"></td>
-												<!-- <td>
+										<tr th:each="tech : ${techno}">
+											<td th:utext="${tech.id}"></td>
+											<td th:utext="${tech.name}"></td>
+											<td th:utext="${tech.description}"></td>
+											<td
+												th:text="${#temporals.format(tech.insertDate, 'dd-MMM-yyyy')}"></td>
+											<!-- <td>
                                             <form method="POST" action="{{route('deleteTechnology')}}">
                                                 
                                                 <input name="id" hidden value="{{$item->id}}">
@@ -73,13 +69,9 @@
                                                 </button>
                                             </form>
                                         </td> -->
-											</tr>
-
-										</tbody>
-									</table>
-
-
-								</div>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 							<!-- /.card-body -->
 							<div class="row">
