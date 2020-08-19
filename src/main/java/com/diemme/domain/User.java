@@ -34,7 +34,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user")
-@JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User {
 	
@@ -94,51 +93,20 @@ public class User {
           name = "role_id", referencedColumnName = "id")) 
 	private Set<Role> roles;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( 
-        name = "user_product_showcase", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id", nullable = true), 
-        inverseJoinColumns = @JoinColumn(
-          name = "product_showcase_id", referencedColumnName = "id")) 
-	private Set<ProductShowcase> productShowcases;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+	private List<ProductShowcase> productShowcases;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( 
-        name = "user_tecnology_showcase", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id", nullable = true), 
-        inverseJoinColumns = @JoinColumn(
-          name = "tecnology_showcase_id", referencedColumnName = "id")) 
-	private Set<TechnologyShowcase> tecnologyShowcases;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+	private List<TechnologyShowcase> technologyShowcases;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( 
-        name = "user_quotation_showcase", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id", nullable = true), 
-        inverseJoinColumns = @JoinColumn(
-          name = "quotation_showcase_id", referencedColumnName = "id")) 
-	private Set<QuotationShowcase> quotationShowcases;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+	private List<QuotationShowcase> quotationShowcases;
 	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+	private List<NewsShowcase> newsShowcases;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( 
-        name = "user_news_showcase", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id", nullable = true), 
-        inverseJoinColumns = @JoinColumn(
-          name = "news_showcase_id", referencedColumnName = "id")) 
-	private Set<NewsShowcase> newsShowcases;
-	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( 
-        name = "user_contact_showcase", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id", nullable = true), 
-        inverseJoinColumns = @JoinColumn(
-          name = "contact_showcase_id", referencedColumnName = "id")) 
-	private Set<ContactShowcase> contactShowcases;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+	private List<ContactShowcase> contactShowcases;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( 

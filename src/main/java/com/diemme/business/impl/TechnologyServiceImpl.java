@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
 import com.diemme.domain.TechnologyShowcase;
@@ -24,6 +25,7 @@ public class TechnologyServiceImpl implements TechnologyService{
 		
 		return technologyShowcaseRepository.findAll();
 	}
+
 	
 	@Override
 	public Page<TechnologyShowcase> getAllTecnologyPageable (Integer page, Integer size) throws BusinessException{
@@ -32,9 +34,9 @@ public class TechnologyServiceImpl implements TechnologyService{
 	}
 	
 	@Override
-	public Optional<TechnologyShowcase> getTecnology (Long id) throws BusinessException{
+	public TechnologyShowcase getTecnology (Long id) throws BusinessException{
 		
-		return technologyShowcaseRepository.findById(id);
+		return technologyShowcaseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("TechnologyShowcase", "id", id));
 	}
 	
 	@Override
@@ -42,6 +44,13 @@ public class TechnologyServiceImpl implements TechnologyService{
 		
         return technologyShowcaseRepository.save(technology);
     }
+	
+	@Override
+	public void deleteTechnology (Long id) throws BusinessException{
+		
+        technologyShowcaseRepository.deleteById(id);
+    }
+
 	
 	
 

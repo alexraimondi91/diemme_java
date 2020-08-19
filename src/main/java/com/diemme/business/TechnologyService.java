@@ -11,10 +11,12 @@ public interface TechnologyService {
 	
 	public List<TechnologyShowcase> getAllTecnology () throws BusinessException;
 	
-	public Optional<TechnologyShowcase> getTecnology (Long id) throws BusinessException;
+	public TechnologyShowcase getTecnology (Long id) throws BusinessException;
 	
 	TechnologyShowcase saveTechnology (TechnologyShowcase technology) throws BusinessException;
 
 	Page<TechnologyShowcase> getAllTecnologyPageable(Integer page, Integer size) throws BusinessException;
+
+	void deleteTechnology(Long id) throws BusinessException;
 
 }

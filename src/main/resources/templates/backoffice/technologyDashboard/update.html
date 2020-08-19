@@ -10,12 +10,12 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>Aggiungi una nuova tecnologia</h1>
+						<h1>Modifica di una tecnologia</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item"><a th:href="@{/dashboard}">Dashboard</a></li>
-							<li class="breadcrumb-item active">Aggiungi tecnologia</li>
+							<li class="breadcrumb-item active">Modifica tecnologia</li>
 						</ol>
 					</div>
 				</div>
@@ -24,8 +24,8 @@
 		</section>
 		<!-- Main content -->
 		<section class="content">
-			<form method="POST" action="" th:action="@{/tecnologieCrea}"
-				th:object="${tecnology_showcase}" id="myForm"
+			<form method="POST" action="" th:action="@{'/tecnologieUpdate/{id}'(id=${tecnology_showcase_update.id})}"
+				th:object="${tecnology_showcase_update}" id="myForm"
 				enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-md-12">
@@ -62,7 +62,7 @@
 
 								<div class="form-group  @error('title') has-error @enderror">
 									<label for="inputName">Titolo</label> <input required
-										th:field="*{name}" type="text" id="inputName"
+										th:field="*{name}" type="text" id="inputName" th:value="${tecnology_showcase_update.name}"
 										class="form-control">
 								</div>
 								<div
@@ -82,7 +82,7 @@
 									class="form-group @error('description') has-error @enderror">
 									<label>Descrizione</label>
 									<textarea class="form-control" maxlength="255" required
-										name="description" th:field="*{description}" rows="3"
+										name="description" th:field="*{description}" rows="3" th:value="${tecnology_showcase_update.description}"
 										placeholder="Descrizione...."></textarea>
 								</div>
 							</div>
