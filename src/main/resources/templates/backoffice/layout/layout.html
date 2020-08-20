@@ -347,11 +347,18 @@
 			$('.textarea').summernote()
 		})
 		function check() {
-			if (document.getElementById('exampleInputFile').files.length)
-				$("#fileC").show()
+			
+			if (document.getElementById('exampleInputFile').files[0].size > 1048570)
+				{
+					$("#fileToLong").show();
+					document.getElementById('exampleInputFile').files = null;
+				}
+			else 
+				if (document.getElementById('exampleInputFile').files.length)
+				$("#fileC").show();
+			
 		}
 	</script>
-	@yield('js')
 
 </body>
 
