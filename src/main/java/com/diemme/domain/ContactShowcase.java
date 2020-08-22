@@ -41,6 +41,8 @@ public class ContactShowcase extends BaseModel{
 	@Column(name = "lon", nullable = true)
 	@NotBlank
 	private String lon;	
+	@Column(name = "active", nullable = false)
+	private Boolean active;
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)

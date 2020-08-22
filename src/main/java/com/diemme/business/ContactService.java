@@ -3,6 +3,8 @@ package com.diemme.business;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+
 import com.diemme.domain.ContactShowcase;
 
 public interface ContactService {
@@ -12,6 +14,12 @@ public interface ContactService {
 	Optional<ContactShowcase> findContactShowcase(Long id) throws BusinessException;
 	
 	Optional<ContactShowcase> findUltimateContac() throws BusinessException;
+
+	void deleteContactShowcase(Long id) throws BusinessException;
+
+	ContactShowcase saveContactShowcase(ContactShowcase contact) throws BusinessException;
+
+	Page<ContactShowcase> getAllContactPageable(Integer page, Integer size) throws BusinessException;
 
 
 
