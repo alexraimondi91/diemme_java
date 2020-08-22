@@ -28,16 +28,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "chat")
 @JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Chat {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;
-	
-	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)
-	private ZonedDateTime insertDate;
+public class Chat extends BaseModel {
+
 	
 	@Column(name = "name", nullable = false)
 	@NotBlank

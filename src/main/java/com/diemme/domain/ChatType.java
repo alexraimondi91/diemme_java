@@ -27,16 +27,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "chat_type")
 @JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
-public class ChatType  {
+public class ChatType extends BaseModel {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;
-	
-	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)
-	private ZonedDateTime insertDate;
 	
 	@Column(name = "object", nullable = false)
 	@NotBlank

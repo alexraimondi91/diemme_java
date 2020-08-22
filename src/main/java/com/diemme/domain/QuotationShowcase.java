@@ -25,16 +25,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "quotation_showcases")
 @Data @NoArgsConstructor @AllArgsConstructor
-public class QuotationShowcase {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;
-	
-	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)
-	private ZonedDateTime insertDate;
+public class QuotationShowcase extends BaseModel{
+
 	
 	@Column(name = "name", nullable = false)
 	private String name;	

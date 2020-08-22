@@ -36,16 +36,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TechnologyShowcase {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;
-
-	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)
-	private ZonedDateTime insertDate;
+public class TechnologyShowcase extends BaseModel{
 
 	@Column(name = "name", nullable = false)
 	@NotBlank
@@ -53,6 +44,9 @@ public class TechnologyShowcase {
 	@Lob
 	@Column(name = "content_img", length = 100000, nullable = false)
 	private byte[] contentImg;
+	@Lob
+	@Column(name = "compress_img", length = 100000, nullable = true)
+	private byte[] compressImg;
 	@Column(name = "description", nullable = false)
 	@NotBlank
 	private String description;

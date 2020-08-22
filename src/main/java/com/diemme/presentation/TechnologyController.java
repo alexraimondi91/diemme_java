@@ -1,6 +1,7 @@
 package com.diemme.presentation;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,8 @@ public class TechnologyController {
 	@Autowired
 	private PageModel pageModel;
 
+	private com.diemme.util.CompressionUtils CompressionUtils;
+
 	@GetMapping("/tecnologie")
 	public String listTechnologyShocases(Model model) throws BusinessException {
 		List<TechnologyShowcase> technologies = serviceTecnology.getAllTecnology();
@@ -78,6 +81,7 @@ public class TechnologyController {
 		return "/backoffice/technologyDashboard/create.html";
 	}
 
+	@SuppressWarnings("static-access")
 	@PostMapping("/tecnologieCrea")
 	public ModelAndView create(@Valid @ModelAttribute("tecnology_showcase") TechnologyShowcase technologies,
 			Errors errors, @RequestParam("contentImg") MultipartFile contentImg, Authentication auth)
@@ -85,10 +89,12 @@ public class TechnologyController {
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		byte[] bytes = new byte[(int) contentImg.getSize()];
+		byte[] byteCompress = new byte[0];
+
 		try {
+			byteCompress = CompressionUtils.compress(bytes);
 			bytes = contentImg.getBytes();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String username = auth.getName();
@@ -101,6 +107,7 @@ public class TechnologyController {
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/technologyDashboard/create.html");
 		technologies.setContentImg(bytes);
+		technologies.setCompressImg(byteCompress);
 		technologies.setUser(userAuth);
 		try {
 			serviceTecnology.saveTechnology(technologies);
@@ -137,28 +144,43 @@ public class TechnologyController {
 		return "/backoffice/technologyDashboard/update.html";
 	}
 
+	@SuppressWarnings("static-access")
 	@PostMapping("/tecnologieUpdate/{id}")
 	public String update(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("tecnology_showcase_update") TechnologyShowcase technologies, Errors errors,
 			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
 		byte[] bytes = new byte[(int) contentImg.getSize()];
+		byte[] byteCompress = new byte[0];
+		TechnologyShowcase technologyOld = new TechnologyShowcase();
+		TechnologyShowcase technologySave = new TechnologyShowcase();
 		User userAuth = new User();
-		if (technologies.getContentImg() == null) {
-			try {
-				technologies.setContentImg(serviceTecnology.getTecnology(id).getContentImg());
-			} catch (BusinessException e) {
-				e.printStackTrace();
 
-			}
+
+		try {
+			technologyOld = serviceTecnology.getTecnology(id);
+			
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		ZonedDateTime dateCreation = technologyOld.getInsertDate();
+
+
+		if (contentImg.isEmpty()) {
+			technologies.setContentImg(technologyOld.getContentImg());
+			technologies.setCompressImg(technologyOld.getCompressImg());
+			technologies.setModifyDate(ZonedDateTime.now());
 
 		} else {
 			try {
+				byteCompress = CompressionUtils.compress(bytes);
 				bytes = contentImg.getBytes();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			technologies.setContentImg(bytes);
+			technologies.setCompressImg(byteCompress);
 		}
 		String username = auth.getName();
 
@@ -170,11 +192,15 @@ public class TechnologyController {
 		}
 		technologies.setUser(userAuth);
 		try {
-			serviceTecnology.saveTechnology(technologies);
+			technologySave = serviceTecnology.saveTechnology(technologies);
+			technologySave.setInsertDate(dateCreation);
+			serviceTecnology.saveTechnology(technologySave);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
 		}
+		
+		
 
 		return "redirect:/tecnologieGestione";
 	}

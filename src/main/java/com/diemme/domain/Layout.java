@@ -22,16 +22,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "layout")
 @JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Layout  {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;
-	
-	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)
-	private ZonedDateTime insertDate;
+public class Layout extends BaseModel{
+
 	
 	@Column(name = "name", nullable = false)
 	@NotBlank

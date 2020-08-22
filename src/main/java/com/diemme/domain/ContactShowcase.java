@@ -29,15 +29,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "contact_showcase")
 @Data @NoArgsConstructor @AllArgsConstructor
-public class ContactShowcase {
+public class ContactShowcase extends BaseModel{
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;	
-	@CreationTimestamp
-	@Column(name = "insertDate", nullable = true)	
-	private ZonedDateTime insertDate;		
+	
 	@Column(name = "info", nullable = false)
 	@NotBlank
 	private String info;

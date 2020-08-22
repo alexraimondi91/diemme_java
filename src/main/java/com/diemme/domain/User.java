@@ -35,13 +35,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user")
 @Data @NoArgsConstructor @AllArgsConstructor
-public class User {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false)
-	private Long id;
-	
+public class User extends BaseModel{
+
 	@Column(name = "name", nullable = false)
     @NotEmpty(message = "*Please provide your name")
 	private String name;
@@ -61,9 +56,7 @@ public class User {
 	@Length(min = 5, message = "*Your password must have at least 5 characters")
     @NotEmpty(message = "*Please provide your password")
 	private String password;	
-	@CreationTimestamp
-	@Column(name = "insertDate")
-	private ZonedDateTime insertDate;
+
 	@Column(name = "active", nullable = true)
 	private Boolean active;
 	
