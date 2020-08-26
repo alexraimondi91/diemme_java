@@ -42,8 +42,10 @@
 											<th>Latitudine</th>
 											<th>Longitudine</th>
 											<th>Data creazione</th>
+											<th>Data modifica</th>
 											<th>Creatore</th>
 										    <th>Attivo</th>
+										    <th>action</th>
 											
 										</tr>
 									</thead>
@@ -55,6 +57,7 @@
 											<td th:utext="${con.lat}"></td>
 											<td th:utext="${con.lon}"></td>
 											<td	th:text="${#temporals.format(con.insertDate, 'dd-MMM-yyyy')}"></td>
+											<td	th:text="${#temporals.format(con.modifyDate, 'dd-MMM-yyyy')}"></td>
 											<td th:utext="${con.user.name + ' ' + con.user.surname}"></td>
 											<td th:text="${con.active ? 'X' : ''}" VALIGN = Middle Align = Center style="color:red"></td>
 											

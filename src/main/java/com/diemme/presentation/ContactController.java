@@ -158,6 +158,8 @@ public class ContactController {
 			 Authentication auth) throws BusinessException {
 		User userAuth = new User();
 		ContactShowcase contactShowcaseActive = new ContactShowcase();
+		ContactShowcase contactOld = new ContactShowcase();
+
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
@@ -165,6 +167,16 @@ public class ContactController {
 			e.printStackTrace();
 
 		}
+		
+		try {
+			contactOld = serviceContact.findContactShowcase(id);
+			
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		
+		ZonedDateTime dateCreation = contactOld.getInsertDate();
 		
 		if (contactShowcase.getActive()) {
 
@@ -176,6 +188,7 @@ public class ContactController {
 					serviceContact.saveContactShowcase(contactShowcaseActive);
 					contactShowcase.setActive(true);
 					contactShowcase.setUser(userAuth);
+					contactShowcase.setInsertDate(dateCreation);
 					serviceContact.saveContactShowcase(contactShowcase);
 
 				} catch (BusinessException e) {
@@ -187,6 +200,8 @@ public class ContactController {
 
 				contactShowcase.setUser(userAuth);
 				contactShowcase.setActive(true);
+				contactShowcase.setInsertDate(dateCreation);
+
 
 				try {
 					serviceContact.saveContactShowcase(contactShowcase);
@@ -200,6 +215,8 @@ public class ContactController {
 		} else if (!contactShowcase.getActive()) {
 
 			contactShowcase.setUser(userAuth);
+			contactShowcase.setInsertDate(dateCreation);
+
 			try {
 				serviceContact.saveContactShowcase(contactShowcase);
 			} catch (BusinessException e) {
