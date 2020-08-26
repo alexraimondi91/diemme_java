@@ -56,7 +56,25 @@
 											<td th:utext="${con.lon}"></td>
 											<td	th:text="${#temporals.format(con.insertDate, 'dd-MMM-yyyy')}"></td>
 											<td th:utext="${con.user.name + ' ' + con.user.surname}"></td>
-											<td th:text="${con.active ? 'X' : ''}" VALIGN = Middle Align = Center style="color:red"></td>									
+											<td th:text="${con.active ? 'X' : ''}" VALIGN = Middle Align = Center style="color:red"></td>
+											
+											<td>
+											
+                                            <form action="#" th:action="@{'/contattiDelete/{id}'(id=${con.id})}" th:method="delete" >
+                                                
+                                                <input type="hidden" value="delete">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                            <hr>
+                                            <form action="#" th:action="@{/contattiUpdate}" th:method="GET" >
+                                                <input type="hidden" name='id' th:value="${con.id}">
+                                                <button type="submit" class="btn btn-secondary">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </form> 
+                                        </td> 									
 
 										</tr>
 									</tbody>

@@ -1,6 +1,7 @@
 package com.diemme.presentation;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +34,7 @@ import com.diemme.domain.User;
 
 @Controller
 public class ContactController {
-	
+
 	@Autowired
 	EmailService serviceEmail;
 	@Autowired
@@ -41,43 +43,41 @@ public class ContactController {
 	private UserService serviceUser;
 	@Autowired
 	private PageModel pageModel;
-	
+
 	@GetMapping("/contatti")
-	public String listContactsShowcases (Model model) throws BusinessException {	
-		
-		Optional<ContactShowcase> ultimateContact = serviceContact.findUltimateContac();
+	public String listContactsShowcases(Model model) throws BusinessException {
+
+		ContactShowcase contactActive = serviceContact.findActiveContac();
 		model.addAttribute("contact", new Contact());
-		model.addAttribute("contacts", ultimateContact);		
+		model.addAttribute("contacts", contactActive);
 		return "/frontoffice/contatti/contatti.html";
-		
+
 	}
-	
+
 	@SuppressWarnings("static-access")
 	@GetMapping("/contattiGestione")
 	public String manageContactShocases(Model model) throws BusinessException {
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
-		Optional<ContactShowcase> ultimateContact = serviceContact.findUltimateContac();
-		Page<ContactShowcase> contacts = serviceContact.getAllContactPageable(pageModel.getPAGE(),
-				pageModel.getSIZE());
-		
+		Page<ContactShowcase> contacts = serviceContact.getAllContactPageable(pageModel.getPAGE(), pageModel.getSIZE());
+
 		model.addAttribute("cont", contacts);
 		return "/backoffice/contactDashboard/manage.html";
 
 	}
-	
+
 	@GetMapping("/contattiCrea")
 	public String createProductShocases(Model model) throws BusinessException {
 		ContactShowcase contactShowcase = new ContactShowcase();
 		model.addAttribute("contact_showcase", contactShowcase);
 		return "/backoffice/contactDashboard/create.html";
 	}
-	
+
 	@PostMapping("/contattiCrea")
-	public ModelAndView create(@Valid @ModelAttribute("contact_showcase") ContactShowcase contact,
-			Errors errors, Authentication auth)
-			throws BusinessException {
+	public ModelAndView create(@Valid @ModelAttribute("contact_showcase") ContactShowcase contact, Errors errors,
+			Authentication auth) throws BusinessException {
 		User userAuth = new User();
+		ContactShowcase contactShowcaseActive = new ContactShowcase();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
 		try {
@@ -86,42 +86,164 @@ public class ContactController {
 			e.printStackTrace();
 
 		}
+
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/contactDashboard/create.html");
-		contact.setUser(userAuth);
-		contact.setActive(false);
-		try {
-			serviceContact.saveContactShowcase(contact);
-		} catch (BusinessException e) {
-			e.printStackTrace();
+		
+		if (contact.getActive()) {
+
+			if (serviceContact.findActiveContac() != null) {
+
+				try {
+					contactShowcaseActive = serviceContact.findActiveContac();
+					contactShowcaseActive.setActive(false);
+					serviceContact.saveContactShowcase(contactShowcaseActive);
+					contact.setActive(true);
+					contact.setUser(userAuth);
+					serviceContact.saveContactShowcase(contact);
+
+				} catch (BusinessException e) {
+					e.printStackTrace();
+
+				}
+
+			} else {
+
+				contact.setUser(userAuth);
+				contact.setActive(true);
+
+				try {
+					serviceContact.saveContactShowcase(contact);
+				} catch (BusinessException e) {
+					e.printStackTrace();
+
+				}
+
+			}
+
+		} else if (!contact.getActive()) {
+
+			contact.setUser(userAuth);
+			try {
+				serviceContact.saveContactShowcase(contact);
+			} catch (BusinessException e) {
+				e.printStackTrace();
+
+			}
 
 		}
 
 		return modelAndView;
 	}
-
 	
+	@GetMapping("/contattiUpdate")
+	public String updateContactShocases(Long id, Model model) throws BusinessException {
+		ContactShowcase contactShowcase = new ContactShowcase();
+
+		try {
+			contactShowcase = serviceContact.findContactShowcase(id);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		model.addAttribute("contact_showcase_update", contactShowcase);
+
+		return "/backoffice/contactDashboard/update.html";
+	}
+	
+	@PostMapping("/contattiUpdate/{id}")
+	public String update(@PathVariable("id") Long id,
+			@Valid @ModelAttribute("contact_showcase_update") ContactShowcase contactShowcase, Errors errors,
+			 Authentication auth) throws BusinessException {
+		User userAuth = new User();
+		ContactShowcase contactShowcaseActive = new ContactShowcase();
+		String username = auth.getName();
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		
+		if (contactShowcase.getActive()) {
+
+			if (serviceContact.findActiveContac() != null) {
+
+				try {
+					contactShowcaseActive = serviceContact.findActiveContac();
+					contactShowcaseActive.setActive(false);
+					serviceContact.saveContactShowcase(contactShowcaseActive);
+					contactShowcase.setActive(true);
+					contactShowcase.setUser(userAuth);
+					serviceContact.saveContactShowcase(contactShowcase);
+
+				} catch (BusinessException e) {
+					e.printStackTrace();
+
+				}
+
+			} else {
+
+				contactShowcase.setUser(userAuth);
+				contactShowcase.setActive(true);
+
+				try {
+					serviceContact.saveContactShowcase(contactShowcase);
+				} catch (BusinessException e) {
+					e.printStackTrace();
+
+				}
+
+			}
+
+		} else if (!contactShowcase.getActive()) {
+
+			contactShowcase.setUser(userAuth);
+			try {
+				serviceContact.saveContactShowcase(contactShowcase);
+			} catch (BusinessException e) {
+				e.printStackTrace();
+
+			}
+
+		}
+
+		return "redirect:/contattiGestione";
+	}
+
+	@PostMapping("/contattiDelete/{id}")
+	public String deleteProductShocases(@PathVariable(value = "id") Long id) throws BusinessException {
+		try {
+			serviceContact.deleteContactShowcase(id);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		return "redirect:/contattiGestione";
+
+	}
+
 	@PostMapping("/sendEmail")
-	public String sendEmail(@Valid  @ModelAttribute("contact") Contact contact, BindingResult result, RedirectAttributes redirectAttributes)throws BusinessException {
+	public String sendEmail(@Valid @ModelAttribute("contact") Contact contact, BindingResult result,
+			RedirectAttributes redirectAttributes) throws BusinessException {
 		String from = contact.getEmail();
 		String object = contact.getObject();
 		String body = contact.getText();
-		String nameSender = contact.getName();		
+		String nameSender = contact.getName();
 		redirectAttributes.addFlashAttribute("message", "Qualcosa è andato storto...Riprova!");
-	    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-	    
-	    if (result.hasErrors()) {
-	        return "redirect:/contatti";
-	    }
-	    
-	    serviceEmail.sendContact(from, object, body, nameSender);
-	    redirectAttributes.addFlashAttribute("message", "Il messaggio è stato inviato correttamente!");
-	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");			
-			
-        return "redirect:/contatti";
-			
-       
-    }
-	
+		redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+
+		if (result.hasErrors()) {
+			return "redirect:/contatti";
+		}
+
+		serviceEmail.sendContact(from, object, body, nameSender);
+		redirectAttributes.addFlashAttribute("message", "Il messaggio è stato inviato correttamente!");
+		redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+
+		return "redirect:/contatti";
+
+	}
 
 }

@@ -11,15 +11,17 @@ public interface ContactService {
 	
 	List<ContactShowcase> findAllContactShowcases() throws BusinessException;
 	
-	Optional<ContactShowcase> findContactShowcase(Long id) throws BusinessException;
+	ContactShowcase findContactShowcase(Long id) throws BusinessException;
 	
-	Optional<ContactShowcase> findUltimateContac() throws BusinessException;
+	ContactShowcase findActiveContac() throws BusinessException;
 
 	void deleteContactShowcase(Long id) throws BusinessException;
 
 	ContactShowcase saveContactShowcase(ContactShowcase contact) throws BusinessException;
 
 	Page<ContactShowcase> getAllContactPageable(Integer page, Integer size) throws BusinessException;
+
+
 
 
 

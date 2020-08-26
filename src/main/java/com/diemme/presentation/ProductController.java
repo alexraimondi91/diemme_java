@@ -120,7 +120,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/prodottiDelete/{id}")
-	public String createProductShocases(@PathVariable(value = "id") Long id) throws BusinessException {
+	public String deleteProductShocases(@PathVariable(value = "id") Long id) throws BusinessException {
 		try {
 			serviceProduct.deleteProduct(id);
 		} catch (BusinessException e) {

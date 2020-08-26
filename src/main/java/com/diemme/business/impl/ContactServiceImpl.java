@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.ContactService;
 import com.diemme.domain.Contact;
@@ -27,38 +28,16 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public Optional<ContactShowcase> findUltimateContac() throws BusinessException {
+	public ContactShowcase findActiveContac() throws BusinessException {
 
-		List<ContactShowcase> contactsList = contactShowcaseRepository.findAll();
-		Long idMaxContact = new Long(0);
-
-		for (Integer i = 0; i < contactsList.size(); i++) {
-			if (i == 0) {
-
-				idMaxContact = contactsList.get(i).getId();
-
-			} else {
-
-				if (idMaxContact < contactsList.get(i).getId()) {
-					idMaxContact = contactsList.get(i).getId();
-				}
-
-			}
-
-		}
-
-		Optional<ContactShowcase> ultimate = contactShowcaseRepository.findById(idMaxContact);
-		if (ultimate.isPresent()) {
-			ultimate.get().setActive(true);
-		}
-		return ultimate;
-
+		ContactShowcase contact = contactShowcaseRepository.findActiveContact();
+		return contact;
 	}
 
 	@Override
-	public Optional<ContactShowcase> findContactShowcase(Long id) throws BusinessException {
+	public ContactShowcase findContactShowcase(Long id) throws BusinessException {
 
-		return contactShowcaseRepository.findById(id);
+		return contactShowcaseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Contact", "id", id));
 	}
 	
 	@Override
