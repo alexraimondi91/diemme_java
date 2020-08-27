@@ -32,6 +32,7 @@ public class IndexController {
 		return "/frontoffice/home/home.html";
 		
 	}
+
 	
 	@GetMapping("/showcase/{id}")
 	@ResponseBody
