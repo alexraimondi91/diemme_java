@@ -38,6 +38,9 @@ public class NewsShowcase extends BaseModel{
 	@Lob
 	@Column(name= "content_img",length=1000000, nullable = false)
 	private byte[] contentImg;
+	@Lob
+	@Column(name = "compress_img", length = 100000, nullable = true)
+	private byte[] compressImg;
 	
 	@Column(name = "description", nullable = false)
 	@NotBlank
