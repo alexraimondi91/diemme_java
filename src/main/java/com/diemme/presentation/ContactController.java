@@ -29,7 +29,6 @@ import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
 import com.diemme.domain.Contact;
 import com.diemme.domain.ContactShowcase;
-import com.diemme.domain.ProductShowcase;
 import com.diemme.domain.User;
 
 @Controller
@@ -47,7 +46,7 @@ public class ContactController {
 	@GetMapping("/contatti")
 	public String listContactsShowcases(Model model) throws BusinessException {
 
-		ContactShowcase contactActive = serviceContact.findActiveContac();
+		ContactShowcase contactActive = serviceContact.findActiveContac();		
 		model.addAttribute("contact", new Contact());
 		model.addAttribute("contacts", contactActive);
 		return "/frontoffice/contatti/contatti.html";
