@@ -77,7 +77,7 @@ public class User extends BaseModel{
     private Set<Message> messages;
 	
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable( 
         name = "user_role", 
         joinColumns = @JoinColumn(

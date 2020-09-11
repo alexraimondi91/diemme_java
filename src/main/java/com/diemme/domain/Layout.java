@@ -1,12 +1,16 @@
 package com.diemme.domain;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -28,16 +32,15 @@ public class Layout extends BaseModel{
 	@Column(name = "name", nullable = false)
 	@NotBlank
 	private String name;
-	@Column(name = "is_final", nullable = false)
-	private Boolean isFinal;
-	@Column(name = "name_file", nullable = false)
-	@NotBlank
-	private String nameFile;
-	@Column(name = "path", nullable = false)
-	@NotBlank
-	private String path;
-	@Column(name = "description", nullable = false)
+	@Column(name = "completed", nullable = false)
+	private Boolean completed;
+	@Column(name = "status", nullable = false)
+	private String status;
+	@Column(name = "description", nullable = true)
 	@NotBlank
 	private String description;
+	
+	@OneToMany(mappedBy="layout",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<FileLayout> flileLayout;
 
 }
