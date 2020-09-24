@@ -27,9 +27,9 @@ import com.diemme.business.ContactService;
 import com.diemme.business.EmailService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.Contact;
-import com.diemme.domain.ContactShowcase;
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.Contact;
+import com.diemme.domain.mysql.ContactShowcase;
+import com.diemme.domain.mysql.User;
 
 @Controller
 public class ContactController {

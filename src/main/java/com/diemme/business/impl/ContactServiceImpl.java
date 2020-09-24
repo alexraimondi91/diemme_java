@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.ContactService;
-import com.diemme.domain.Contact;
-import com.diemme.domain.ContactShowcase;
-import com.diemme.domain.ProductShowcase;
-import com.diemme.repository.ContactShowcaseRepository;
+import com.diemme.domain.mysql.Contact;
+import com.diemme.domain.mysql.ContactShowcase;
+import com.diemme.domain.mysql.ProductShowcase;
+import com.diemme.repository.mysql.ContactShowcaseRepository;
 
 @Service
 public class ContactServiceImpl implements ContactService {

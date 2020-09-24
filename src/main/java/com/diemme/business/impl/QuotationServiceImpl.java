@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.QuotationService;
-import com.diemme.domain.QuotationShowcase;
-import com.diemme.domain.TechnologyShowcase;
-import com.diemme.repository.QuotationShowcaseRepository;
+import com.diemme.domain.mysql.QuotationShowcase;
+import com.diemme.domain.mysql.TechnologyShowcase;
+import com.diemme.repository.mysql.QuotationShowcaseRepository;
 
 @Service
 public class QuotationServiceImpl implements QuotationService{

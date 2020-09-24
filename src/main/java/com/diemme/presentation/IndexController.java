@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.IndexService;
-import com.diemme.domain.NewsShowcase;
+import com.diemme.domain.mysql.NewsShowcase;
 
 
 @Controller

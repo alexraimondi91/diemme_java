@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.diemme.domain.ProductShowcase;
-import com.diemme.domain.TechnologyShowcase;
+import com.diemme.domain.mysql.ProductShowcase;
+import com.diemme.domain.mysql.TechnologyShowcase;
 
 
 public interface ProductService {

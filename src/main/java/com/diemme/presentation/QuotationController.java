@@ -22,9 +22,9 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.QuotationService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.ContactShowcase;
-import com.diemme.domain.QuotationShowcase;
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.ContactShowcase;
+import com.diemme.domain.mysql.QuotationShowcase;
+import com.diemme.domain.mysql.User;
 
 @Controller
 public class QuotationController {

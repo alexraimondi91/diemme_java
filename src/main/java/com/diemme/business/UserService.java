@@ -1,6 +1,6 @@
 package com.diemme.business;
 
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.User;
 
 public interface UserService {
 	

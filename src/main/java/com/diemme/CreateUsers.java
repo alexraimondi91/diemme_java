@@ -1,5 +1,7 @@
 package com.diemme;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,11 +10,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.diemme.domain.Role;
-import com.diemme.domain.RoleType;
-import com.diemme.domain.User;
-import com.diemme.repository.RoleRepository;
-import com.diemme.repository.UserRepository;
+import com.diemme.domain.mongo.Message;
+import com.diemme.domain.mysql.Role;
+import com.diemme.domain.mysql.RoleType;
+import com.diemme.domain.mysql.User;
+import com.diemme.repository.mongo.MessageRepository;
+import com.diemme.repository.mysql.RoleRepository;
+import com.diemme.repository.mysql.UserRepository;
 
 @Component
 public class CreateUsers implements CommandLineRunner {
@@ -22,6 +26,9 @@ public class CreateUsers implements CommandLineRunner {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private MessageRepository messageRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -130,6 +137,12 @@ public class CreateUsers implements CommandLineRunner {
 			userRepository.save(userProductor);
 
 		}
+		
+		/*
+		 * Message message = new Message(); message.setId(1L);
+		 * message.setDate(LocalDateTime.now()); message.setMessage("prova");
+		 * messageRepository.save(message);
+		 */
 
 	}
 

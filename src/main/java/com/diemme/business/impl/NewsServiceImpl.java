@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.NewsService;
-import com.diemme.domain.NewsShowcase;
-import com.diemme.repository.NewsShowcaseRepository;
+import com.diemme.domain.mysql.NewsShowcase;
+import com.diemme.repository.mysql.NewsShowcaseRepository;
 
 @Service
 public class NewsServiceImpl implements NewsService {

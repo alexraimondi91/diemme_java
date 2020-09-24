@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
-import com.diemme.domain.TechnologyShowcase;
-import com.diemme.repository.TechnologyShowcaseRepository;
+import com.diemme.domain.mysql.TechnologyShowcase;
+import com.diemme.repository.mysql.TechnologyShowcaseRepository;
 
 @Service
 public class TechnologyServiceImpl implements TechnologyService{

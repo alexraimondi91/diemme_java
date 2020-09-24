@@ -29,8 +29,8 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.TechnologyShowcase;
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.TechnologyShowcase;
+import com.diemme.domain.mysql.User;
 
 @Controller
 public class TechnologyController {

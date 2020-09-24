@@ -26,8 +26,8 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.ProductService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.ProductShowcase;
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.ProductShowcase;
+import com.diemme.domain.mysql.User;
 
 @Controller
 public class ProductController {

@@ -21,9 +21,9 @@ import com.diemme.business.EmailService;
 import com.diemme.business.IndexService;
 import com.diemme.business.RoleService;
 import com.diemme.business.impl.UserServiceImpl;
-import com.diemme.domain.NewsShowcase;
-import com.diemme.domain.Role;
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.NewsShowcase;
+import com.diemme.domain.mysql.Role;
+import com.diemme.domain.mysql.User;
 
 @Controller
 public class LoginController {

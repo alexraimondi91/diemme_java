@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.diemme.domain.NewsShowcase;
+import com.diemme.domain.mysql.NewsShowcase;
 
 public interface NewsService {
 

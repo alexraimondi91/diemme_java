@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.diemme.domain.QuotationShowcase;
+import com.diemme.domain.mysql.QuotationShowcase;
 
 public interface QuotationService {
 

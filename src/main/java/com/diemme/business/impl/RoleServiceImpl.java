@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.diemme.business.RoleService;
-import com.diemme.domain.Role;
-import com.diemme.repository.RoleRepository;
+import com.diemme.domain.mysql.Role;
+import com.diemme.repository.mysql.RoleRepository;
 
 @Service
 public class RoleServiceImpl implements RoleService {

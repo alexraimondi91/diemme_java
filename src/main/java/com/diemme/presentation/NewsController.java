@@ -26,8 +26,8 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.NewsService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.NewsShowcase;
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.NewsShowcase;
+import com.diemme.domain.mysql.User;
 
 @Controller
 public class NewsController {
@@ -37,9 +37,8 @@ public class NewsController {
 	@Autowired
 	private UserService serviceUser;
 	@Autowired
-	private PageModel pageModel;
-	
-private com.diemme.util.CompressionUtils CompressionUtils;
+	private PageModel pageModel;	
+    private com.diemme.util.CompressionUtils CompressionUtils;
 
 	
 	@GetMapping("/news")

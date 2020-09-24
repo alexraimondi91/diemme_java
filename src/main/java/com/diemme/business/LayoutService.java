@@ -2,18 +2,18 @@ package com.diemme.business;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import com.diemme.domain.Layout;
+import com.diemme.domain.mysql.Layout;
 
 public interface LayoutService {
 	
-	List<Layout> findAllLayout() throws BusinessException;
-
-	Optional<Layout> findNewsLayout(Long id) throws BusinessException;
-
+	
 	Layout getLayout(Long id) throws BusinessException;
+	
+	Page<Layout> getLayoutsByUserId(Long id, Integer page, Integer size) throws BusinessException;
 
 	Layout saveLayout(Layout news) throws BusinessException;
 

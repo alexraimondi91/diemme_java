@@ -1,8 +1,9 @@
 package com.diemme.business;
 
-import com.diemme.domain.NewsShowcase;
 import java.util.List;
 import java.util.Optional;
+
+import com.diemme.domain.mysql.NewsShowcase;
 
 
 public interface IndexService {

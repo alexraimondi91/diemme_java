@@ -3,8 +3,8 @@ package com.diemme.business.impl;
 import java.util.Optional;
 
 import com.diemme.business.BusinessException;
-import com.diemme.domain.Role;
-import com.diemme.domain.User;
+import com.diemme.domain.mysql.Role;
+import com.diemme.domain.mysql.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

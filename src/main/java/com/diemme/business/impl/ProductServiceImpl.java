@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.ProductService;
-import com.diemme.domain.ProductShowcase;
-import com.diemme.domain.TechnologyShowcase;
-import com.diemme.repository.ProductsShowcaseRepository;
+import com.diemme.domain.mysql.ProductShowcase;
+import com.diemme.domain.mysql.TechnologyShowcase;
+import com.diemme.repository.mysql.ProductsShowcaseRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
