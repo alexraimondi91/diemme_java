@@ -26,16 +26,15 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class FileLayout extends BaseModel{
 	
-	@Column(name = "name", nullable = false)
-	@NotBlank
+	@Column(name = "name", nullable = true)
 	private String name;
 	
 	@Lob
-	@Column(name= "content_img",length=1000000, nullable = false)
-	private List<byte[]> contentImg;
+	@Column(name= "content_img",length=3000000, nullable = false)
+	byte[] contentImg;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "layout_id", nullable = false)
+	@JoinColumn(name = "layout_id", nullable = true)
 	private Layout layout;
 
 }

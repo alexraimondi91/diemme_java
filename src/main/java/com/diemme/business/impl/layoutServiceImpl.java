@@ -14,6 +14,7 @@ import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.LayoutService;
 import com.diemme.domain.mysql.Layout;
+import com.diemme.domain.mysql.User;
 import com.diemme.repository.mysql.LayoutRepository;
 
 @Service
@@ -48,6 +49,11 @@ public class layoutServiceImpl implements LayoutService{
 		Pageable pageable = PageRequest.of(page,size);
 		Page<Layout> pageLayout = layoutRepository.getLayoutByUserId(pageable, id);
 		return pageLayout;
+	}
+
+	@Override
+	public Set<User> getAllUsersLayout(Long id) throws BusinessException {
+		return layoutRepository.getUsersLayout(id);
 	}
 
 	

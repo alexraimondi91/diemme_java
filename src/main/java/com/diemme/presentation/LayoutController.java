@@ -30,10 +30,12 @@ import com.diemme.business.LayoutService;
 import com.diemme.business.NewsService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
+import com.diemme.domain.mysql.FileLayout;
 import com.diemme.domain.mysql.Layout;
 import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.User;
+import com.diemme.repository.mysql.FileLayoutRepository;
 
 @Controller
 public class LayoutController {
@@ -43,6 +45,8 @@ public class LayoutController {
 	@Autowired
 	private UserService serviceUser;
 	@Autowired
+	private FileLayoutRepository fileLayoutRepository;
+	@Autowired
 	private PageModel pageModel;
 
 	@SuppressWarnings("static-access")
@@ -51,7 +55,7 @@ public class LayoutController {
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
 		Page<Layout> layouts = serviceLayout.getAllLayoutPageable(pageModel.getPAGE(), pageModel.getSIZE());
-		
+
 		model.addAttribute("layouts", layouts);
 		model.addAttribute("layouts", layouts);
 		model.addAttribute("layouts", layouts);
@@ -63,26 +67,23 @@ public class LayoutController {
 	public String createNewsShocases(Model model) throws BusinessException {
 		Layout layout = new Layout();
 		model.addAttribute("layout", layout);
+
 		return "/backoffice/layoutDashboard/create.html";
 	}
 
 	@PostMapping("/layoutCrea")
 	public ModelAndView create(@Valid @ModelAttribute("layout") Layout layout, Errors errors,
-			@RequestParam("contentImg") List<MultipartFile> contentImg, Authentication auth) throws BusinessException {
+			@RequestParam(value = "contentImg") List<MultipartFile> contentImg, Authentication auth)
+			throws BusinessException {
 		System.out.println("\n\n\n contentImg" + contentImg);
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
+		Set<FileLayout> file = new HashSet<FileLayout>();
+		FileLayout fileLayoutSave = new FileLayout();
+		Layout layoutSave = new Layout();
 		List<byte[]> Listbytes = new ArrayList<byte[]>();
 		Set<User> usersLayout = new HashSet<User>();
 
-		try {
-			for (MultipartFile bytes : contentImg) {
-				Listbytes.add(bytes.getBytes());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		layout.setContentImg(Listbytes);
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
@@ -102,16 +103,46 @@ public class LayoutController {
 			}
 
 		}
-		
-		Set<User> userClient = serviceUser.getUsersByRole("CLIENT");		
+
+		Set<User> userClient = serviceUser.getUsersByRole("CLIENT");
 		usersLayout.add(userAuth);
 		modelAndView.addObject("userClient", userClient);
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/layoutDashboard/create.html");
-
 		layout.setUsers(usersLayout);
+		layout.setStatus(new String("in progress"));
+		
+		System.out.println("\n\n\n layout" + layout);
+
 		try {
-			serviceLayout.saveLayout(layout);
+			layoutSave = serviceLayout.saveLayout(layout);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		try {
+			for (MultipartFile bytes : contentImg) {
+				Listbytes.add(bytes.getBytes());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		for (byte[] files : Listbytes) {
+
+			fileLayoutSave.setContentImg(files);
+			fileLayoutSave.setLayout(layoutSave);
+			file.add(fileLayoutSave);
+
+			
+		}
+		System.out.println("\n\n\n fileLayoutSave" + fileLayoutSave);
+
+		fileLayoutRepository.saveAll(file);
+		layoutSave.setFileLayouts(file);
+		try {
+			layoutSave = serviceLayout.saveLayout(layout);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
@@ -147,15 +178,17 @@ public class LayoutController {
 
 	@PostMapping("/layoutUpdate/{id}")
 	public String update(@PathVariable("id") Long id, @Valid @ModelAttribute("layout") Layout layout, Errors errors,
-			@RequestParam("contentImg") List<MultipartFile> contentImg) throws BusinessException {
+			@RequestParam("contentImg") MultipartFile[] contentImg) throws BusinessException {
 
-		List<byte[]> Listbytes = new ArrayList<byte[]>();
+		List<FileLayout> file = new ArrayList<FileLayout>();
+
+		byte[] bytes = new byte[(int) contentImg.getSize()];
 		Set<User> usersLayout = new HashSet<User>();
 
 		try {
-			for (MultipartFile bytes : contentImg) {
-				Listbytes.add(bytes.getBytes());
-			}
+
+			bytes = contentImg.getBytes();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

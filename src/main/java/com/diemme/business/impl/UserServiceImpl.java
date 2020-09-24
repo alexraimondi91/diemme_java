@@ -13,6 +13,7 @@ import com.diemme.repository.mysql.UserRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -47,5 +48,13 @@ public class UserServiceImpl implements UserService{
     public User saveUser(User user) throws BusinessException{
         return userRepository.save(user);
     }
+
+	@Override
+	public Set<User> getUsersByRole(String role) throws BusinessException {
+		// TODO Auto-generated method stub
+		return userRepository.findUserByRole(role);
+	}
+	
+	
 
 }

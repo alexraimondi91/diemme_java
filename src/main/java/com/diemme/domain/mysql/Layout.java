@@ -36,14 +36,12 @@ public class Layout extends BaseModel{
 
 	
 	@Column(name = "name", nullable = false)
-	@NotBlank
 	private String name;
 	@Column(name = "completed", nullable = false)
 	private Boolean completed;
 	@Column(name = "status", nullable = false)
 	private String status;
 	@Column(name = "description", nullable = true)
-	@NotBlank
 	private String description;	
 		
 	@ManyToMany(mappedBy="layouts")

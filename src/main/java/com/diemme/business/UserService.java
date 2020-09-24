@@ -1,5 +1,7 @@
 package com.diemme.business;
 
+import java.util.Set;
+
 import com.diemme.domain.mysql.User;
 
 public interface UserService {
@@ -9,5 +11,7 @@ public interface UserService {
     User findUserByUserName(String userName)throws BusinessException;
     
     User saveUser(User user)throws BusinessException;
+    
+    Set<User> getUsersByRole (String role)throws BusinessException;
 
 }
