@@ -26,8 +26,8 @@ public class FileController {
 	private PageModel pageModel;
 	
 	@SuppressWarnings("static-access")
-	@GetMapping("/layoutVisione/{id}")
-	public String manageNewsShocases(Model model, @PathVariable Long id) throws BusinessException {
+	@GetMapping("/layoutVisione")
+	public String manageNewsShocases(Model model, Long id) throws BusinessException {
 		pageModel.setSIZE(1);
 		pageModel.initPageAndSize();
 
@@ -39,9 +39,9 @@ public class FileController {
 
 	}
 	
-	@GetMapping("/fileDelete/{id}")
+	@GetMapping("/fileDelete")
 	@ResponseBody
-	public byte[] getImage (@PathVariable Long id) throws BusinessException{
+	public byte[] getImage (Long id) throws BusinessException{
 		
 		FileLayout file = fileService.getFileLayout(id);
 		byte[] imageFile = file.getContentImg();
