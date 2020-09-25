@@ -41,11 +41,9 @@
 											<th>Descrizione</th>
 											<th>Data creazione</th>
 											<th>Data modifica</th>
-											<th>Nome file layout</th>
 											<th>Users</th>
-											<th>stato</th>
+											<th>stato ordine</th>
 											<th>completato</th>
-											<th>immagine</th>
 											<th style="width: 40px">Action</th>
 										</tr>
 										<tr th:each="lay : ${layouts}">
@@ -56,15 +54,14 @@
 												th:text="${#temporals.format(lay.insertDate, 'dd-MMM-yyyy')}"></td>
 											<td
 												th:text="${#temporals.format(lay.modifyDate, 'dd-MMM-yyyy')}"></td>
-											<td th:utext="${lay.nameFile}"></td>
 											<td th:each="user : ${lay.users}">
 												<ul>
-													<li th:utext="${user.name + ' ' + user.surname}"></li>
+													<li th:text="${user.name + ' ' + user.surname}"></li>
 												</ul>
 
 											</td>
 											<td th:utext="${lay.status}"></td>
-											<td><span th:if="${lay.completed == true}"
+											<td><span th:if="${lay.completed}"
 												style="color: green">trattativa conclusa!</span> <span
 												th:unless="${lay.completed == false}" style="color: orange">trattativa
 													in corso..</span></td>
@@ -73,7 +70,7 @@
 											<td>
 
 												<form action="#"
-													th:action="@{'/layoutDelete/{id}'(id=${layout.id})}"
+													th:action="@{'/layoutDelete/{id}'(id=${lay.id})}"
 													th:method="delete">
 
 													<input type="hidden" value="delete">
@@ -84,14 +81,14 @@
 												<hr>
 												<form action="#" th:action="@{/layoutUpdate}"
 													th:method="GET">
-													<input type="hidden" name='id' th:value="${layout.id}">
+													<input type="hidden" name='id' th:value="${lay.id}">
 													<button type="submit" class="btn btn-secondary">
 														<i class="fas fa-edit"></i>
 													</button>
 												</form>
 												<hr>
 												<form action="#"
-													th:action="@{'/layoutVisione/{id}'(id=${layout.id})}"
+													th:action="@{'/layoutVisione/{id}'(id=${lay.id})}"
 													th:method="get">
 
 													<input type="hidden" value="delete">
@@ -119,7 +116,7 @@
 															data-toggle="tooltip"> <span aria-hidden="true">&laquo;</span>
 											</a></li>
 											<li class="page-item"
-															th:classappend="${i eq layouts + 1} ? 'active'"
+															th:classappend="${i eq layouts.number + 1} ? 'active'"
 															th:each="i : ${#numbers.sequence( 1, layouts.totalPages, 1)}">
 												<a class="page-link"
 															th:href="@{/layoutGestione?page={id}(id=${i})}"

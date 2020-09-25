@@ -31,6 +31,7 @@ import com.diemme.business.NewsService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
 import com.diemme.domain.mysql.FileLayout;
+import com.diemme.domain.mysql.FormWrapperLayout;
 import com.diemme.domain.mysql.Layout;
 import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.Role;
@@ -55,31 +56,32 @@ public class LayoutController {
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
 		Page<Layout> layouts = serviceLayout.getAllLayoutPageable(pageModel.getPAGE(), pageModel.getSIZE());
+		model.addAttribute("layouts", layouts);
 
-		model.addAttribute("layouts", layouts);
-		model.addAttribute("layouts", layouts);
-		model.addAttribute("layouts", layouts);
 		return "/backoffice/layoutDashboard/manage.html";
 
 	}
 
 	@GetMapping("/layoutCrea")
 	public String createNewsShocases(Model model) throws BusinessException {
-		Layout layout = new Layout();
-		model.addAttribute("layout", layout);
+		FormWrapperLayout layoutWrapper = new FormWrapperLayout();
+		Set<User> userClients = serviceUser.getUsersByRole("CLIENT");
+		model.addAttribute("userClients", userClients);
+		model.addAttribute("layoutWrapper", layoutWrapper);
 
 		return "/backoffice/layoutDashboard/create.html";
 	}
 
 	@PostMapping("/layoutCrea")
-	public ModelAndView create(@Valid @ModelAttribute("layout") Layout layout, Errors errors,
+	public ModelAndView create(@Valid @ModelAttribute("layoutWrapper") FormWrapperLayout layoutWrapper, Errors errors,
 			@RequestParam(value = "contentImg") List<MultipartFile> contentImg, Authentication auth)
 			throws BusinessException {
-		System.out.println("\n\n\n contentImg" + contentImg);
+
+		int i = 1;
 		User userAuth = new User();
+		User userClient = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		Set<FileLayout> file = new HashSet<FileLayout>();
-		FileLayout fileLayoutSave = new FileLayout();
 		Layout layoutSave = new Layout();
 		List<byte[]> Listbytes = new ArrayList<byte[]>();
 		Set<User> usersLayout = new HashSet<User>();
@@ -87,35 +89,29 @@ public class LayoutController {
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
+
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
 		}
-
-		for (User user : layout.getUsers()) {
-
-			for (Role role : user.getRoles()) {
-
-				if (role.getRole() == "CLIENT" || role.getRole() == "PRODUCTOR") {
-					usersLayout.add(user);
-				}
-
-			}
-
+		
+		for(User user : layoutWrapper.getUserClient()) {
+			usersLayout.add(user);
 		}
-
-		Set<User> userClient = serviceUser.getUsersByRole("CLIENT");
-		usersLayout.add(userAuth);
+		
+		usersLayout.add(userAuth);		
 		modelAndView.addObject("userClient", userClient);
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/layoutDashboard/create.html");
-		layout.setUsers(usersLayout);
-		layout.setStatus(new String("in progress"));
-		
-		System.out.println("\n\n\n layout" + layout);
+		layoutSave.setName(layoutWrapper.getLayout().getName());
+		layoutSave.setDescription(layoutWrapper.getLayout().getDescription());
+		layoutSave.setCompleted(false);
+		layoutSave.setUsers(usersLayout);
+		layoutSave.setStatus(new String("in progress"));		
+		System.out.println("\n users" + usersLayout);
 
 		try {
-			layoutSave = serviceLayout.saveLayout(layout);
+			layoutSave = serviceLayout.saveLayout(layoutSave);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
@@ -129,24 +125,20 @@ public class LayoutController {
 			e.printStackTrace();
 		}
 
-		for (byte[] files : Listbytes) {
-
-			fileLayoutSave.setContentImg(files);
-			fileLayoutSave.setLayout(layoutSave);
-			file.add(fileLayoutSave);
-
+		for (byte[] fileContent : Listbytes) {
 			
-		}
-		System.out.println("\n\n\n fileLayoutSave" + fileLayoutSave);
+			FileLayout fileLayoutSave = new FileLayout();
+			fileLayoutSave.setContentImg(fileContent);
+			fileLayoutSave.setLayout(layoutSave);
+			fileLayoutSave.setName((String)"layout: "+ layoutSave.getName() + ", file N° " + i);
+			fileLayoutRepository.save(fileLayoutSave);
+			i ++;
 
-		fileLayoutRepository.saveAll(file);
+
+		}
+
 		layoutSave.setFileLayouts(file);
-		try {
-			layoutSave = serviceLayout.saveLayout(layout);
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
+		
 
 		return modelAndView;
 	}

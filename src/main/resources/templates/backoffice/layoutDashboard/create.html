@@ -25,7 +25,8 @@
 		<!-- Main content -->
 		<section class="content">
 			<form method="POST" action="" th:action="@{/layoutCrea}"
-				th:object="${layout}" id="myForm" enctype="multipart/form-data">
+				th:object="${layoutWrapper}" id="myForm"
+				enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="alert alert-success alert-dismissible"
@@ -70,26 +71,21 @@
 
 								<div class="form-group  @error('title') has-error @enderror">
 									<label for="inputName">Nome</label> <input required
-										th:field="*{name}" type="text" id="inputName"
+										th:field="*{layout.name}" type="text" id="inputName"
 										class="form-control">
 								</div>
 								<div class="form-group  @error('title') has-error @enderror">
 									<label for="inputName">Descrizione</label> <input required
-										th:field="*{description}" type="text" id="inputName"
+										th:field="*{layout.description}" type="text" id="inputName"
 										class="form-control">
-								</div>
-								<div class="form-group  @error('title') has-error @enderror">
-									<label for="inputName">Completato</label> <input
-										th:field="*{completed}" type="checkbox" id="inputName"
-										class="form-check-input">
 								</div>
 
 								<div class="form-group  @error('title') has-error @enderror">
-									<th:block th:each="user , stat : ${userClient}">
-										<input type="checkbox" th:field="*{userClient}"
-											name="userClient" th:value="${user.id]}" />
-										<label th:text="${user.name}"></label>
-									</th:block>
+								    <label for="inputName">Cliente</label>
+									<select th:field="*{userClient}">
+										<option th:each="user : ${userClients}" th:value="${user.id}"
+											th:utext="${user.userName}" />
+									</select>
 								</div>
 								<div
 									class="form-group @error('principalImage') has-error @enderror">
@@ -98,13 +94,13 @@
 										<div class="custom-file">
 											<label class="custom-file-label" for="principalImage">Scegli
 												immagine max 1MB</label> <input required type="file"
-												onchange="check()" max-file-size="100" name="contentImg"
-												th:name="contentImg"class="custom-file-input"
-												id="exampleInputFile" multiple="multiple">
+												onchange="check()" name="contentImg" th:name="contentImg"
+												class="custom-file-input" id="exampleInputFile"
+												multiple="multiple">
 										</div>
 									</div>
 								</div>
-								
+
 							</div>
 							<!-- /.card-body -->
 						</div>

@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -44,11 +45,17 @@ public class Layout extends BaseModel{
 	@Column(name = "description", nullable = true)
 	private String description;	
 		
-	@ManyToMany(mappedBy="layouts")
-    private Set<User> users = new HashSet<User>();	
+	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable( 
+        name = "layout_user", 
+        joinColumns = @JoinColumn(
+          name = "layout_id", referencedColumnName = "id", nullable = false), 
+        inverseJoinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id", nullable = true)) 
+	private Set<User> users;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "layout", cascade = CascadeType.ALL)
-	private List<FileLayout> fileLayouts;
+	private Set<FileLayout> fileLayouts;
 
 
 }
