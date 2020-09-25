@@ -61,7 +61,7 @@
 
 											</td>
 											<td th:utext="${lay.status}"></td>
-											<td><span th:if="${lay.completed}"
+											<td><span th:if="${lay.completed == true}"
 												style="color: green">trattativa conclusa!</span> <span
 												th:unless="${lay.completed == false}" style="color: orange">trattativa
 													in corso..</span></td>

@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
+import com.diemme.business.FileLayoutService;
 import com.diemme.business.LayoutService;
 import com.diemme.business.NewsService;
 import com.diemme.business.UserService;
@@ -46,7 +47,7 @@ public class LayoutController {
 	@Autowired
 	private UserService serviceUser;
 	@Autowired
-	private FileLayoutRepository fileLayoutRepository;
+	private FileLayoutService fileLayoutService;
 	@Autowired
 	private PageModel pageModel;
 
@@ -108,7 +109,6 @@ public class LayoutController {
 		layoutSave.setCompleted(false);
 		layoutSave.setUsers(usersLayout);
 		layoutSave.setStatus(new String("in progress"));		
-		System.out.println("\n users" + usersLayout);
 
 		try {
 			layoutSave = serviceLayout.saveLayout(layoutSave);
@@ -131,10 +131,14 @@ public class LayoutController {
 			fileLayoutSave.setContentImg(fileContent);
 			fileLayoutSave.setLayout(layoutSave);
 			fileLayoutSave.setName((String)"layout: "+ layoutSave.getName() + ", file N° " + i);
-			fileLayoutRepository.save(fileLayoutSave);
+			
+			try {
+				fileLayoutService.saveFileLayout(fileLayoutSave);
+			} catch (BusinessException e) {
+				e.printStackTrace();
+
+			}
 			i ++;
-
-
 		}
 
 		layoutSave.setFileLayouts(file);
@@ -169,28 +173,33 @@ public class LayoutController {
 	}
 
 	@PostMapping("/layoutUpdate/{id}")
-	public String update(@PathVariable("id") Long id, @Valid @ModelAttribute("layout") Layout layout, Errors errors,
-			@RequestParam("contentImg") MultipartFile[] contentImg) throws BusinessException {
+	public String update(@PathVariable("id") Long id, @Valid @ModelAttribute("layoutWrapper") Layout layout, Errors errors,
+			@RequestParam("contentImg") List<MultipartFile> contentImg, Authentication auth) throws BusinessException {
 
-		List<FileLayout> file = new ArrayList<FileLayout>();
-
-		byte[] bytes = new byte[(int) contentImg.getSize()];
+		int i = 1;
+		Set<FileLayout> file = new HashSet<FileLayout>();
+		List<byte[]> Listbytes = new ArrayList<byte[]>();
 		Set<User> usersLayout = new HashSet<User>();
+		User userAuth = new User();
 
-		try {
-
-			bytes = contentImg.getBytes();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		Layout layoutOld = new Layout();
 		Layout layoutSave = new Layout();
+		
+		String username = auth.getName();
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+			usersLayout.add(userAuth);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
 
 		try {
 			layoutOld = serviceLayout.getLayout(id);
 			usersLayout = serviceLayout.getAllUsersLayout(layoutOld.getId());
+			
 
 		} catch (BusinessException e) {
 			e.printStackTrace();
@@ -200,18 +209,39 @@ public class LayoutController {
 		layoutSave.setDescription(layout.getDescription());
 		layoutSave.setName(layout.getName());
 		layoutSave.setUsers(usersLayout);
+		layoutSave.setStatus(layout.getStatus());
 		layoutSave.setModifyDate(ZonedDateTime.now());
 
 		ZonedDateTime dateCreation = layoutOld.getInsertDate();
 
 		if (contentImg.isEmpty()) {
-
-			layoutSave.setContentImg(layoutOld.getContentImg());
+			
+			Set<FileLayout> oldFiles = layoutOld.getFileLayouts();
+			layoutSave.setFileLayouts(oldFiles);
 
 		} else {
 
-			layoutSave.setContentImg(Listbytes);
-		}
+			try {
+				for (MultipartFile bytes : contentImg) {
+					Listbytes.add(bytes.getBytes());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			for (byte[] fileContent : Listbytes) {
+				
+				FileLayout fileLayoutSave = new FileLayout();
+				fileLayoutSave.setContentImg(fileContent);
+				fileLayoutSave.setLayout(layoutSave);
+				fileLayoutSave.setName((String)"layout: "+ layoutSave.getName() + ", file N° " + i);
+				fileLayoutService.saveFileLayout(fileLayoutSave);
+				i ++;
+
+
+			}
+
+			layoutSave.setFileLayouts(file);		}
 
 		try {
 			layoutSave = serviceLayout.saveLayout(layout);

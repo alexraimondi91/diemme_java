@@ -16,7 +16,7 @@ public interface LayoutService {
 	
 	Page<Layout> getLayoutsByUserId(Long id, Integer page, Integer size) throws BusinessException;
 
-	Layout saveLayout(Layout news) throws BusinessException;
+	Layout saveLayout(Layout layout) throws BusinessException;
 
 	Page<Layout> getAllLayoutPageable(Integer page, Integer size) throws BusinessException;
 
