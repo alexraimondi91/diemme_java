@@ -48,12 +48,12 @@ public class LayoutController {
 	private UserService serviceUser;
 	@Autowired
 	private FileLayoutService fileLayoutService;
-
+	@Autowired
+	private PageModel pageModel;
 
 	@SuppressWarnings("static-access")
 	@GetMapping("/layoutGestione")
 	public String manageMyLayouts(Model model ) throws BusinessException {
-		PageModel pageModel = new PageModel(null);
 		pageModel.initPageAndSize();
 		pageModel.setSIZE(5);
 		Page<Layout> layouts = serviceLayout.getAllLayoutPageable(pageModel.getPAGE(), pageModel.getSIZE());
