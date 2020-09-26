@@ -45,7 +45,7 @@
 										<tr th:each="file : ${files}">
 											<td th:utext="${file.id}"></td>
 											<td th:utext="${file.name}"></td>
-											<td><img th:src="@{/layout/image/{id}(id=${file.id})}"></td>
+											<td><img style="width:500px" th:src="@{/layout/image/{id}(id=${file.id})}"></td>
 											<td>
 												<form action="#"
 													th:action="@{'/fileDelete/{id}'(id=${file.id})}"
@@ -72,7 +72,7 @@
 											<li class="page-item"
 												th:classappend="${files.number eq 0} ? 'disabled'"><a
 												class="page-link"
-												th:href="@{/layoutVisione?page={id}(id=${files.number lt 2 ? 1 : files.number})}"
+												th:href="@{/layoutVisione?idLayout={idLayout}&page={id}(id=${files.number lt 2 ? 1 : files.number}, idLayout=${idLayout})}"
 												aria-label="Previous" title="Previous Page"
 												data-toggle="tooltip"> <span aria-hidden="true">&laquo;</span>
 											</a></li>
@@ -80,14 +80,14 @@
 												th:classappend="${i eq files.number + 1} ? 'active'"
 												th:each="i : ${#numbers.sequence( 1, files.totalPages, 1)}">
 												<a class="page-link"
-												th:href="@{/layoutVisione?page={id}(id=${i})}"
+												th:href="@{/layoutVisione?idLayout={idLayout}&page={id}(id=${i}, idLayout=${idLayout})}"
 												th:text="${i}" th:title="${'Page '+ i}"
 												data-toggle="tooltip"></a>
 											</li>
 											<li class="page-item"
 												th:classappend="${files.number + 1 eq files.totalPages} ? 'disabled'">
 												<a class="page-link"
-												th:href="@{/layoutVisione?page={id}(id=${files.number + 2})}"
+												th:href="@{/layoutVisione?idLayout={idLayout}&page={id}(id=${files.number + 2}, idLayout=${idLayout})}"
 												aria-label="Next" title="Next Page" data-toggle="tooltip">
 													<span aria-hidden="true">&raquo;</span>
 											</a>

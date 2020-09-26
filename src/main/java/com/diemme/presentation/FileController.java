@@ -27,21 +27,22 @@ public class FileController {
 	
 	@SuppressWarnings("static-access")
 	@GetMapping("/layoutVisione")
-	public String manageNewsShocases(Model model, Long id) throws BusinessException {
+	public String manageNewsShocases(Model model, Long idLayout) throws BusinessException {
 		pageModel.setSIZE(1);
 		pageModel.initPageAndSize();
 
 		Page<FileLayout> files = fileService.getAllFileslayout(pageModel.getPAGE(),
-				pageModel.getSIZE(),id);
-
+				pageModel.getSIZE(),idLayout);
+		
+		model.addAttribute("idLayout", idLayout);
 		model.addAttribute("files", files);
 		return "/backoffice/layoutDashboard/manageFileLayout.html";
 
 	}
 	
-	@GetMapping("/fileDelete")
+	@GetMapping("/layout/image/{id}")
 	@ResponseBody
-	public byte[] getImage (Long id) throws BusinessException{
+	public byte[] getImage (@PathVariable Long id) throws BusinessException{
 		
 		FileLayout file = fileService.getFileLayout(id);
 		byte[] imageFile = file.getContentImg();
