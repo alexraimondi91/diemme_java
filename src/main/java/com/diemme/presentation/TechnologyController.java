@@ -60,7 +60,7 @@ public class TechnologyController {
 
 		Page<TechnologyShowcase> technologies = serviceTecnology.getAllTecnologyPageable(pageModel.getPAGE(),
 				pageModel.getSIZE());
-
+		pageModel.resetPAGE();
 		model.addAttribute("techno", technologies);
 		return "/backoffice/technologyDashboard/manage.html";
 

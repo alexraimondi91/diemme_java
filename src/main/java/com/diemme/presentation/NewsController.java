@@ -54,11 +54,10 @@ public class NewsController {
 	public String manageNewsShocases(Model model) throws BusinessException {
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
-
 		Page<NewsShowcase> news = serviceNews.getAllNewsPageable(pageModel.getPAGE(),
 				pageModel.getSIZE());
-
 		model.addAttribute("news_showcase", news);
+		pageModel.resetPAGE();
 		return "/backoffice/newsDashboard/manage.html";
 
 	}

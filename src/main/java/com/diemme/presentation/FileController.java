@@ -36,6 +36,7 @@ public class FileController {
 		
 		model.addAttribute("idLayout", idLayout);
 		model.addAttribute("files", files);
+		pageModel.resetPAGE();
 		return "/backoffice/layoutDashboard/manageFileLayout.html";
 
 	}
@@ -43,7 +44,6 @@ public class FileController {
 	@GetMapping("/layout/image/{id}")
 	@ResponseBody
 	public byte[] getImage (@PathVariable Long id) throws BusinessException{
-		
 		FileLayout file = fileService.getFileLayout(id);
 		byte[] imageFile = file.getContentImg();
 		return imageFile;

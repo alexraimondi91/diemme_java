@@ -51,7 +51,7 @@ public class QuotationController {
 		pageModel.initPageAndSize();
 		Page<QuotationShowcase> quotations = serviceQuotation.getAllQuotationPageable(pageModel.getPAGE(),
 				pageModel.getSIZE());
-
+		pageModel.resetPAGE();
 		model.addAttribute("quot", quotations);
 		return "/backoffice/quotationDashboard/manage.html";
 

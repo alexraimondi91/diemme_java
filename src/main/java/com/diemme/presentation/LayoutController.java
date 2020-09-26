@@ -54,11 +54,12 @@ public class LayoutController {
 	@SuppressWarnings("static-access")
 	@GetMapping("/layoutGestione")
 	public String manageMyLayouts(Model model ) throws BusinessException {
+		
 		pageModel.initPageAndSize();
 		pageModel.setSIZE(5);
 		Page<Layout> layouts = serviceLayout.getAllLayoutPageable(pageModel.getPAGE(), pageModel.getSIZE());
 		model.addAttribute("layouts", layouts);
-
+		pageModel.resetPAGE();
 		return "/backoffice/layoutDashboard/manage.html";
 
 	}
@@ -69,7 +70,6 @@ public class LayoutController {
 		Set<User> userClients = serviceUser.getUsersByRole("CLIENT");
 		model.addAttribute("userClients", userClients);
 		model.addAttribute("layoutWrapper", layoutWrapper);
-
 		return "/backoffice/layoutDashboard/create.html";
 	}
 

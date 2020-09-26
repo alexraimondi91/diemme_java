@@ -58,7 +58,7 @@ public class ProductController {
 
 		Page<ProductShowcase> products = serviceProduct.getAllProductPageable(pageModel.getPAGE(),
 				pageModel.getSIZE());
-
+		pageModel.resetPAGE();
 		model.addAttribute("prod", products);
 		return "/backoffice/productDashboard/manage.html";
 

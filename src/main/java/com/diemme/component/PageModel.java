@@ -27,4 +27,8 @@ public class PageModel {
     public static int getSIZE() {
         return SIZE;
     }
+    
+    public static void resetPAGE() {
+        PAGE = 0;
+    }
 }
