@@ -10,12 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.diemme.domain.mysql.Chat;
+import com.diemme.domain.mysql.ChatUser;
 import com.diemme.domain.mysql.User;
 
 import lombok.AllArgsConstructor;
@@ -24,16 +27,19 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "message")
-public class Message {
+public class Message extends BaseModel{	
 	
-	@Id
-	private Long id;	
-	
+	@Field("message")
 	private String message;	
-	
+	@Field("content")
 	private byte[] content;	
-	
+	@Field("date")
 	private LocalDateTime date;
+	@Field("id_user")
+	private Long idUser;	
+    @DBRef
+    @Field("id_chat")
+	private Long idChat;
 		
 
 }

@@ -21,22 +21,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "chat")
+@Table(name = "chat_user")
 @JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Chat extends BaseModel {
+public class ChatUser extends BaseModel {
 
 	
-	@Column(name = "name", nullable = false)
-	@NotBlank
-	private String name;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "chat_type_id", nullable = false)
-	private ChatType chatType;
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 	
-	@ElementCollection(targetClass=Long.class)
-    private Set<Long> idMessage;
+	private Long idChatMongo;
 	
 	
 }

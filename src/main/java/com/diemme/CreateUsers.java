@@ -10,10 +10,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.diemme.domain.mongo.Chat;
+import com.diemme.domain.mongo.ChatType;
 import com.diemme.domain.mongo.Message;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.RoleType;
 import com.diemme.domain.mysql.User;
+import com.diemme.repository.mongo.ChatRepository;
+import com.diemme.repository.mongo.ChatTypeRepository;
 import com.diemme.repository.mongo.MessageRepository;
 import com.diemme.repository.mysql.RoleRepository;
 import com.diemme.repository.mysql.UserRepository;
@@ -28,7 +32,10 @@ public class CreateUsers implements CommandLineRunner {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private MessageRepository messageRepository;
+	private ChatRepository chatRepository;
+	
+	@Autowired
+	private ChatTypeRepository chatTypeRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -138,11 +145,20 @@ public class CreateUsers implements CommandLineRunner {
 
 		}
 		
-		/*
-		 * Message message = new Message(); message.setId(1L);
-		 * message.setDate(LocalDateTime.now()); message.setMessage("prova");
-		 * messageRepository.save(message);
-		 */
+		  ChatType chatType = new ChatType();
+		  Chat chat = new Chat();
+		  Message message = new Message(); 
+		  Set<Message> messages = new HashSet<Message>();
+		  
+		  chatType.setName("user/client");
+		  chatTypeRepository.save(chatType);
+		  message.setDate(LocalDateTime.now()); 
+		  message.setMessage("prova");
+		  messages.add(message);
+		  chat.setChatType(chatType);
+		  chat.setMessages(messages);		  
+		  chatRepository.save(chat);
+		 
 
 	}
 

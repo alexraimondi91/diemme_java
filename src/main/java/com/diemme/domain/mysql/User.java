@@ -80,7 +80,7 @@ public class User extends BaseModel{
           name = "user_id", referencedColumnName = "id", nullable = true), 
         inverseJoinColumns = @JoinColumn(
           name = "chat_id", referencedColumnName = "id", nullable = true)) 
-	private Set<Chat> chats;
+	private Set<ChatUser> chats;
 	
 	
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -91,6 +91,9 @@ public class User extends BaseModel{
         inverseJoinColumns = @JoinColumn(
           name = "role_id", referencedColumnName = "id")) 
 	private Set<Role> roles;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+	private List<ChatUser> chatUsers;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 	private List<ProductShowcase> productShowcases;

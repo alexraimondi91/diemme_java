@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -50,6 +52,7 @@ public class LayoutController {
 	private FileLayoutService fileLayoutService;
 	@Autowired
 	private PageModel pageModel;
+
 
 	@SuppressWarnings("static-access")
 	@GetMapping("/layoutGestione")
