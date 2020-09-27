@@ -145,19 +145,15 @@ public class CreateUsers implements CommandLineRunner {
 
 		}
 		
-		  ChatType chatType = new ChatType();
-		  Chat chat = new Chat();
-		  Message message = new Message(); 
-		  Set<Message> messages = new HashSet<Message>();
-		  
-		  chatType.setName("user/client");
-		  chatTypeRepository.save(chatType);
-		  message.setDate(LocalDateTime.now()); 
-		  message.setMessage("prova");
-		  messages.add(message);
-		  chat.setChatType(chatType);
-		  chat.setMessages(messages);		  
-		  chatRepository.save(chat);
+		/*
+		 * ChatType chatType = new ChatType(); Chat chat = new Chat(); Message message =
+		 * new Message(); Set<Message> messages = new HashSet<Message>();
+		 * 
+		 * chatType.setName("user/client"); chatTypeRepository.save(chatType);
+		 * message.setDate(LocalDateTime.now()); message.setMessage("prova");
+		 * messages.add(message); chat.setChatType(chatType);
+		 * chat.setMessages(messages); chatRepository.save(chat);
+		 */
 		 
 
 	}
