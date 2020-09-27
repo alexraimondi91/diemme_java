@@ -32,7 +32,8 @@ public class ChatUser extends BaseModel {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	
-	private Long idChatMongo;
+	@Column(name = "id_chat_mongo", nullable = false)
+	private String idChatMongo;
 	
 	
 }
