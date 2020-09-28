@@ -59,6 +59,7 @@ public class ChatController {
 		return chatUserService.getChat(id);
 	}
 	
+
 	@DeleteMapping("/chatDelete/{id}/{idChatMongo}")
 	public String deletelayout(@PathVariable(value = "id") Long id, @PathVariable(value = "idChatMongo") String idChatMongo) throws BusinessException {
 		try {
@@ -69,6 +70,26 @@ public class ChatController {
 		}
 		return "redirect:/chatGestione";
 
+	}
+		
+
+	@GetMapping("/chatVisione")
+	public String getChatView( String id, Model model,Authentication auth) {
+		User userAuth = new User();
+		String username = auth.getName();
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		Long idUser = userAuth.getId();
+		model.addAttribute("auth",idUser);
+		model.addAttribute("idChat",id);
+		return "/backoffice/chatDashboard/chat.html";
+		
 	}
 
 }

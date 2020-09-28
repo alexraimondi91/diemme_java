@@ -31,14 +31,16 @@ public class Message extends BaseModel{
 	
 	@Field("message")
 	private String message;	
-	@Field("content")
-	private byte[] content;	
+	@Field("file")
+	private byte[] file;	
 	@Field("date")
 	private LocalDateTime date;
 	@Field("id_user")
 	private Long idUser;
-	@Field("user_name")
+	@Field("name_user")
 	private String name;
+	@Field("surname_user")
+	private String surname;
     @DBRef
     @Field("id_chat")
 	private Long idChat;
