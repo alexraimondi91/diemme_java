@@ -36,7 +36,9 @@ public class Message extends BaseModel{
 	@Field("date")
 	private LocalDateTime date;
 	@Field("id_user")
-	private Long idUser;	
+	private Long idUser;
+	@Field("user_name")
+	private String name;
     @DBRef
     @Field("id_chat")
 	private Long idChat;

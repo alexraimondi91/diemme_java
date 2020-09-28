@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.diemme.business.BusinessException;
@@ -55,6 +57,18 @@ public class ChatController {
 	@ResponseBody
 	public Chat getChat(@PathVariable("id") String id) {
 		return chatUserService.getChat(id);
+	}
+	
+	@DeleteMapping("/chatDelete/{id}/{idChatMongo}")
+	public String deletelayout(@PathVariable(value = "id") Long id, @PathVariable(value = "idChatMongo") String idChatMongo) throws BusinessException {
+		try {
+			chatUserService.deleteChat(id, idChatMongo);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		return "redirect:/chatGestione";
+
 	}
 
 }

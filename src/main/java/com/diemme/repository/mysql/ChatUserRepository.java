@@ -1,10 +1,12 @@
 package com.diemme.repository.mysql;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,4 +21,8 @@ public interface ChatUserRepository extends JpaRepository<ChatUser, Long> {
 	
 	@Query(value = "SELECT cu FROM ChatUser cu WHERE cu.idChatMongo = :idChatMongo")
 	Set<ChatUser> findUserChatMongoDb(@Param("idChatMongo") String idChatMongo);
+	
+	@Modifying
+	@Query(value = "DELETE FROM ChatUser cu WHERE cu.idChatMongo = :idChatMongo")
+	List<Integer> deleteUserChatMongoDb(@Param("idChatMongo") String idChatMongo);
 }
