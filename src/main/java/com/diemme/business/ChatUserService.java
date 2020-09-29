@@ -13,7 +13,7 @@ public interface ChatUserService {
 
 	public Set<ChatUser> getAllChatUser(String idChatMongo) throws BusinessException;
 
-	public Chat getChat(String idChatMongo);
+	public Chat getChat(String idChatMongo) throws BusinessException;
 
 	public void deleteChat(Long idChatUser, String idChatMongo) throws BusinessException;
 
