@@ -1,23 +1,41 @@
 package com.diemme.presentation;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.ChatUserService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
 import com.diemme.domain.mongo.Chat;
+import com.diemme.domain.mongo.ChatType;
 import com.diemme.domain.mongo.Message;
 import com.diemme.domain.mysql.ChatUser;
+import com.diemme.domain.mysql.FormWrapperChat;
+import com.diemme.domain.mysql.FormWrapperLayout;
+import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.User;
 
 @Controller
@@ -67,7 +85,7 @@ public class ChatController {
 		return chat;
 	}
 
-	@DeleteMapping("/chatDelete/{id}/{idChatMongo}")
+	@PostMapping("/chatDelete/{id}/{idChatMongo}")
 	public String deletelayout(@PathVariable(value = "id") Long id,
 			@PathVariable(value = "idChatMongo") String idChatMongo) throws BusinessException {
 		try {
@@ -126,6 +144,114 @@ public class ChatController {
 		}
 
 		return null;
+
+	}
+
+	@GetMapping("/chatCrea")
+	public String createNewsShocases(Model model, Authentication auth) throws BusinessException {
+		FormWrapperChat formWrapperChat = new FormWrapperChat();
+		User userAuth = new User();
+		String typeChat = new String();
+		Set<User> userRole = new HashSet<User>();
+		String userName = auth.getName();
+
+		try {
+			userAuth = serviceUser.findUserByUserName(userName);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		for (Role role : userAuth.getRoles()) {
+
+			if (role.getRole().equals("CLIENT")) {
+
+				userRole = serviceUser.getUsersByRole("DESIGNER");
+				typeChat = "un Designer!";
+
+			} else if (role.getRole().equals("DESIGNER")) {
+
+				userRole = serviceUser.getUsersByRole("PRODUCTOR");
+				typeChat = "un Produttore!";
+
+			}
+
+		}
+		model.addAttribute("typeChat", typeChat);
+		model.addAttribute("userRole", userRole);
+		model.addAttribute("formWrapperChat", formWrapperChat);
+
+		return "/backoffice/chatDashboard/create.html";
+	}
+
+	@PostMapping("/chatCrea")
+	@ResponseBody
+	public ModelAndView createChat(Authentication auth,
+			@Valid @ModelAttribute("formWrapperChat") FormWrapperChat formWrapperChat, Errors errors,
+			@RequestParam(value = "contentImg") MultipartFile contentImg) throws BusinessException {
+
+		Chat chatSave = new Chat();
+		ChatUser chatUser1 = new ChatUser();
+		ChatUser chatUser2 = new ChatUser();
+		User userAuth = new User();
+		Message message = new Message();
+		String nameuser = new String();
+		Set<Message> messageList = new HashSet<Message>();
+		ModelAndView modelAndView = new ModelAndView();
+		byte[] bytes = new byte[(int) contentImg.getSize()];
+		String username = auth.getName();
+
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		nameuser = userAuth.getName() + " " + userAuth.getSurname();
+
+		try {
+			bytes = contentImg.getBytes();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		for (Role role : userAuth.getRoles()) {
+			if (role.getRole().equals("CLIENT")) {
+				chatUser1.setUser(userAuth);
+				chatUser1.setNameProject(formWrapperChat.getNameProject());
+				chatUser2.setUser(formWrapperChat.getUser());
+				chatUser2.setNameProject(formWrapperChat.getNameProject());
+				chatSave.setChatType(ChatType.CLIENT_DESIGNER);
+			} else if (role.getRole().equals("DESIGNER")) {
+				chatUser1.setUser(userAuth);
+				chatUser1.setNameProject(formWrapperChat.getNameProject());
+				chatUser2.setUser(formWrapperChat.getUser());
+				chatUser2.setNameProject(formWrapperChat.getNameProject());
+				chatSave.setChatType(ChatType.DESIGNER_PRODUCTOR);
+
+			}
+		}
+
+		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
+		modelAndView.setViewName("/backoffice/chatDashboard/create.html");
+		message.setMessage(formWrapperChat.getMessage());
+		message.setFile(bytes);
+		message.setIdUser(userAuth.getId());
+		message.setName(nameuser);
+		message.setDate(LocalDateTime.now());
+		messageList.add(message);
+		chatSave.setMessages(messageList);
+
+		try {
+			chatUserService.saveChat(chatUser1, chatSave, chatUser2);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		return modelAndView;
 
 	}
 

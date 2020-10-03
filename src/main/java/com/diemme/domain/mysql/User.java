@@ -25,14 +25,21 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Length;
 
+import com.diemme.serialize.CustomListSerializer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Entity
+@EqualsAndHashCode(callSuper=true) 
+@ToString(callSuper = true)
 @Table(name = "user")
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User extends BaseModel{
@@ -73,15 +80,6 @@ public class User extends BaseModel{
 	private String companyName;
 
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable( 
-        name = "user_chat", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id", nullable = true), 
-        inverseJoinColumns = @JoinColumn(
-          name = "chat_id", referencedColumnName = "id", nullable = true)) 
-	private Set<ChatUser> chats;
-	
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable( 
@@ -90,10 +88,7 @@ public class User extends BaseModel{
           name = "user_id", referencedColumnName = "id", nullable = true), 
         inverseJoinColumns = @JoinColumn(
           name = "role_id", referencedColumnName = "id")) 
-	private Set<Role> roles;
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-	private List<ChatUser> chatUsers;
+	private Set<Role> roles;	
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 	private List<ProductShowcase> productShowcases;

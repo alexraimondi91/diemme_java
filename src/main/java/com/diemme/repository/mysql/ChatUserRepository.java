@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.diemme.domain.mysql.ChatUser;
 
@@ -22,7 +23,8 @@ public interface ChatUserRepository extends JpaRepository<ChatUser, Long> {
 	@Query(value = "SELECT cu FROM ChatUser cu WHERE cu.idChatMongo = :idChatMongo")
 	Set<ChatUser> findUserChatMongoDb(@Param("idChatMongo") String idChatMongo);
 	
+	@Transactional
 	@Modifying
 	@Query(value = "DELETE FROM ChatUser cu WHERE cu.idChatMongo = :idChatMongo")
-	List<Integer> deleteUserChatMongoDb(@Param("idChatMongo") String idChatMongo);
+	void deleteUserChatMongoDb(@Param("idChatMongo") String idChatMongo);
 }

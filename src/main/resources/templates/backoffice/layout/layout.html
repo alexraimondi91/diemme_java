@@ -279,12 +279,12 @@
 						</a>
 							<ul sec:authorize="hasAuthority('CLIENT')"
 								class="nav nav-treeview">
-								<li class="nav-item"><a href="{{route('chatCreate')}}"
+								<li class="nav-item"><a th:href="@{/chatCrea}"
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>Inizia chat Progetto</p>
 								</a></li>
-								<li sec:authorize="hasAuthority('DEISGNER')" class="nav-item">
-									<a href="{{route('chatCreateFactory')}}" class="nav-link">
+								<li sec:authorize="hasAuthority('DESIGNER')" class="nav-item">
+									<a th:href="@{/chatCrea}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
 										<p>Inizia chat Produttore</p>
 								</a>

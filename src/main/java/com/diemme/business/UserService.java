@@ -13,5 +13,6 @@ public interface UserService {
     User saveUser(User user)throws BusinessException;
     
     Set<User> getUsersByRole (String role)throws BusinessException;
+    
 
 }

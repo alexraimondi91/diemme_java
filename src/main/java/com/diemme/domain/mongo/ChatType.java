@@ -10,11 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor @AllArgsConstructor
-@Document(collection = "chat_type")
-public class ChatType extends BaseModel{
+@Document
+public enum ChatType {
 	
-	@Field("name")
-	private String name;
+	CLIENT_DESIGNER,
+	DESIGNER_PRODUCTOR;
+	
 
 }

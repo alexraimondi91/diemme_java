@@ -23,7 +23,7 @@ public class BaseModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", updatable = false)
-	private Long id;
+	public Long id;
 	
 	@CreationTimestamp
 	@Column(name = "insert_date", nullable = true)

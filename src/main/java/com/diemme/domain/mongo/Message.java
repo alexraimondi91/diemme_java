@@ -27,8 +27,10 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "message")
-public class Message extends BaseModel{	
+public class Message {	
 	
+	@Id
+	private String id;	
 	@Field("message")
 	private String message;	
 	@Field("file")
@@ -39,11 +41,9 @@ public class Message extends BaseModel{
 	private Long idUser;
 	@Field("name_user")
 	private String name;
-	@Field("surname_user")
-	private String surname;
     @DBRef
     @Field("id_chat")
-	private Long idChat;
+	private String idChat;
 		
 
 }

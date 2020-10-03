@@ -17,7 +17,6 @@ import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.RoleType;
 import com.diemme.domain.mysql.User;
 import com.diemme.repository.mongo.ChatRepository;
-import com.diemme.repository.mongo.ChatTypeRepository;
 import com.diemme.repository.mongo.MessageRepository;
 import com.diemme.repository.mysql.RoleRepository;
 import com.diemme.repository.mysql.UserRepository;
@@ -33,9 +32,7 @@ public class CreateUsers implements CommandLineRunner {
 	
 	@Autowired
 	private ChatRepository chatRepository;
-	
-	@Autowired
-	private ChatTypeRepository chatTypeRepository;
+
 
 	@Override
 	public void run(String... args) throws Exception {

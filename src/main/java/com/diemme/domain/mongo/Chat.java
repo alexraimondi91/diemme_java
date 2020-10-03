@@ -3,6 +3,7 @@ package com.diemme.domain.mongo;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.Enumerated;
 import javax.persistence.Version;
 
 import org.springframework.data.annotation.Id;
@@ -16,10 +17,14 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "chat")
-public class Chat extends BaseModel{	
+public class Chat {	
 	
-    @DBRef
+	@Id
+	private String id;	
+	@Version
+	private long version;
     @Field("chat_type")
+    @Enumerated
 	private ChatType chatType;
     @Field("messages")
     private Set<Message> messages;
