@@ -17,7 +17,9 @@ public interface ChatUserService {
 
 	public void deleteChat(Long idChatUser, String idChatMongo) throws BusinessException;
 
-	public void saveChat(ChatUser chatUser, Chat chat, ChatUser chatUser2) throws BusinessException;
+	public void saveNewChat(ChatUser chatUser, Chat chat, ChatUser chatUser2) throws BusinessException;
+
+	Chat saveUpdateChat(Chat chat) throws BusinessException;
 
 
 }

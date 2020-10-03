@@ -42,19 +42,26 @@ public class ChatUserServiceImpl implements ChatUserService {
 
 	@Override
 	public void deleteChat(Long idChatUser, String idChatMongo) throws BusinessException {
-		
-		chatUserRepository.deleteUserChatMongoDb(idChatMongo);		
+
+		chatUserRepository.deleteUserChatMongoDb(idChatMongo);
 		chatRepository.deleteById(idChatMongo);
 	}
-	
+
 	@Override
-	public void saveChat(ChatUser chatUser, Chat chat, ChatUser chatUser2) throws BusinessException {
-	    chat = chatRepository.insert(chat);		
+	public void saveNewChat(ChatUser chatUser, Chat chat, ChatUser chatUser2) throws BusinessException {
+		chat = chatRepository.insert(chat);
 		chatUser.setIdChatMongo(chat.getId());
 		chatUserRepository.save(chatUser);
 		chatUser2.setIdChatMongo(chat.getId());
-		chatUserRepository.save(chatUser2);		
+		chatUserRepository.save(chatUser2);
 	}
 
-	
+	@Override
+	public Chat saveUpdateChat(Chat chat) throws BusinessException {
+		Chat chatSave = new Chat();
+		chatSave = chatRepository.save(chat);
+
+		return chatSave;
+	}
+
 }

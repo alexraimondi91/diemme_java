@@ -9,7 +9,7 @@
 <div layout:fragment="script">
 	<script th:src="@{backoffice/dist/js/ChatHTML5.js}"> </script>
 	<script>
-    $('#chatHTML5').ready(new ChatHTML5( [[${auth}]] , "[[@{'/chat/{id}'(id=${idChat})}]]" ,"[[@{'/chatSalva/{id}'(id=${idChat})}]]","[[@{'/chatFile/{id}'(id=${idChat})}]]")); 
+    $('#chatHTML5').ready(new ChatHTML5( [[${auth}]] , "[[@{'/chat/{id}'(id=${idChat})}]]" ,"[[@{'/chatUpdate/{id}'(id=${idChat})}]]","[[@{'/chatFile/{id}'(id=${idChat})}]]")); 
 	</script>
 </div>
 </html>

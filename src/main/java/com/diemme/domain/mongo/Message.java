@@ -29,8 +29,7 @@ import lombok.NoArgsConstructor;
 @Document(collection = "message")
 public class Message {	
 	
-	@Id
-	private String id;	
+
 	@Field("message")
 	private String message;	
 	@Field("file")

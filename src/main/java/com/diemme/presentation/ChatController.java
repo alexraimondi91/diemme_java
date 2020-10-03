@@ -2,6 +2,7 @@ package com.diemme.presentation;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,10 +34,10 @@ import com.diemme.domain.mongo.Chat;
 import com.diemme.domain.mongo.ChatType;
 import com.diemme.domain.mongo.Message;
 import com.diemme.domain.mysql.ChatUser;
-import com.diemme.domain.mysql.FormWrapperChat;
-import com.diemme.domain.mysql.FormWrapperLayout;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.User;
+import com.diemme.wrapperForm.FormWrapperChat;
+import com.diemme.wrapperForm.FormWrapperLayout;
 
 @Controller
 public class ChatController {
@@ -245,13 +246,99 @@ public class ChatController {
 		chatSave.setMessages(messageList);
 
 		try {
-			chatUserService.saveChat(chatUser1, chatSave, chatUser2);
+			chatUserService.saveNewChat(chatUser1, chatSave, chatUser2);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
 		}
 
 		return modelAndView;
+
+	}
+
+	@SuppressWarnings("null")
+	@PostMapping("/chatUpdate/{id}")
+	@ResponseBody
+	public String updateChat(Authentication auth, String message,
+			@RequestParam(value = "contentImg", required = false) MultipartFile contentImg,
+			@PathVariable("id") String id) {
+
+		Chat chatUpdate = new Chat();
+		User userAuth = new User();
+		Message messageSave = new Message();
+		Set<Message> messageList = new HashSet<Message>();
+		String username = auth.getName();
+		String nameuser = new String();
+
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		nameuser = userAuth.getName() + " " + userAuth.getSurname();
+
+		try {
+			chatUpdate = chatUserService.getChat(id);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		messageSave.setDate(LocalDateTime.now());
+		messageSave.setIdChat(chatUpdate.getId());
+		messageSave.setIdUser(userAuth.getId());
+		messageSave.setName(nameuser);
+		messageSave.setMessage(message);
+		
+
+		if (contentImg != null) {
+
+			if (!contentImg.isEmpty()) {
+
+				byte[] bytes = new byte[(int) contentImg.getSize()];
+				messageSave.setFile(bytes);
+			}
+
+		}
+
+
+		for (
+
+		Message messaggi : chatUpdate.getMessages()) {
+			
+			messaggi.setIdChat(id);
+			messageList.add(messaggi);
+
+		}
+		
+
+
+		messageList.add(messageSave);
+		
+		System.out.println("\n\n\n messageList " + messageList);
+
+		chatUpdate.setChatType(chatUpdate.getChatType());
+		chatUpdate.setId(id);
+		chatUpdate.setMessages(messageList);
+		
+		
+
+
+
+
+		try {
+			chatUpdate = chatUserService.saveUpdateChat(chatUpdate);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/chatVisione";
 
 	}
 

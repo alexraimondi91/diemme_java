@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.diemme.domain.mongo.Chat;
 import com.diemme.domain.mysql.ChatUser;
 
 @Repository("ChatRepository")
@@ -27,4 +28,5 @@ public interface ChatUserRepository extends JpaRepository<ChatUser, Long> {
 	@Modifying
 	@Query(value = "DELETE FROM ChatUser cu WHERE cu.idChatMongo = :idChatMongo")
 	void deleteUserChatMongoDb(@Param("idChatMongo") String idChatMongo);
+
 }

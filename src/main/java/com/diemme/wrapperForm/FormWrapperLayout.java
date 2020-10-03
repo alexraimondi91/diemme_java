@@ -1,6 +1,9 @@
-package com.diemme.domain.mysql;
+package com.diemme.wrapperForm;
 
 import java.util.Set;
+
+import com.diemme.domain.mysql.Layout;
+import com.diemme.domain.mysql.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

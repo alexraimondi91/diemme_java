@@ -34,12 +34,12 @@ import com.diemme.business.NewsService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
 import com.diemme.domain.mysql.FileLayout;
-import com.diemme.domain.mysql.FormWrapperLayout;
 import com.diemme.domain.mysql.Layout;
 import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.User;
 import com.diemme.repository.mysql.FileLayoutRepository;
+import com.diemme.wrapperForm.FormWrapperLayout;
 
 @Controller
 public class LayoutController {

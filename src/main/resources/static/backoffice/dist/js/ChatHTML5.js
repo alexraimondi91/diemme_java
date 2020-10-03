@@ -99,7 +99,7 @@ class messages {
                     if (a.message != "START") {
                         let msg = new message(a, userId, asset,id);
                         this.divContainer.appendChild(msg.get());
-                        id++;
+                        id ++;
                     }
                 }
             );
@@ -193,7 +193,7 @@ class message {
         this.info.className = "direct-chat-infos clearfix";
         this.span1 = document.createElement("span");
         this.span1.className = "direct-chat-name float-left";
-        this.span1.innerHTML = "" +  msg.name+ " " + msg.surname;
+        this.span1.innerHTML = "" +  msg.name;
         this.span2 = document.createElement("span");
         this.span2.className = "direct-chat-timestamp float-right";
         this.span2.innerHTML = msg.date;
@@ -205,7 +205,7 @@ class message {
         if (msg.file) {
             this.href = document.createElement("a");
             this.href.className = "btn bg-info";
-            this.href.setAttribute("href", asset + msg.pivot.path);
+            this.href.setAttribute("href", asset + "/" + id);
             this.href.innerHTML = "Visualizza File";
             this.br = document.createElement("br");
             this.text.appendChild(this.br);
