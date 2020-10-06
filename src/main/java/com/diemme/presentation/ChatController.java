@@ -186,7 +186,6 @@ public class ChatController {
 	}
 
 	@PostMapping("/chatCrea")
-	@ResponseBody
 	public ModelAndView createChat(Authentication auth,
 			@Valid @ModelAttribute("formWrapperChat") FormWrapperChat formWrapperChat, Errors errors,
 			@RequestParam(value = "contentImg") MultipartFile contentImg) throws BusinessException {
@@ -256,11 +255,10 @@ public class ChatController {
 
 	}
 
-	@SuppressWarnings("null")
 	@PostMapping("/chatUpdate/{id}")
 	@ResponseBody
 	public String updateChat(Authentication auth, String message,
-			@RequestParam(value = "contentImg", required = false) MultipartFile contentImg,
+			@RequestParam(value = "attachment", required = false) MultipartFile attachment,
 			@PathVariable("id") String id) {
 
 		Chat chatUpdate = new Chat();
@@ -295,11 +293,11 @@ public class ChatController {
 		messageSave.setMessage(message);
 		
 
-		if (contentImg != null) {
+		if (attachment != null) {
 
-			if (!contentImg.isEmpty()) {
+			if (!attachment.isEmpty()) {
 
-				byte[] bytes = new byte[(int) contentImg.getSize()];
+				byte[] bytes = new byte[(int) attachment.getSize()];
 				messageSave.setFile(bytes);
 			}
 
@@ -325,11 +323,6 @@ public class ChatController {
 		chatUpdate.setId(id);
 		chatUpdate.setMessages(messageList);
 		
-		
-
-
-
-
 		try {
 			chatUpdate = chatUserService.saveUpdateChat(chatUpdate);
 
