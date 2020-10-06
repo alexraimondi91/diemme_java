@@ -117,6 +117,15 @@ public class ChatController {
 		return "/backoffice/chatDashboard/chat.html";
 
 	}
+	
+	@GetMapping("/fileVisione/{idChatMongo}/{index}")
+	public String getFile(String id, Model model, @PathVariable("idChatMongo") String idChatMongo, @PathVariable("index") int index) {	
+
+    	model.addAttribute("idChatMongo", idChatMongo);
+		model.addAttribute("index", index);
+		return "/backoffice/chatDashboard/viewImage.html";
+
+	}
 
 	@GetMapping("/chatFile/{idChatMongo}/{index}")
 	@ResponseBody
@@ -312,9 +321,6 @@ public class ChatController {
 			messageList.add(messaggi);
 
 		}
-		
-
-
 		messageList.add(messageSave);
 		
 		System.out.println("\n\n\n messageList " + messageList);
