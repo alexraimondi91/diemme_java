@@ -47,6 +47,7 @@ public class ChatController {
 
 	@Autowired
 	private UserService serviceUser;
+	
 	@Autowired
 	private PageModel pageModel;
 
@@ -250,10 +251,14 @@ public class ChatController {
 		message.setIdUser(userAuth.getId());
 		message.setName(nameuser);
 		message.setDate(LocalDateTime.now());
-		messageList.add(message);
-		chatSave.setMessages(messageList);
+
+		
+		
 
 		try {
+			chatUserService.saveMessage(message);
+			messageList.add(message);
+			chatSave.setMessages(messageList);
 			chatUserService.saveNewChat(chatUser1, chatSave, chatUser2);
 		} catch (BusinessException e) {
 			e.printStackTrace();
@@ -265,12 +270,13 @@ public class ChatController {
 	}
 
 	@PostMapping("/chatUpdate/{id}")
-	@ResponseBody
 	public String updateChat(Authentication auth, String message,
 			@RequestParam(value = "attachment", required = false) MultipartFile attachment,
 			@PathVariable("id") String id) {
 
 		Chat chatUpdate = new Chat();
+		Chat chatOld = new Chat();
+
 		User userAuth = new User();
 		Message messageSave = new Message();
 		Set<Message> messageList = new HashSet<Message>();
@@ -288,15 +294,15 @@ public class ChatController {
 		nameuser = userAuth.getName() + " " + userAuth.getSurname();
 
 		try {
-			chatUpdate = chatUserService.getChat(id);
+			chatOld = chatUserService.getChat(id);
 
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
 		}
+		
 
 		messageSave.setDate(LocalDateTime.now());
-		messageSave.setIdChat(chatUpdate.getId());
 		messageSave.setIdUser(userAuth.getId());
 		messageSave.setName(nameuser);
 		messageSave.setMessage(message);
@@ -312,25 +318,20 @@ public class ChatController {
 
 		}
 
-
-		for (
-
-		Message messaggi : chatUpdate.getMessages()) {
+		for (Message messaggi : chatOld.getMessages()) {
 			
-			messaggi.setIdChat(id);
 			messageList.add(messaggi);
 
 		}
 		messageList.add(messageSave);
 		
-		System.out.println("\n\n\n messageList " + messageList);
 
-		chatUpdate.setChatType(chatUpdate.getChatType());
+		chatUpdate.setChatType(chatOld.getChatType());
 		chatUpdate.setId(id);
 		chatUpdate.setMessages(messageList);
 		
 		try {
-			chatUpdate = chatUserService.saveUpdateChat(chatUpdate);
+			chatUserService.saveUpdateChat(chatOld, chatUpdate);
 
 		} catch (BusinessException e) {
 			e.printStackTrace();

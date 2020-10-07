@@ -193,9 +193,8 @@
 								</p>
 						</a>
 							<ul class="nav nav-treeview">
-								<li class="nav-item"><a href="#"
-									th:href="@{/contattiCrea}" class="nav-link"> <i
-										class="far fa-circle nav-icon"></i>
+								<li class="nav-item"><a href="#" th:href="@{/contattiCrea}"
+									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>Aggiungi contatto</p>
 								</a></li>
 								<li class="nav-item"><a th:href="@{/contattiGestione}"
@@ -265,7 +264,6 @@
 						</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item"><a th:href="@{/chatGestione}"
-
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>Visualizza</p>
 								</a></li>
@@ -277,15 +275,15 @@
 									Inizia chat <i class="fas fa-angle-left right"></i>
 								</p>
 						</a>
-							<ul sec:authorize="hasAuthority('CLIENT')"
-								class="nav nav-treeview">
-								<li class="nav-item"><a th:href="@{/chatCrea}"
-									class="nav-link"> <i class="far fa-circle nav-icon"></i>
+							<ul class="nav nav-treeview">
+								<li sec:authorize="hasAuthority('CLIENT')" class="nav-item"><a
+									th:href="@{/chatCrea}" class="nav-link"> <i
+										class="far fa-circle nav-icon"></i>
 										<p>Inizia chat Progetto</p>
 								</a></li>
 								<li sec:authorize="hasAuthority('DESIGNER')" class="nav-item">
-									<a th:href="@{/chatCrea}" class="nav-link">
-										<i class="far fa-circle nav-icon"></i>
+									<a th:href="@{/chatCrea}" class="nav-link"> <i
+										class="far fa-circle nav-icon"></i>
 										<p>Inizia chat Produttore</p>
 								</a>
 								</li>

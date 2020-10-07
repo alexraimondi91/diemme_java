@@ -30,6 +30,10 @@ import lombok.NoArgsConstructor;
 public class Message {	
 	
 
+	@Id
+	private String id;	
+	@Version
+	private long version;
 	@Field("message")
 	private String message;	
 	@Field("file")
@@ -40,9 +44,6 @@ public class Message {
 	private Long idUser;
 	@Field("name_user")
 	private String name;
-    @DBRef
-    @Field("id_chat")
-	private String idChat;
 		
 
 }

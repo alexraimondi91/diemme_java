@@ -26,6 +26,7 @@ public class Chat {
     @Field("chat_type")
     @Enumerated
 	private ChatType chatType;
+    @DBRef
     @Field("messages")
     private Set<Message> messages;
 

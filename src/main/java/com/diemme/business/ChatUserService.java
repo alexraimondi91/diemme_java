@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.data.domain.Page;
 
 import com.diemme.domain.mongo.Chat;
+import com.diemme.domain.mongo.Message;
 import com.diemme.domain.mysql.ChatUser;
 
 public interface ChatUserService {
@@ -20,6 +21,10 @@ public interface ChatUserService {
 	public void saveNewChat(ChatUser chatUser, Chat chat, ChatUser chatUser2) throws BusinessException;
 
 	Chat saveUpdateChat(Chat chat) throws BusinessException;
+
+	void saveUpdateChat(Chat chatOld, Chat chatNew) throws BusinessException;
+
+	Message saveMessage(Message message) throws BusinessException;
 
 
 }
