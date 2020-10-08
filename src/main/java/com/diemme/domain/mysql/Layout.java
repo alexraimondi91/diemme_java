@@ -57,6 +57,7 @@ public class Layout extends BaseModel{
           name = "user_id", referencedColumnName = "id", nullable = true)) 
 	private Set<User> users;
 	
+	@JsonIgnoreProperties("layout")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "layout", cascade = CascadeType.ALL)
 	private Set<FileLayout> fileLayouts;
 

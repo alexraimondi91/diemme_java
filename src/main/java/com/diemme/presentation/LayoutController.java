@@ -146,7 +146,6 @@ public class LayoutController {
 			
 			FileLayout fileLayoutSave = new FileLayout();
 			fileLayoutSave.setContentImg(fileContent);
-			fileLayoutSave.setLayout(layoutSave);
 			fileLayoutSave.setName((String)"layout: "+ layoutSave.getName() + ", file N° " + i);
 			
 			try {
@@ -200,7 +199,6 @@ public class LayoutController {
 		int i = 1;
 		Set<FileLayout> file = new HashSet<FileLayout>();
 		List<byte[]> Listbytes = new ArrayList<byte[]>();
-		Set<User> usersLayout = new HashSet<User>();
 		User userAuth = new User();
 
 
@@ -210,7 +208,6 @@ public class LayoutController {
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
-			usersLayout.add(userAuth);
 
 		} catch (BusinessException e) {
 			e.printStackTrace();
@@ -218,18 +215,17 @@ public class LayoutController {
 		}
 
 		try {
-			layoutOld = serviceLayout.getLayout(id);
-			usersLayout = serviceLayout.getAllUsersLayout(layoutOld.getId());
-			
+			layoutOld = serviceLayout.getLayout(id);			
 
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
 		}
+		layoutSave.setId(id);
 		layoutSave.setCompleted(layout.getCompleted());
 		layoutSave.setDescription(layout.getDescription());
 		layoutSave.setName(layout.getName());
-		layoutSave.setUsers(usersLayout);
+		layoutSave.setUsers(layoutOld.getUsers());
 		layoutSave.setStatus(layout.getStatus());
 		layoutSave.setModifyDate(ZonedDateTime.now());
 
@@ -254,7 +250,6 @@ public class LayoutController {
 				
 				FileLayout fileLayoutSave = new FileLayout();
 				fileLayoutSave.setContentImg(fileContent);
-				fileLayoutSave.setLayout(layoutSave);
 				fileLayoutSave.setName((String)"layout: "+ layoutSave.getName() + ", file N° " + i);
 				fileLayoutService.saveFileLayout(fileLayoutSave);
 				i ++;
@@ -265,7 +260,7 @@ public class LayoutController {
 			layoutSave.setFileLayouts(file);		}
 
 		try {
-			layoutSave = serviceLayout.saveLayout(layout);
+			layoutSave = serviceLayout.saveLayout(layoutSave);
 			layoutSave.setInsertDate(dateCreation);
 			serviceLayout.saveLayout(layoutSave);
 		} catch (BusinessException e) {
@@ -295,7 +290,6 @@ public class LayoutController {
 	public String updateProductorLayout(@PathVariable("id") Long id, @Valid @ModelAttribute("layout") Layout layout, Errors errors,
 			 Authentication auth) throws BusinessException {
 
-		Set<User> usersLayout = new HashSet<User>();
 		User userAuth = new User();
 
 
@@ -305,7 +299,6 @@ public class LayoutController {
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
-			usersLayout.add(userAuth);
 
 		} catch (BusinessException e) {
 			e.printStackTrace();
@@ -314,16 +307,16 @@ public class LayoutController {
 
 		try {
 			layoutOld = serviceLayout.getLayout(id);
-			usersLayout = serviceLayout.getAllUsersLayout(layoutOld.getId());		
 
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
 		}
+		layoutSave.setId(layoutOld.getId());
 		layoutSave.setCompleted(layoutOld.getCompleted());
 		layoutSave.setDescription(layoutOld.getDescription());
 		layoutSave.setName(layoutOld.getName());
-		layoutSave.setUsers(usersLayout);
+		layoutSave.setUsers(layoutOld.getUsers());
 		layoutSave.setStatus(layout.getStatus());
 		layoutSave.setModifyDate(ZonedDateTime.now());
 		ZonedDateTime dateCreation = layoutOld.getInsertDate();			
@@ -333,9 +326,8 @@ public class LayoutController {
 		
 
 		try {
-			System.out.println("\n\n\n layoutSave " + layoutSave + " \n\n\n");
 
-			layoutSave = serviceLayout.saveLayout(layout);
+			layoutSave = serviceLayout.saveLayout(layoutSave);
 			layoutSave.setInsertDate(dateCreation);
 			serviceLayout.saveLayout(layoutSave);
 		} catch (BusinessException e) {

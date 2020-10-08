@@ -51,20 +51,21 @@
 											<td th:utext="${lay.description}"></td>
 											<td
 												th:text="${#temporals.format(lay.insertDate, 'dd-MMM-yyyy')}"></td>
-											
+
 											<td>
 												<ul th:each="user : ${lay.users}">
-													<li th:text="${user.name + ' ' + user.surname + ' ' + user.roles}"></li>
+													<li th:text="${user.name + ' ' + user.surname}">
+														
+													</li>
+
 												</ul>
 
 											</td>
 											<td th:utext="${lay.status}"></td>
-											<td th:switch="${lay.completed}">
-											    <span th:case="true"
-												style="color: green">trattativa conclusa!</span> 
-												<span
-												th:case="false" style="color: orange">trattativa
-													in corso..</span></td>
+											<td th:switch="${lay.completed}"><span th:case="true"
+												style="color: green">trattativa conclusa!</span> <span
+												th:case="false" style="color: orange">trattativa in
+													corso..</span></td>
 											<td>
 
 												<form action="#" th:action="@{/layoutUpdateProductor}"
@@ -75,11 +76,10 @@
 													</button>
 												</form>
 												<hr>
-												<form action="#"
-													th:action="@{/layoutVisione}"
+												<form action="#" th:action="@{/layoutVisione}"
 													th:method="get">
-												
-													<input  type="hidden" name='idLayout' th:value="${lay.id}">
+
+													<input type="hidden" name='idLayout' th:value="${lay.id}">
 													<button type="submit" class="btn btn-info">
 														<i class="fa fa-eye"></i>
 													</button>
