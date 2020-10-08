@@ -2,10 +2,7 @@ package com.diemme.presentation;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -15,12 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +35,6 @@ import com.diemme.domain.mysql.ChatUser;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.User;
 import com.diemme.wrapperForm.FormWrapperChat;
-import com.diemme.wrapperForm.FormWrapperLayout;
 
 @Controller
 public class ChatController {
@@ -158,6 +155,29 @@ public class ChatController {
 
 	}
 
+	@PostMapping("/chat/{idChatMongo}")
+	@ResponseBody
+	public byte[] postMEssage(@PathVariable("idChatMongo") String idChatMongo, @RequestBody String messaggio) {
+		Chat chat = new Chat();
+		Message message = new Message();
+		try {
+			chat = chatUserService.getChat(idChatMongo);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		if (!chat.getMessages().isEmpty() && chat.getMessages() != null) {
+			Message[] messages = chat.getMessages().toArray(new Message[chat.getMessages().size()]);
+
+			System.out.println(messaggio);
+		}
+
+		return null;
+
+	}
+
 	@GetMapping("/chatCrea")
 	public String createNewsShocases(Model model, Authentication auth) throws BusinessException {
 		FormWrapperChat formWrapperChat = new FormWrapperChat();
@@ -270,7 +290,7 @@ public class ChatController {
 	}
 
 	@PostMapping("/chatUpdate/{id}")
-	public String updateChat(Authentication auth, String message,
+	public ModelAndView updateChat(ModelMap model ,Authentication auth, String message,
 			@RequestParam(value = "attachment", required = false) MultipartFile attachment,
 			@PathVariable("id") String id) {
 
@@ -306,7 +326,6 @@ public class ChatController {
 		messageSave.setIdUser(userAuth.getId());
 		messageSave.setName(nameuser);
 		messageSave.setMessage(message);
-		
 
 		if (attachment != null) {
 
@@ -337,8 +356,10 @@ public class ChatController {
 			e.printStackTrace();
 
 		}
+		
+		model.addAttribute("id", id);
+        return new ModelAndView("redirect:/chatVisione", model);
 
-		return "redirect:/chatVisione";
 
 	}
 
