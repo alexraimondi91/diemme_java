@@ -337,11 +337,7 @@ public class ChatController {
 
 		}
 
-		for (Message messaggi : chatOld.getMessages()) {
-			
-			messageList.add(messaggi);
-
-		}
+		messageList = chatOld.getMessages();
 		messageList.add(messageSave);
 		
 
