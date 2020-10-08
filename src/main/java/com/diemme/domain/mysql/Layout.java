@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,7 +43,8 @@ public class Layout extends BaseModel{
 	@Column(name = "completed", nullable = false)
 	private Boolean completed;
 	@Column(name = "status", nullable = false)
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private StatusType status;
 	@Column(name = "description", nullable = true)
 	private String description;	
 		

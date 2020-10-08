@@ -107,7 +107,7 @@
 						<!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
 						<li class="nav-item has-treeview"><a
-							href="{{route('dashboard')}}" th:href="@{/dashboard}"
+							 th:href="@{/dashboard}"
 							class="nav-link"> <i class="nav-icon fas fa-tachometer-alt"></i>
 								<p>Dashboard</p>
 						</a></li>
@@ -219,21 +219,8 @@
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>Gestione layout</p>
 								</a></li>
-							</ul></li>
-
-						<li sec:authorize="hasAuthority('DESIGNER')"
-							class="nav-item has-treeview"><a
-							href="{{route('showLayouts')}}" class="nav-link"> <i
-								class="nav-icon fas fa-image"></i>
-								<p>Progetto Layout</p>
-						</a></li>
-
-						<li sec:authorize="hasAuthority('DESIGNER')"
-							class="nav-item has-treeview"><a
-							href="{{route('statusOrder')}}" class="nav-link"> <i
-								class="nav-icon fas fa-list"></i>
-								<p>Status ordini</p>
-						</a></li>
+							</ul></li>					
+						
 
 						<li sec:authorize="hasAuthority('CLIENT')"
 							class="nav-item has-treeview"><a
@@ -242,7 +229,7 @@
 								<p>Status Ordini</p>
 						</a></li>
 
-						<li sec:authorize="hasAuthority('FACTORY')"
+						<li sec:authorize="hasAuthority('PRODUCTOR')"
 							class="nav-item has-treeview"><a href="#" class="nav-link">
 								<i class="nav-icon fas fa-industry"></i>
 								<p>
@@ -250,45 +237,48 @@
 								</p>
 						</a>
 							<ul class="nav nav-treeview">
-								<li class="nav-item"><a href="{{route('makeList')}}"
+								<li class="nav-item"><a  th:href="@{/layoutProduzioneGestione}"
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>Ordini da realizzare</p>
 								</a></li>
 							</ul></li>
+						<sec:authorize access="hasAnyRole('CLIENT','DESIGNER','PRODUCTOR')">
+							<li class="nav-item has-treeview"><a href="#"
+								class="nav-link"> <i class="nav-icon fas fa-mail-bulk"></i>
+									<p>
+										Gestione Chat <i class="fas fa-angle-left right"></i>
+									</p>
+							</a>
+								<ul class="nav nav-treeview">
+									<li class="nav-item"><a th:href="@{/chatGestione}"
+										class="nav-link"> <i class="far fa-circle nav-icon"></i>
+											<p>Visualizza</p>
+									</a></li>
+								</ul></li>
 
-						<li class="nav-item has-treeview"><a href="#"
-							class="nav-link"> <i class="nav-icon fas fa-mail-bulk"></i>
-								<p>
-									Gestione Chat <i class="fas fa-angle-left right"></i>
-								</p>
-						</a>
-							<ul class="nav nav-treeview">
-								<li class="nav-item"><a th:href="@{/chatGestione}"
-									class="nav-link"> <i class="far fa-circle nav-icon"></i>
-										<p>Visualizza</p>
-								</a></li>
-							</ul></li>
-
-						<li class="nav-item has-treeview"><a href="#"
-							class="nav-link"> <i class="nav-icon fas fa-envelope"></i>
-								<p>
-									Inizia chat <i class="fas fa-angle-left right"></i>
-								</p>
-						</a>
-							<ul class="nav nav-treeview">
-								<li sec:authorize="hasAuthority('CLIENT')" class="nav-item"><a
-									th:href="@{/chatCrea}" class="nav-link"> <i
-										class="far fa-circle nav-icon"></i>
-										<p>Inizia chat Progetto</p>
-								</a></li>
-								<li sec:authorize="hasAuthority('DESIGNER')" class="nav-item">
-									<a th:href="@{/chatCrea}" class="nav-link"> <i
-										class="far fa-circle nav-icon"></i>
-										<p>Inizia chat Produttore</p>
-								</a>
-								</li>
-							</ul></li>
+						</sec:authorize>
+						<sec:authorize access="hasAnyRole('CLIENT','DESIGNER','PRODUCTOR')">
+							<li class="nav-item has-treeview"><a href="#"
+								class="nav-link"> <i class="nav-icon fas fa-envelope"></i>
+									<p>
+										Inizia chat <i class="fas fa-angle-left right"></i>
+									</p>
+							</a>
+								<ul class="nav nav-treeview">
+									<li sec:authorize="hasAuthority('CLIENT')" class="nav-item"><a
+										th:href="@{/chatCrea}" class="nav-link"> <i
+											class="far fa-circle nav-icon"></i>
+											<p>Inizia chat Progetto</p>
+									</a></li>
+									<li sec:authorize="hasAuthority('DESIGNER')" class="nav-item">
+										<a th:href="@{/chatCrea}" class="nav-link"> <i
+											class="far fa-circle nav-icon"></i>
+											<p>Inizia chat Produttore</p>
+									</a>
+									</li>
+								</ul></li>
 					</ul>
+					</sec:authorize>
 
 				</nav>
 				<!-- /.sidebar-menu -->
@@ -349,16 +339,13 @@
 			$('.textarea').summernote()
 		})
 		function check() {
-			
-			if (document.getElementById('exampleInputFile').files[0].size > 1048570)
-				{
-					$("#fileToLong").show();
-					document.getElementById('exampleInputFile').files = null;
-				}
-			else 
-				if (document.getElementById('exampleInputFile').files.length)
+
+			if (document.getElementById('exampleInputFile').files[0].size > 1048570) {
+				$("#fileToLong").show();
+				document.getElementById('exampleInputFile').files = null;
+			} else if (document.getElementById('exampleInputFile').files.length)
 				$("#fileC").show();
-			
+
 		}
 	</script>
 	<div layout:fragment="script"></div>

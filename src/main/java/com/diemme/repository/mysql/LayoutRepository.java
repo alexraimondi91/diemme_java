@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.diemme.domain.mysql.FileLayout;
 import com.diemme.domain.mysql.Layout;
+import com.diemme.domain.mysql.StatusType;
 import com.diemme.domain.mysql.User;
 
 
@@ -26,6 +27,8 @@ public interface LayoutRepository  extends JpaRepository<Layout, Long>{
 	
 	@Query(value = "SELECT u FROM User u JOIN u.layouts l WHERE l.id = :idLayout")
 	Set<User> getUsersLayout(@Param("idLayout") Long idLayout);
+	
+	Page<Layout> findByStatus(Pageable pageable, StatusType status);
 	
 
 }

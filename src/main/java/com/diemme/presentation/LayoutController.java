@@ -37,6 +37,7 @@ import com.diemme.domain.mysql.FileLayout;
 import com.diemme.domain.mysql.Layout;
 import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.Role;
+import com.diemme.domain.mysql.StatusType;
 import com.diemme.domain.mysql.User;
 import com.diemme.repository.mysql.FileLayoutRepository;
 import com.diemme.wrapperForm.FormWrapperLayout;
@@ -66,9 +67,22 @@ public class LayoutController {
 		return "/backoffice/layoutDashboard/manage.html";
 
 	}
+	
+	@SuppressWarnings("static-access")
+	@GetMapping("/layoutProduzioneGestione")
+	public String manageLayoutsByStatus(Model model ) throws BusinessException {
+		
+		pageModel.initPageAndSize();
+		pageModel.setSIZE(5);
+		Page<Layout> layouts = serviceLayout.getLayoutsByStatus(StatusType.TRANSFERRED_TO_PRODUCTION, pageModel.getPAGE(), pageModel.getSIZE());
+		model.addAttribute("layouts", layouts);
+		pageModel.resetPAGE();
+		return "/backoffice/factoryDashboard/manage.html";
+
+	}
 
 	@GetMapping("/layoutCrea")
-	public String createNewsShocases(Model model) throws BusinessException {
+	public String create(Model model) throws BusinessException {
 		FormWrapperLayout layoutWrapper = new FormWrapperLayout();
 		Set<User> userClients = serviceUser.getUsersByRole("CLIENT");
 		model.addAttribute("userClients", userClients);
@@ -111,7 +125,7 @@ public class LayoutController {
 		layoutSave.setDescription(layoutWrapper.getLayout().getDescription());
 		layoutSave.setCompleted(false);
 		layoutSave.setUsers(usersLayout);
-		layoutSave.setStatus(new String("in progress"));		
+		layoutSave.setStatus(StatusType.IN_PROGRESS);		
 
 		try {
 			layoutSave = serviceLayout.saveLayout(layoutSave);
@@ -163,7 +177,7 @@ public class LayoutController {
 	}
 
 	@GetMapping("/layoutUpdate")
-	public String updateNewsShocases(Long id, Model model) throws BusinessException {
+	public String updateLayout(Long id, Model model) throws BusinessException {
 		Layout layout = new Layout();
 		try {
 			layout = serviceLayout.getLayout(id);
@@ -171,12 +185,16 @@ public class LayoutController {
 			e.printStackTrace();
 
 		}
+		
+		
+		
+		model.addAttribute("StatusType", StatusType.values());
 		model.addAttribute("layout", layout);
 		return "/backoffice/layoutDashboard/update.html";
 	}
 
 	@PostMapping("/layoutUpdate/{id}")
-	public String update(@PathVariable("id") Long id, @Valid @ModelAttribute("layoutWrapper") Layout layout, Errors errors,
+	public String updateLayout(@PathVariable("id") Long id, @Valid @ModelAttribute("layout") Layout layout, Errors errors,
 			@RequestParam("contentImg") List<MultipartFile> contentImg, Authentication auth) throws BusinessException {
 
 		int i = 1;
@@ -247,6 +265,76 @@ public class LayoutController {
 			layoutSave.setFileLayouts(file);		}
 
 		try {
+			layoutSave = serviceLayout.saveLayout(layout);
+			layoutSave.setInsertDate(dateCreation);
+			serviceLayout.saveLayout(layoutSave);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/layoutGestione";
+	}
+	
+	@GetMapping("/layoutUpdateProductor")
+	public String updateProductorLayout(Long id, Model model) throws BusinessException {
+		Layout layout = new Layout();
+		try {
+			layout = serviceLayout.getLayout(id);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}		
+		
+		model.addAttribute("StatusType", StatusType.values());
+		model.addAttribute("layout", layout);
+		return "/backoffice/factoryDashboard/update.html";
+	}
+	
+	@PostMapping("/layoutUpdateProductor/{id}")
+	public String updateProductorLayout(@PathVariable("id") Long id, @Valid @ModelAttribute("layout") Layout layout, Errors errors,
+			 Authentication auth) throws BusinessException {
+
+		Set<User> usersLayout = new HashSet<User>();
+		User userAuth = new User();
+
+
+		Layout layoutOld = new Layout();
+		Layout layoutSave = new Layout();
+		
+		String username = auth.getName();
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+			usersLayout.add(userAuth);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		try {
+			layoutOld = serviceLayout.getLayout(id);
+			usersLayout = serviceLayout.getAllUsersLayout(layoutOld.getId());		
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		layoutSave.setCompleted(layoutOld.getCompleted());
+		layoutSave.setDescription(layoutOld.getDescription());
+		layoutSave.setName(layoutOld.getName());
+		layoutSave.setUsers(usersLayout);
+		layoutSave.setStatus(layout.getStatus());
+		layoutSave.setModifyDate(ZonedDateTime.now());
+		ZonedDateTime dateCreation = layoutOld.getInsertDate();			
+		Set<FileLayout> oldFiles = layoutOld.getFileLayouts();
+		layoutSave.setFileLayouts(oldFiles);
+
+		
+
+		try {
+			System.out.println("\n\n\n layoutSave " + layoutSave + " \n\n\n");
+
 			layoutSave = serviceLayout.saveLayout(layout);
 			layoutSave.setInsertDate(dateCreation);
 			serviceLayout.saveLayout(layoutSave);

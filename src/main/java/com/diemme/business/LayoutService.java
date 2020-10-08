@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.data.domain.Page;
 
 import com.diemme.domain.mysql.Layout;
+import com.diemme.domain.mysql.StatusType;
 import com.diemme.domain.mysql.User;
 
 public interface LayoutService {
@@ -23,5 +24,7 @@ public interface LayoutService {
 	void deleteLayout(Long id) throws BusinessException;
 	
 	Set<User> getAllUsersLayout (Long id) throws BusinessException;
+
+	Page<Layout> getLayoutsByStatus(StatusType status, Integer page, Integer size) throws BusinessException;
 
 }
