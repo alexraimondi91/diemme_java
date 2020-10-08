@@ -121,6 +121,7 @@ public class ChatController {
 
     	model.addAttribute("idChatMongo", idChatMongo);
 		model.addAttribute("index", index);
+		
 		return "/backoffice/chatDashboard/viewImage.html";
 
 	}
@@ -292,7 +293,7 @@ public class ChatController {
 	@PostMapping("/chatUpdate/{id}")
 	public ModelAndView updateChat(ModelMap model ,Authentication auth, String message,
 			@RequestParam(value = "attachment", required = false) MultipartFile attachment,
-			@PathVariable("id") String id) {
+			@PathVariable("id") String id) throws IOException {
 
 		Chat chatUpdate = new Chat();
 		Chat chatOld = new Chat();
@@ -302,7 +303,7 @@ public class ChatController {
 		Set<Message> messageList = new HashSet<Message>();
 		String username = auth.getName();
 		String nameuser = new String();
-
+		
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
 
@@ -332,6 +333,7 @@ public class ChatController {
 			if (!attachment.isEmpty()) {
 
 				byte[] bytes = new byte[(int) attachment.getSize()];
+				bytes = attachment.getBytes();
 				messageSave.setFile(bytes);
 			}
 
