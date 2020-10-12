@@ -27,4 +27,7 @@ public interface LayoutService {
 
 	Page<Layout> getLayoutsByStatus(StatusType status, Integer page, Integer size) throws BusinessException;
 
+
+	Page<Layout> getMyLayoutsByStatus(Long id, StatusType status, Integer page, Integer size) throws BusinessException;
+
 }

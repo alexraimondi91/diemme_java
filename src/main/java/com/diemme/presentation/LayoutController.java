@@ -57,11 +57,21 @@ public class LayoutController {
 
 	@SuppressWarnings("static-access")
 	@GetMapping("/layoutGestione")
-	public String manageMyLayouts(Model model ) throws BusinessException {
+	public String manageMyLayouts(Model model, Authentication auth ) throws BusinessException {
 		
+		User userAuth = new User();
+		String username = auth.getName();
+		
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}				
 		pageModel.initPageAndSize();
 		pageModel.setSIZE(5);
-		Page<Layout> layouts = serviceLayout.getAllLayoutPageable(pageModel.getPAGE(), pageModel.getSIZE());
+		Page<Layout> layouts = serviceLayout.getLayoutsByUserId(userAuth.getId(), pageModel.getPAGE(), pageModel.getSIZE());
 		model.addAttribute("layouts", layouts);
 		pageModel.resetPAGE();
 		return "/backoffice/layoutDashboard/manage.html";
@@ -70,14 +80,38 @@ public class LayoutController {
 	
 	@SuppressWarnings("static-access")
 	@GetMapping("/layoutProduzioneGestione")
-	public String manageLayoutsByStatus(Model model ) throws BusinessException {
-		
+	public String manageLayoutsByStatus(Model model ) throws BusinessException {		
+
 		pageModel.initPageAndSize();
 		pageModel.setSIZE(5);
 		Page<Layout> layouts = serviceLayout.getLayoutsByStatus(StatusType.TRANSFERRED_TO_PRODUCTION, pageModel.getPAGE(), pageModel.getSIZE());
 		model.addAttribute("layouts", layouts);
+		
 		pageModel.resetPAGE();
 		return "/backoffice/factoryDashboard/manage.html";
+
+	}
+	
+	@SuppressWarnings("static-access")
+	@GetMapping("/layoutClientGestione")
+	public String manageMyLayoutsByStatus(Model model, Authentication auth ) throws BusinessException {
+		
+		User userAuth = new User();
+		String username = auth.getName();
+		
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}		
+		pageModel.initPageAndSize();
+		pageModel.setSIZE(5);
+		Page<Layout> layouts = serviceLayout.getMyLayoutsByStatus(userAuth.getId(), StatusType.SEND,  pageModel.getPAGE(), pageModel.getSIZE());
+		model.addAttribute("layouts", layouts);
+		pageModel.resetPAGE();
+		return "/backoffice/layoutDashboard/manageOrdini.html";
 
 	}
 
@@ -165,6 +199,7 @@ public class LayoutController {
 
 	@PostMapping("/layoutDelete/{id}")
 	public String deletelayout(@PathVariable(value = "id") Long id) throws BusinessException {
+		
 		try {
 			serviceLayout.deleteLayout(id);
 		} catch (BusinessException e) {
@@ -177,6 +212,7 @@ public class LayoutController {
 
 	@GetMapping("/layoutUpdate")
 	public String updateLayout(Long id, Model model) throws BusinessException {
+		
 		Layout layout = new Layout();
 		try {
 			layout = serviceLayout.getLayout(id);
@@ -200,11 +236,8 @@ public class LayoutController {
 		Set<FileLayout> file = new HashSet<FileLayout>();
 		List<byte[]> Listbytes = new ArrayList<byte[]>();
 		User userAuth = new User();
-
-
 		Layout layoutOld = new Layout();
-		Layout layoutSave = new Layout();
-		
+		Layout layoutSave = new Layout();		
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
@@ -273,6 +306,7 @@ public class LayoutController {
 	
 	@GetMapping("/layoutUpdateProductor")
 	public String updateProductorLayout(Long id, Model model) throws BusinessException {
+		
 		Layout layout = new Layout();
 		try {
 			layout = serviceLayout.getLayout(id);
@@ -291,11 +325,8 @@ public class LayoutController {
 			 Authentication auth) throws BusinessException {
 
 		User userAuth = new User();
-
-
 		Layout layoutOld = new Layout();
-		Layout layoutSave = new Layout();
-		
+		Layout layoutSave = new Layout();		
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
@@ -322,9 +353,7 @@ public class LayoutController {
 		ZonedDateTime dateCreation = layoutOld.getInsertDate();			
 		Set<FileLayout> oldFiles = layoutOld.getFileLayouts();
 		layoutSave.setFileLayouts(oldFiles);
-
 		
-
 		try {
 
 			layoutSave = serviceLayout.saveLayout(layoutSave);
@@ -335,7 +364,68 @@ public class LayoutController {
 
 		}
 
-		return "redirect:/layoutGestione";
+		return "redirect:/layoutProduzioneGestione";
+	}
+	
+	@GetMapping("/layoutUpdateClient")
+	public String updateClientLayout(Long id, Model model) throws BusinessException {
+		
+		Layout layout = new Layout();
+		try {
+			layout = serviceLayout.getLayout(id);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}		
+		
+		model.addAttribute("layout", layout);
+		return "/backoffice/layoutDashboard/updateOrdini.html";
+	}
+	
+	@PostMapping("/layoutUpdateClient/{id}")
+	public String updateClientLayout(@PathVariable("id") Long id, @Valid @ModelAttribute("layout") Layout layout, Errors errors,
+			 Authentication auth) throws BusinessException {
+
+		User userAuth = new User();
+		Layout layoutOld = new Layout();
+		Layout layoutSave = new Layout();		
+		String username = auth.getName();
+		try {
+			userAuth = serviceUser.findUserByUserName(username);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		try {
+			layoutOld = serviceLayout.getLayout(id);
+
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+		layoutSave.setId(layoutOld.getId());
+		layoutSave.setCompleted(layout.getCompleted());
+		layoutSave.setDescription(layoutOld.getDescription());
+		layoutSave.setName(layoutOld.getName());
+		layoutSave.setUsers(layoutOld.getUsers());
+		layoutSave.setStatus(layoutOld.getStatus());
+		layoutSave.setModifyDate(ZonedDateTime.now());
+		ZonedDateTime dateCreation = layoutOld.getInsertDate();			
+		Set<FileLayout> oldFiles = layoutOld.getFileLayouts();
+		layoutSave.setFileLayouts(oldFiles);
+		try {
+
+			layoutSave = serviceLayout.saveLayout(layoutSave);
+			layoutSave.setInsertDate(dateCreation);
+			serviceLayout.saveLayout(layoutSave);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/layoutClientGestione";
 	}
 
 }

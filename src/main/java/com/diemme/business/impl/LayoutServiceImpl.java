@@ -19,7 +19,7 @@ import com.diemme.domain.mysql.User;
 import com.diemme.repository.mysql.LayoutRepository;
 
 @Service
-public class layoutServiceImpl implements LayoutService{
+public class LayoutServiceImpl implements LayoutService{
 	
 	@Autowired
 	private LayoutRepository layoutRepository;
@@ -61,6 +61,18 @@ public class layoutServiceImpl implements LayoutService{
 	public Page<Layout> getLayoutsByStatus(StatusType status, Integer page, Integer size) throws BusinessException {	
 		Pageable pageable = PageRequest.of(page,size);
 		Page<Layout> pageLayout = layoutRepository.findByStatus(pageable, status);
+		return pageLayout;
+	}
+	
+	@Override
+	public Page<Layout> getMyLayoutsByStatus(Long id, StatusType status, Integer page, Integer size) throws BusinessException {
+		System.out.println("\n page " + page);
+		System.out.println("\n size " + size);
+
+		Pageable pageable = PageRequest.of(page,size);
+		System.out.println("\n\n\n arrivato 2 ");
+		Page<Layout> pageLayout = layoutRepository.getLayoutByUserIdAndStatus(pageable, id, status);
+		System.out.println("\n\n\n arrivato 3 ");
 		return pageLayout;
 	}
 
