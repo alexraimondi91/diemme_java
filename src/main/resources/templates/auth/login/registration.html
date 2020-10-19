@@ -72,7 +72,7 @@
 					</div>
 				</div>
 				<div class="input-group mb-3">
-					<input type="fiscal_code" th:field="*{fiscalCode}"
+					<input type="text" th:field="*{fiscalCode}"
 						placeholder="fiscal code" class="form-control" /> <label
 						th:if="${#fields.hasErrors('fiscalCode')}"
 						th:errors="*{fiscalCode}" class="validation-message"></label>
@@ -84,7 +84,7 @@
 				</div>
 
 				<div class="input-group mb-3">
-					<input type="address_shipment" th:field="*{addressShipment}"
+					<input type="text" th:field="*{addressShipment}"
 						placeholder="address shipment" class="form-control" /> <label
 						th:if="${#fields.hasErrors('addressShipment')}"
 						th:errors="*{addressShipment}" class="validation-message"></label>
@@ -95,6 +95,28 @@
 					</div>
 				</div>
 
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{companyName}"
+						placeholder="Company Name" class="form-control" /> <label
+						th:if="${#fields.hasErrors('companyName')}"
+						th:errors="*{addressShipment}" class="validation-message"></label>
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-address-card"></span>
+						</div>
+					</div>
+				</div>
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{pIva}"
+						placeholder="Partita Iva" class="form-control" /> <label
+						th:if="${#fields.hasErrors('pIva')}"
+						th:errors="*{addressShipment}" class="validation-message"></label>
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-address-card"></span>
+						</div>
+					</div>
+				</div>
 
 
 				<div class="form-group">
