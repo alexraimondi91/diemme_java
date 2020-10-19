@@ -22,13 +22,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "product_showcase")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper=true) 
+@ToString(callSuper = true)
 public class ProductShowcase extends BaseModel{
 
 
@@ -43,8 +47,7 @@ public class ProductShowcase extends BaseModel{
 	private byte[] compressImg;
 	@Column(name = "description", nullable = false)
 	@NotBlank
-	private String description;
-	
+	private String description;	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)

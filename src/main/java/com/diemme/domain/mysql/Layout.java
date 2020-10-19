@@ -25,15 +25,21 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "layout")
-@JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
+@EqualsAndHashCode(callSuper=true) 
+@ToString(callSuper = true)
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Layout extends BaseModel{
 
@@ -57,8 +63,8 @@ public class Layout extends BaseModel{
           name = "user_id", referencedColumnName = "id", nullable = true)) 
 	private Set<User> users;
 	
-	@JsonIgnoreProperties("layout")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "layout", cascade = CascadeType.ALL)
+	@OneToMany(cascade= CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@JoinColumn(name = "layout_id")
 	private Set<FileLayout> fileLayouts;
 
 

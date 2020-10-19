@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.LayoutService;
+import com.diemme.domain.mysql.FileLayout;
 import com.diemme.domain.mysql.Layout;
 import com.diemme.domain.mysql.StatusType;
 import com.diemme.domain.mysql.User;
+import com.diemme.repository.mysql.FileLayoutRepository;
 import com.diemme.repository.mysql.LayoutRepository;
 
 @Service
@@ -23,6 +25,10 @@ public class LayoutServiceImpl implements LayoutService{
 	
 	@Autowired
 	private LayoutRepository layoutRepository;
+	
+	@Autowired
+	private FileLayoutRepository fileLayoutRepository;
+
 
 
 	@Override
@@ -42,6 +48,8 @@ public class LayoutServiceImpl implements LayoutService{
 
 	@Override
 	public void deleteLayout(Long id) throws BusinessException {
+		
+		//Set<FileLayout> files = layoutRepository.findById(id).get().getFileLayouts();
 		layoutRepository.deleteById(id);		
 	}
 

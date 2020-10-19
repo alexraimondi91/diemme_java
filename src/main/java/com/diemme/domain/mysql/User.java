@@ -77,9 +77,7 @@ public class User extends BaseModel{
 	private String pIva;
 	
 	@Column(name = "company_name", nullable = true)
-	private String companyName;
-
-	
+	private String companyName;	
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable( 
@@ -105,7 +103,7 @@ public class User extends BaseModel{
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 	private List<ContactShowcase> contactShowcases;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable( 
         name = "user_layout", 
         joinColumns = @JoinColumn(

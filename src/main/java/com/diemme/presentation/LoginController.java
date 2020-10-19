@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,7 @@ public class LoginController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User userExists = new User();
 		try {
 			userExists = userService.findUserByUserName(user.getUserName());
@@ -69,6 +71,8 @@ public class LoginController {
         roles.add(roleUser);
         user.setRoles(roles);
         user.setActive(false);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         if (userExists != null) {
             bindingResult
                     .rejectValue("userName", "error.user",
@@ -111,8 +115,7 @@ public class LoginController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        //modelAndView.addObject("userName", "Welcome " + user.getUserName() + "/" + user.getName() + " " + user.getSurname() + " (" + user.getEmail() + ")");
-        //modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+       
         modelAndView.addObject("showcases", showcases);
         modelAndView.setViewName("frontoffice/home/home");
         return modelAndView;

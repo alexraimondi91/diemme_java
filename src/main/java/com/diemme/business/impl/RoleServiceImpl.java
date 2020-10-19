@@ -1,6 +1,8 @@
 package com.diemme.business.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,12 @@ public class RoleServiceImpl implements RoleService {
 	public Role findByRole(String name) {
 
 		return roleRepository.findByRole(name);
+	}
+	
+	@Override
+	@Transactional
+	public List<Role> getAllRoles(){
+		return roleRepository.findAll();
 	}
 
 }

@@ -2,6 +2,8 @@ package com.diemme.business;
 
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+
 import com.diemme.domain.mysql.User;
 
 public interface UserService {
@@ -13,6 +15,13 @@ public interface UserService {
     User saveUser(User user)throws BusinessException;
     
     Set<User> getUsersByRole (String role)throws BusinessException;
+
+	Page<User> getAllUserPageable(Integer page, Integer size) throws BusinessException;
+
+	void deleteUser(Long id) throws BusinessException;
+
+	User getUser(Long id)throws BusinessException;
+
     
 
 }

@@ -28,20 +28,16 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper=true) 
 @ToString(callSuper = true)
 @Table(name = "chat_user")
-@JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 @Data @NoArgsConstructor @AllArgsConstructor
 public class ChatUser extends BaseModel {
 
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
-	
+	private User user;	
 	@Column(name = "name_project", nullable = false)
 	@NotBlank
-	private String nameProject;
-
-	
+	private String nameProject;	
 	@Column(name = "id_chat_mongo", nullable = false)
 	private String idChatMongo;
 	

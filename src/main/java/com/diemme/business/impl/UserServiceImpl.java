@@ -1,11 +1,15 @@
 package com.diemme.business.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.UserService;
+import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.User;
 import com.diemme.repository.mysql.RoleRepository;
@@ -22,10 +26,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
     private UserRepository userRepository;
-	@Autowired
-    private RoleRepository roleRepository;
-	@Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
 	@Bean
@@ -42,6 +43,12 @@ public class UserServiceImpl implements UserService{
     public User findUserByUserName(String userName) throws BusinessException{
         return userRepository.findByUserName(userName);
     }
+	
+	@Override
+    public void deleteUser(Long id) throws BusinessException{
+        userRepository.deleteById(id);
+    }
+
 
 	@Override
 	@Transactional
@@ -53,6 +60,16 @@ public class UserServiceImpl implements UserService{
 	public Set<User> getUsersByRole(String role) throws BusinessException {
 		// TODO Auto-generated method stub
 		return userRepository.findUserByRole(role);
+	}
+	
+	@Override
+	public Page<User> getAllUserPageable(Integer page, Integer size) throws BusinessException {
+		return userRepository.findAll(PageRequest.of(page,size));
+	}
+
+	@Override
+	public User getUser(Long id) {
+		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 	}
 	
 	

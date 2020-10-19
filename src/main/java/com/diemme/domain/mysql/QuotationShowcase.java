@@ -20,11 +20,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "quotation_showcases")
 @Data @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(callSuper=true) 
+@ToString(callSuper = true)
 public class QuotationShowcase extends BaseModel{
 
 	

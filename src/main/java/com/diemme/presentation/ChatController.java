@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.ChatUserService;
+import com.diemme.business.EmailService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
 import com.diemme.domain.mongo.Chat;
@@ -44,7 +45,10 @@ public class ChatController {
 
 	@Autowired
 	private UserService serviceUser;
-	
+
+	@Autowired
+	private EmailService emailService;
+
 	@Autowired
 	private PageModel pageModel;
 
@@ -115,13 +119,14 @@ public class ChatController {
 		return "/backoffice/chatDashboard/chat.html";
 
 	}
-	
-	@GetMapping("/fileVisione/{idChatMongo}/{index}")
-	public String getFile(String id, Model model, @PathVariable("idChatMongo") String idChatMongo, @PathVariable("index") int index) {	
 
-    	model.addAttribute("idChatMongo", idChatMongo);
+	@GetMapping("/fileVisione/{idChatMongo}/{index}")
+	public String getFile(String id, Model model, @PathVariable("idChatMongo") String idChatMongo,
+			@PathVariable("index") int index) {
+
+		model.addAttribute("idChatMongo", idChatMongo);
 		model.addAttribute("index", index);
-		
+
 		return "/backoffice/chatDashboard/viewImage.html";
 
 	}
@@ -160,7 +165,6 @@ public class ChatController {
 	@ResponseBody
 	public byte[] postMEssage(@PathVariable("idChatMongo") String idChatMongo, @RequestBody String messaggio) {
 		Chat chat = new Chat();
-		Message message = new Message();
 		try {
 			chat = chatUserService.getChat(idChatMongo);
 
@@ -273,9 +277,6 @@ public class ChatController {
 		message.setName(nameuser);
 		message.setDate(LocalDateTime.now());
 
-		
-		
-
 		try {
 			chatUserService.saveMessage(message);
 			messageList.add(message);
@@ -286,12 +287,22 @@ public class ChatController {
 
 		}
 
+		for (Role role : userAuth.getRoles()) {
+
+			if (role.getRole().equals("CLIENT")) {
+				emailService.sendNotifyClientMessage(userAuth.getEmail(), userAuth.getName());
+			} else if (role.getRole().equals("DESIGNER")) {
+				emailService.sendNotifyDesignerMessage(userAuth.getEmail(), userAuth.getName());
+			}
+
+		}
+
 		return modelAndView;
 
 	}
 
 	@PostMapping("/chatUpdate/{id}")
-	public ModelAndView updateChat(ModelMap model ,Authentication auth, String message,
+	public ModelAndView updateChat(ModelMap model, Authentication auth, String message,
 			@RequestParam(value = "attachment", required = false) MultipartFile attachment,
 			@PathVariable("id") String id) throws IOException {
 
@@ -303,7 +314,7 @@ public class ChatController {
 		Set<Message> messageList = new HashSet<Message>();
 		String username = auth.getName();
 		String nameuser = new String();
-		
+
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
 
@@ -321,8 +332,6 @@ public class ChatController {
 			e.printStackTrace();
 
 		}
-		
-
 		messageSave.setDate(LocalDateTime.now());
 		messageSave.setIdUser(userAuth.getId());
 		messageSave.setName(nameuser);
@@ -341,12 +350,11 @@ public class ChatController {
 
 		messageList = chatOld.getMessages();
 		messageList.add(messageSave);
-		
 
 		chatUpdate.setChatType(chatOld.getChatType());
 		chatUpdate.setId(id);
 		chatUpdate.setMessages(messageList);
-		
+
 		try {
 			chatUserService.saveUpdateChat(chatOld, chatUpdate);
 
@@ -354,10 +362,22 @@ public class ChatController {
 			e.printStackTrace();
 
 		}
-		
-		model.addAttribute("id", id);
-        return new ModelAndView("redirect:/chatVisione", model);
 
+		for (Role role : userAuth.getRoles()) {
+
+			if (role.getRole().equals("CLIENT")) {
+				emailService.sendNotifyClientMessage(userAuth.getEmail(), userAuth.getName());
+			} else if (role.getRole().equals("DESIGNER")) {
+				emailService.sendNotifyDesignerMessage(userAuth.getEmail(), userAuth.getName());
+			}
+
+			else if (role.getRole().equals("PRODUCTOR")) {
+				emailService.sendNotifyProductorMessage(userAuth.getEmail(), userAuth.getName());
+			}
+		}
+
+		model.addAttribute("id", id);
+		return new ModelAndView("redirect:/chatVisione", model);
 
 	}
 

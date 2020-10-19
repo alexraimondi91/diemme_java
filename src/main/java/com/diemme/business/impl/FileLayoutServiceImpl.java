@@ -1,5 +1,7 @@
 package com.diemme.business.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +31,7 @@ public class FileLayoutServiceImpl implements FileLayoutService{
 	}
 
 	@Override
-	public Page<FileLayout> getAllFileslayout(Integer page, Integer size, Long id) throws BusinessException {
+	public Page<FileLayout> getAllFileslayout(Integer page, Integer size, List<Long> id) throws BusinessException {
 		return fileLayoutRepository.getFileLayoutsByLayoutId(PageRequest.of(page,size),id);
 
 	}

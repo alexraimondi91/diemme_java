@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
+import com.diemme.business.EmailService;
 import com.diemme.business.FileLayoutService;
 import com.diemme.business.LayoutService;
 import com.diemme.business.NewsService;
@@ -51,6 +52,8 @@ public class LayoutController {
 	private UserService serviceUser;
 	@Autowired
 	private FileLayoutService fileLayoutService;
+	@Autowired
+	private EmailService emailService;
 	@Autowired
 	private PageModel pageModel;
 
@@ -181,9 +184,9 @@ public class LayoutController {
 			FileLayout fileLayoutSave = new FileLayout();
 			fileLayoutSave.setContentImg(fileContent);
 			fileLayoutSave.setName((String)"layout: "+ layoutSave.getName() + ", file N° " + i);
-			
 			try {
 				fileLayoutService.saveFileLayout(fileLayoutSave);
+				file.add(fileLayoutSave);
 			} catch (BusinessException e) {
 				e.printStackTrace();
 
@@ -192,6 +195,13 @@ public class LayoutController {
 		}
 
 		layoutSave.setFileLayouts(file);
+		
+		try {
+			serviceLayout.saveLayout(layoutSave);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+		}
 		
 
 		return modelAndView;
@@ -268,6 +278,7 @@ public class LayoutController {
 			
 			Set<FileLayout> oldFiles = layoutOld.getFileLayouts();
 			layoutSave.setFileLayouts(oldFiles);
+			
 
 		} else {
 
@@ -300,6 +311,10 @@ public class LayoutController {
 			e.printStackTrace();
 
 		}
+		
+		if(layoutSave.getStatus().equals(StatusType.TRANSFERRED_TO_PRODUCTION)) {
+			emailService.sendNotifyNewOrder(userAuth.getEmail(), userAuth.getName(), layoutSave.getName());
+		}
 
 		return "redirect:/layoutGestione";
 	}
@@ -320,11 +335,13 @@ public class LayoutController {
 		return "/backoffice/factoryDashboard/update.html";
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	@PostMapping("/layoutUpdateProductor/{id}")
 	public String updateProductorLayout(@PathVariable("id") Long id, @Valid @ModelAttribute("layout") Layout layout, Errors errors,
 			 Authentication auth) throws BusinessException {
 
 		User userAuth = new User();
+		User client = new User();
 		Layout layoutOld = new Layout();
 		Layout layoutSave = new Layout();		
 		String username = auth.getName();
@@ -362,6 +379,18 @@ public class LayoutController {
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
+		}
+		
+		for(User user: layoutSave.getUsers()) {
+			for(Role role : user.getRoles()) {
+				if(role.equals("CLIENT")) {
+					client = user;
+				}
+			}
+		}
+		
+		if(layoutSave.getStatus().equals(StatusType.SEND)) {
+			emailService.sendNotifyOrderShip(userAuth.getEmail(), userAuth.getName(), layoutSave.getName(),client.getAddressShipment());
 		}
 
 		return "redirect:/layoutProduzioneGestione";
@@ -423,6 +452,10 @@ public class LayoutController {
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
+		}
+		
+		if(layoutSave.getCompleted() == true) {
+			emailService.sendChangeStatusOrder(userAuth.getEmail(), userAuth.getName(), layoutSave.getName(),layoutSave.getCompleted());
 		}
 
 		return "redirect:/layoutClientGestione";
