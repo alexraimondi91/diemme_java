@@ -41,84 +41,79 @@
 							</div>
 							<div class="card-body">
 
-								<div class="form-group">
+								<div class="input-group mb-3">
 									<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-										class="validation-message"></label> <input type="text"
-										th:field="*{name}" placeholder="Name" class="form-control" />
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-user"></span>
-										</div>
-
-									</div>
-								</div>
-								<div class="form-group">
-									<label th:if="${#fields.hasErrors('surname')}"
-										th:errors="*{surname}" class="validation-message"></label> <input
-										type="text" th:field="*{surname}" placeholder="Last Name"
-										class="form-control" />
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-user"></span>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<input type="text" th:field="*{email}" placeholder="Email"
-										class="form-control" /> <label
-										th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
 										class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-id-card"></span>
-										</div>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-user-edit"></i></span>
 									</div>
+									<input type="text" th:field="*{name}" placeholder="Name"
+										class="form-control" />
 								</div>
-								<div class="form-group">
-									<input type="text" th:field="*{userName}"
-										placeholder="User Name" class="form-control" /> <label
-										th:if="${#fields.hasErrors('userName')}"
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('surname')}"
+										th:errors="*{surname}" class="validation-message"></label>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-user-edit"></i></span>
+									</div>
+									<input type="text" th:field="*{surname}"
+										placeholder="Last Name" class="form-control" />
+								</div>
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('email')}"
+										th:errors="*{email}" class="validation-message"></label>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-user-edit"></i></span>
+									</div>
+									<input type="text" th:field="*{email}" placeholder="Email"
+										class="form-control" />
+								</div>
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('userName')}"
 										th:errors="*{userName}" class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-address-card"></span>
-										</div>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
 									</div>
+									<input type="text" th:field="*{userName}"
+										placeholder="User Name" class="form-control" />
 								</div>
-								<div class="form-group">
-									<input type="password" th:field="*{password}"
-										placeholder="Password" class="form-control" /> <label
-										th:if="${#fields.hasErrors('password')}"
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('password')}"
 										th:errors="*{password}" class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-address-card"></span>
-										</div>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
 									</div>
+									<input type="password" th:field="*{password}"
+										placeholder="Password" class="form-control" />
 								</div>
-								<div class="form-group">
-									<input type="fiscal_code" th:field="*{fiscalCode}"
-										placeholder="fiscal code" class="form-control" /> <label
-										th:if="${#fields.hasErrors('fiscalCode')}"
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('fiscalCode')}"
 										th:errors="*{fiscalCode}" class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-address-card"></span>
-										</div>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
 									</div>
+									<input type="fiscal_code" th:field="*{fiscalCode}"
+										placeholder="fiscal code" class="form-control" />
 								</div>
-								
+
 								<div class="form-group  @error('title') has-error @enderror">
-								    <label for="inputName">Ruolo</label>
-									<select th:field="*{roles}">
+									<label>Ruolo</label>
+									
+									<select class="form-control select2"
+										th:field="*{roles}">
 										<option th:each="role : ${roles}" th:value="${role.id}"
 											th:utext="${role.role}" />
 									</select>
 								</div>
 
-								<div class="form-group">
-									<input type="address_shipment" th:field="*{addressShipment}"
-										placeholder="address shipment" class="form-control" /> <label
+								<div class="input-group mb-3">
+									<label
 										th:if="${#fields.hasErrors('addressShipment')}"
 										th:errors="*{addressShipment}" class="validation-message"></label>
 									<div class="input-group-append">
@@ -126,24 +121,28 @@
 											<span class="fas fa-address-card"></span>
 										</div>
 									</div>
+									<input type="address_shipment" th:field="*{addressShipment}"
+										placeholder="address shipment" class="form-control" /> 
 								</div>
-								
-								<div class="form-group">
-									<input type="text" th:field="*{pIva}"
-										placeholder="Partita iva" class="form-control" /> 
+
+								<div class="input-group mb-3">
 									<div class="input-group-append">
 										<div class="input-group-text">
+											<span class="fas fa-address-card"></span>
 										</div>
 									</div>
+									<input type="text" th:field="*{pIva}" placeholder="Partita iva"
+										class="form-control" />
 								</div>
-								
-								<div class="form-group">
+
+								<div class="input-group mb-3">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-address-card"></span>
+										</div>
+									</div>
 									<input type="text" th:field="*{companyName}"
-										placeholder="Nome compagnia" class="form-control" /> 
-									<div class="input-group-append">
-										<div class="input-group-text">
-										</div>
-									</div>
+										placeholder="Nome compagnia" class="form-control" />
 								</div>
 
 
