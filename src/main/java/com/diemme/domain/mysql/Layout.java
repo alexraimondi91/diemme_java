@@ -63,7 +63,7 @@ public class Layout extends BaseModel{
           name = "user_id", referencedColumnName = "id", nullable = true)) 
 	private Set<User> users;
 	
-	@OneToMany(cascade= CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(cascade= CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "layout_id")
 	private Set<FileLayout> fileLayouts;
 

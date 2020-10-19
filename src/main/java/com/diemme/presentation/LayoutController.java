@@ -279,6 +279,7 @@ public class LayoutController {
 			Set<FileLayout> oldFiles = layoutOld.getFileLayouts();
 			layoutSave.setFileLayouts(oldFiles);
 			
+			
 
 		} else {
 
@@ -297,11 +298,14 @@ public class LayoutController {
 				fileLayoutSave.setName((String)"layout: "+ layoutSave.getName() + ", file N° " + i);
 				fileLayoutService.saveFileLayout(fileLayoutSave);
 				i ++;
+				file.add(fileLayoutSave);
+
 
 
 			}
 
-			layoutSave.setFileLayouts(file);		}
+			layoutSave.setFileLayouts(file);	
+			}
 
 		try {
 			layoutSave = serviceLayout.saveLayout(layoutSave);
