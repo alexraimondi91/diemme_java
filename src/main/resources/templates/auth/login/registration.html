@@ -3,22 +3,32 @@
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="~{auth/layout/layout}">
 <div layout:fragment="registration">
-
+	
 	<form th:action="@{/login}" method="get">
-		<button class="btn btn-md btn-warning btn-block" type="Submit">Go
-			To Login Page</button>
+		<button class="btn btn-md btn-warning btn-block" type="Submit">Vai alla Login</button>
 	</form>
 
 	<div class="card">
-		<div class="card-body register-card-body">
+		<div class="card-body login-card-body">
+		<div class="alert alert-success alert-dismissible fade show "
+					role="alert" th:if="${successMessage}">
+					<h7>Ti sei appena registrato! <br> <!-- th:utext="${successMessage}" -->
+					Rimani in attesa dalla mail <br>
+					 di avvenuta registrazione
+					</h7>
+					<button type="button" class="close" data-dismiss="alert"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+	    </div>
 			<p class="login-box-msg">Registrazione</p>
 			<form autocomplete="off" action="#" th:action="@{/registration}"
 				th:object="${user}" method="POST" class="form-horizontal"
 				role="form">
-
+				<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+						class="validation-message"></label>
 				<div class="input-group mb-3">
-					<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-						class="validation-message"></label> <input type="text"
+					 <input type="text"
 						th:field="*{name}" placeholder="Name" class="form-control" />
 					<div class="input-group-append">
 						<div class="input-group-text">
@@ -27,9 +37,10 @@
 
 					</div>
 				</div>
+				<label th:if="${#fields.hasErrors('surname')}"
+						th:errors="*{surname}" class="validation-message"></label>
 				<div class="input-group mb-3">
-					<label th:if="${#fields.hasErrors('surname')}"
-						th:errors="*{surname}" class="validation-message"></label> <input
+					 <input
 						type="text" th:field="*{surname}" placeholder="Last Name"
 						class="form-control" />
 					<div class="input-group-append">
@@ -38,79 +49,84 @@
 						</div>
 					</div>
 				</div>
-				<div class="input-group mb-3">
-					<input type="text" th:field="*{email}" placeholder="Email"
-						class="form-control" /> <label
+				<label
 						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
 						class="validation-message"></label>
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{email}" placeholder="Email"
+						class="form-control" /> 
 					<div class="input-group-append">
 						<div class="input-group-text">
 							<span class="fas fa-id-card"></span>
 						</div>
 					</div>
 				</div>
-				<div class="input-group mb-3">
-					<input type="text" th:field="*{userName}" placeholder="User Name"
-						class="form-control" /> <label
+				<label
 						th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"
 						class="validation-message"></label>
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{userName}" placeholder="User Name"
+						class="form-control" /> 
 					<div class="input-group-append">
 						<div class="input-group-text">
 							<span class="fas fa-address-card"></span>
 						</div>
 					</div>
 				</div>
-				<div class="input-group mb-3">
-					<input type="password" th:field="*{password}"
-						placeholder="Password" class="form-control" /> <label
+				<label
 						th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
 						class="validation-message"></label>
+				<div class="input-group mb-3">
+					<input type="password" th:field="*{password}"
+						placeholder="Password" class="form-control" /> 
 					<div class="input-group-append">
 						<div class="input-group-text">
 							<span class="fas fa-address-card"></span>
 						</div>
 					</div>
 				</div>
-				<div class="input-group mb-3">
-					<input type="text" th:field="*{fiscalCode}"
-						placeholder="fiscal code" class="form-control" /> <label
+				<label
 						th:if="${#fields.hasErrors('fiscalCode')}"
 						th:errors="*{fiscalCode}" class="validation-message"></label>
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{fiscalCode}"
+						placeholder="fiscal code" class="form-control" /> 
 					<div class="input-group-append">
 						<div class="input-group-text">
 							<span class="fas fa-address-card"></span>
 						</div>
 					</div>
 				</div>
-
-				<div class="input-group mb-3">
-					<input type="text" th:field="*{addressShipment}"
-						placeholder="address shipment" class="form-control" /> <label
+				<label
 						th:if="${#fields.hasErrors('addressShipment')}"
 						th:errors="*{addressShipment}" class="validation-message"></label>
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{addressShipment}"
+						placeholder="address shipment" class="form-control" /> 
 					<div class="input-group-append">
 						<div class="input-group-text">
 							<span class="fas fa-address-card"></span>
 						</div>
 					</div>
 				</div>
-
-				<div class="input-group mb-3">
-					<input type="text" th:field="*{companyName}"
-						placeholder="Company Name" class="form-control" /> <label
+				<label
 						th:if="${#fields.hasErrors('companyName')}"
 						th:errors="*{addressShipment}" class="validation-message"></label>
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{companyName}"
+						placeholder="Company Name" class="form-control" /> 
 					<div class="input-group-append">
 						<div class="input-group-text">
 							<span class="fas fa-address-card"></span>
 						</div>
 					</div>
 				</div>
-				<div class="input-group mb-3">
-					<input type="text" th:field="*{pIva}"
-						placeholder="Partita Iva" class="form-control" /> <label
+				<label
 						th:if="${#fields.hasErrors('pIva')}"
 						th:errors="*{addressShipment}" class="validation-message"></label>
+				<div class="input-group mb-3">
+					<input type="text" th:field="*{pIva}" placeholder="Partita Iva"
+						class="form-control" /> 
 					<div class="input-group-append">
 						<div class="input-group-text">
 							<span class="fas fa-address-card"></span>
@@ -125,10 +141,6 @@
 					</div>
 				</div>
 
-				<h2>
-					<span class="text-success" th:utext="${successMessage}"></span>
-				</h2>
-
 			</form>
 
 		</div>
@@ -138,4 +150,4 @@
 </div>
 <!-- /.register-box -->
 
-</div>
+</html>

@@ -76,7 +76,7 @@ public class LoginController {
         if (userExists != null) {
             bindingResult
                     .rejectValue("userName", "error.user",
-                            "Questo nome utente è già stato preso, riprova con un altro!");
+                            "exist");
         }
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("auth/login/registration");
@@ -87,7 +87,7 @@ public class LoginController {
 				e.printStackTrace();
 			}
 
-            modelAndView.addObject("successMessage", "Ti sei appena registrato! ora attendi un'email di attivazione prima di poter accedere alla tua area personale!");
+            modelAndView.addObject("successMessage", "ok");
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("auth/login/registration");
             emailService.sendUserActive(user.getEmail(), user.getName());
