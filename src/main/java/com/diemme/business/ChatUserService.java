@@ -11,6 +11,7 @@ import com.diemme.domain.mysql.ChatUser;
 import com.diemme.domain.mysql.User;
 import com.diemme.wrapperForm.FormWrapperChat;
 
+
 public interface ChatUserService {
 
 	public Page<ChatUser> getAllUserChat(Integer page, Integer size, Long idUser) throws BusinessException;

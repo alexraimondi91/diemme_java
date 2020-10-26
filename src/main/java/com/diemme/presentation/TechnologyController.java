@@ -1,12 +1,7 @@
 package com.diemme.presentation;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -17,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +25,6 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.TechnologyService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.TechnologyShowcase;
 import com.diemme.domain.mysql.User;
 
@@ -44,7 +37,6 @@ public class TechnologyController {
 	private UserService serviceUser;
 	@Autowired
 	private PageModel pageModel;
-
 
 	@GetMapping("/tecnologie")
 	public String listTechnology(Model model) throws BusinessException {
@@ -82,13 +74,13 @@ public class TechnologyController {
 	@GetMapping("/tecnologie/image/{id}")
 	@ResponseBody
 	public byte[] getImage(@PathVariable Long id) throws BusinessException {
-		
+
 		TechnologyShowcase product = new TechnologyShowcase();
-		
+
 		try {
-			
+
 			product = serviceTecnology.getTecnology(id);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 
@@ -99,7 +91,7 @@ public class TechnologyController {
 
 	@GetMapping("/tecnologieCrea")
 	public String createTechnology(Model model) throws BusinessException {
-		
+
 		TechnologyShowcase technologyShowcase = new TechnologyShowcase();
 		model.addAttribute("tecnology_showcase", technologyShowcase);
 		return "/backoffice/technologyDashboard/create.html";
@@ -109,21 +101,21 @@ public class TechnologyController {
 	public ModelAndView createTechnology(@Valid @ModelAttribute("tecnology_showcase") TechnologyShowcase technology,
 			Errors errors, @RequestParam("contentImg") MultipartFile contentImg, Authentication auth)
 			throws BusinessException {
-		
+
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
-		
+
 		try {
-			
+
 			userAuth = serviceUser.findUserByUserName(username);
 			serviceTecnology.createTechnology(technology, contentImg, userAuth);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new ModelAndView("/error/error.html");
 
-		}		
+		}
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/technologyDashboard/create.html");
 		return modelAndView;
@@ -131,11 +123,11 @@ public class TechnologyController {
 
 	@PostMapping("/tecnologieDelete/{id}")
 	public String createTechnology(@PathVariable(value = "id") Long id) throws BusinessException {
-		
+
 		try {
-			
+
 			serviceTecnology.deleteTechnology(id);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
@@ -148,11 +140,11 @@ public class TechnologyController {
 	@GetMapping("/tecnologieUpdate")
 	public String updateTechnology(Long id, Model model) throws BusinessException {
 		TechnologyShowcase technologyShowcase = new TechnologyShowcase();
-		
+
 		try {
-			
+
 			technologyShowcase = serviceTecnology.getTecnology(id);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
@@ -165,21 +157,21 @@ public class TechnologyController {
 	@PostMapping("/tecnologieUpdate/{id}")
 	public String updateTechnology(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("tecnology_showcase_update") TechnologyShowcase technology, Errors errors,
-			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {		
-		
-		User userAuth = new User();		
+			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
+
+		User userAuth = new User();
 		String username = auth.getName();
-		
+
 		try {
-			
+
 			userAuth = serviceUser.findUserByUserName(username);
 			serviceTecnology.updateTechnology(id, technology, contentImg, userAuth);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
 
-		}	
+		}
 
 		return "redirect:/tecnologieGestione";
 	}

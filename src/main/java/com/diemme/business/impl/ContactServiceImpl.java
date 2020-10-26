@@ -2,23 +2,22 @@ package com.diemme.business.impl;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
 import com.diemme.business.ContactService;
-import com.diemme.domain.mysql.Contact;
 import com.diemme.domain.mysql.ContactShowcase;
-import com.diemme.domain.mysql.ProductShowcase;
 import com.diemme.domain.mysql.User;
 import com.diemme.repository.mysql.ContactShowcaseRepository;
 
 @Service
+@Transactional
 public class ContactServiceImpl implements ContactService {
 	@Autowired
 	private ContactShowcaseRepository contactShowcaseRepository;
@@ -35,7 +34,7 @@ public class ContactServiceImpl implements ContactService {
 		return contactShowcaseRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Contact", "id", id));
 	}
-	
+
 	@Override
 	public ContactShowcase findActiveContac() throws BusinessException {
 

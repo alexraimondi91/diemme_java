@@ -1,6 +1,5 @@
 package com.diemme.presentation;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,6 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.QuotationService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-
 import com.diemme.domain.mysql.QuotationShowcase;
 import com.diemme.domain.mysql.User;
 
@@ -39,13 +37,13 @@ public class QuotationController {
 
 	@GetMapping("/preventivi")
 	public String listQuotation(Model model) throws BusinessException {
-		
+
 		List<QuotationShowcase> quotation = new ArrayList<QuotationShowcase>();
-		
+
 		try {
-			
+
 			quotation = serviceQuotation.findAllQuotationShowcases();
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
@@ -77,25 +75,24 @@ public class QuotationController {
 	}
 
 	@PostMapping("/preventiviCrea")
-	public ModelAndView createQuotation(@Valid @ModelAttribute("quotation_showcase") QuotationShowcase quotation, Errors errors,
-			Authentication auth) throws BusinessException {
-		
+	public ModelAndView createQuotation(@Valid @ModelAttribute("quotation_showcase") QuotationShowcase quotation,
+			Errors errors, Authentication auth) throws BusinessException {
+
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
-		
+
 		try {
-			
+
 			userAuth = serviceUser.findUserByUserName(username);
 			serviceQuotation.createQuotation(quotation, userAuth);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new ModelAndView("/error/error.html");
 
-
 		}
-		
+
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/quotationDashboard/create.html");
 		return modelAndView;
@@ -106,7 +103,7 @@ public class QuotationController {
 		QuotationShowcase quotationShowcase = new QuotationShowcase();
 
 		try {
-			
+
 			quotationShowcase = serviceQuotation.getQuotation(id);
 
 		} catch (DataAccessException e) {
@@ -114,7 +111,7 @@ public class QuotationController {
 			return "/error/error.html";
 
 		}
-		
+
 		model.addAttribute("quotation_showcase_update", quotationShowcase);
 		return "/backoffice/quotationDashboard/update.html";
 	}
@@ -123,31 +120,31 @@ public class QuotationController {
 	public String updateQuotation(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("quotation_showcase_update") QuotationShowcase quotation, Errors errors,
 			Authentication auth) throws BusinessException {
-		
+
 		User userAuth = new User();
 		String username = auth.getName();
-		
+
 		try {
-			
+
 			userAuth = serviceUser.findUserByUserName(username);
 			serviceQuotation.updateQuotation(id, quotation, userAuth);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
 
-		}		
+		}
 
 		return "redirect:/preventiviGestione";
 	}
 
 	@PostMapping("/preventiviDelete/{id}")
 	public String deleteQuotationShocases(@PathVariable(value = "id") Long id) throws BusinessException {
-		
+
 		try {
-			
+
 			serviceQuotation.deleteQuotation(id);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";

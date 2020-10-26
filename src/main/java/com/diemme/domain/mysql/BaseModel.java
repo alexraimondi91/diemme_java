@@ -1,7 +1,6 @@
 package com.diemme.domain.mysql;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -17,18 +16,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @MappedSuperclass
-@Data @NoArgsConstructor @AllArgsConstructor
-public class BaseModel {	
-	
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class BaseModel {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", updatable = false)
 	public Long id;
-	
+
 	@CreationTimestamp
 	@Column(name = "insert_date", nullable = true)
 	private ZonedDateTime insertDate;
-	
+
 	@UpdateTimestamp
 	@Column(name = "modify_date", nullable = true)
 	private ZonedDateTime modifyDate;

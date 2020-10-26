@@ -1,8 +1,6 @@
 package com.diemme.business.impl;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +11,9 @@ import com.diemme.domain.mysql.Role;
 import com.diemme.repository.mysql.RoleRepository;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
-	
+
 	@Autowired
 	RoleRepository roleRepository;
 
@@ -24,10 +23,10 @@ public class RoleServiceImpl implements RoleService {
 
 		return roleRepository.findByRole(name);
 	}
-	
+
 	@Override
 	@Transactional
-	public List<Role> getAllRoles(){
+	public List<Role> getAllRoles() {
 		return roleRepository.findAll();
 	}
 

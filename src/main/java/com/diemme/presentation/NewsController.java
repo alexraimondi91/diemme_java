@@ -1,7 +1,5 @@
 package com.diemme.presentation;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +41,7 @@ public class NewsController {
 
 	@GetMapping("/news")
 	public String listNews(Model model) throws BusinessException {
-		
+
 		List<NewsShowcase> news = new ArrayList<NewsShowcase>();
 		try {
 			news = serviceNews.findAllNewsShowcases();
@@ -60,7 +58,7 @@ public class NewsController {
 	@SuppressWarnings("static-access")
 	@GetMapping("/newsGestione")
 	public String manageNews(Model model) throws BusinessException {
-		
+
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
 		Page<NewsShowcase> news = serviceNews.getAllNewsPageable(pageModel.getPAGE(), pageModel.getSIZE());
@@ -73,7 +71,7 @@ public class NewsController {
 	@GetMapping("/news/image/{id}")
 	@ResponseBody
 	public byte[] getImage(@PathVariable Long id) throws BusinessException {
-		
+
 		Optional<NewsShowcase> news = Optional.empty();
 		try {
 			news = serviceNews.findNewsShowcase(id);
@@ -87,7 +85,7 @@ public class NewsController {
 
 	@GetMapping("/newsCrea")
 	public String createNews(Model model) throws BusinessException {
-		
+
 		NewsShowcase newsShowcase = new NewsShowcase();
 		model.addAttribute("news_showcase", newsShowcase);
 		return "/backoffice/newsDashboard/create.html";
@@ -96,7 +94,7 @@ public class NewsController {
 	@PostMapping("/newsCrea")
 	public ModelAndView createNews(@Valid @ModelAttribute("news_showcase") NewsShowcase news, Errors errors,
 			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
-		
+
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
@@ -117,7 +115,7 @@ public class NewsController {
 
 	@PostMapping("/newsDelete/{id}")
 	public String deleteNews(@PathVariable(value = "id") Long id) throws BusinessException {
-		
+
 		try {
 			serviceNews.deleteNews(id);
 		} catch (DataAccessException e) {
@@ -131,7 +129,7 @@ public class NewsController {
 
 	@GetMapping("/newsUpdate")
 	public String updateNews(Long id, Model model) throws BusinessException {
-		
+
 		NewsShowcase newsShowcase = new NewsShowcase();
 		try {
 			newsShowcase = serviceNews.getNews(id);

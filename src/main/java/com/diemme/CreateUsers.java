@@ -1,7 +1,5 @@
 package com.diemme;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,14 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.diemme.domain.mongo.Chat;
-import com.diemme.domain.mongo.ChatType;
-import com.diemme.domain.mongo.Message;
 import com.diemme.domain.mysql.Role;
-import com.diemme.domain.mysql.RoleType;
 import com.diemme.domain.mysql.User;
-import com.diemme.repository.mongo.ChatRepository;
-import com.diemme.repository.mongo.MessageRepository;
 import com.diemme.repository.mysql.RoleRepository;
 import com.diemme.repository.mysql.UserRepository;
 
@@ -29,9 +21,6 @@ public class CreateUsers implements CommandLineRunner {
 
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private ChatRepository chatRepository;
 
 
 	@Override
@@ -141,7 +130,7 @@ public class CreateUsers implements CommandLineRunner {
 			userRepository.save(userProductor);
 
 		}
-		
+
 		/*
 		 * ChatType chatType = new ChatType(); Chat chat = new Chat(); Message message =
 		 * new Message(); Set<Message> messages = new HashSet<Message>();
@@ -151,7 +140,6 @@ public class CreateUsers implements CommandLineRunner {
 		 * messages.add(message); chat.setChatType(chatType);
 		 * chat.setMessages(messages); chatRepository.save(chat);
 		 */
-		 
 
 	}
 

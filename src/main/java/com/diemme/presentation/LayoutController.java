@@ -1,18 +1,12 @@
 package com.diemme.presentation;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -24,24 +18,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.business.BusinessException;
 import com.diemme.business.EmailService;
-import com.diemme.business.FileLayoutService;
 import com.diemme.business.LayoutService;
-import com.diemme.business.NewsService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.mysql.FileLayout;
 import com.diemme.domain.mysql.Layout;
-import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.StatusType;
 import com.diemme.domain.mysql.User;
-import com.diemme.repository.mysql.FileLayoutRepository;
 import com.diemme.wrapperForm.FormWrapperLayout;
 
 @Controller
@@ -51,8 +39,6 @@ public class LayoutController {
 	private LayoutService serviceLayout;
 	@Autowired
 	private UserService serviceUser;
-	@Autowired
-	private FileLayoutService fileLayoutService;
 	@Autowired
 	private EmailService emailService;
 	@Autowired
@@ -113,7 +99,7 @@ public class LayoutController {
 			return "/error/error.html";
 
 		}
-		
+
 		pageModel.initPageAndSize();
 		pageModel.setSIZE(5);
 		Page<Layout> layouts = serviceLayout.getMyLayoutsByStatus(userAuth.getId(), StatusType.SEND,
@@ -126,10 +112,10 @@ public class LayoutController {
 
 	@GetMapping("/layoutCrea")
 	public String createLayout(Model model) throws BusinessException {
-		
+
 		FormWrapperLayout layoutWrapper = new FormWrapperLayout();
 		Set<User> userClients = new HashSet<User>();
-		
+
 		try {
 			userClients = serviceUser.getUsersByRole("CLIENT");
 		} catch (DataAccessException e) {
@@ -137,22 +123,22 @@ public class LayoutController {
 			return "/error/error.html";
 
 		}
-		
+
 		model.addAttribute("userClients", userClients);
 		model.addAttribute("layoutWrapper", layoutWrapper);
 		return "/backoffice/layoutDashboard/create.html";
 	}
 
 	@PostMapping("/layoutCrea")
-	public ModelAndView createLayout(@Valid @ModelAttribute("layoutWrapper") FormWrapperLayout layoutWrapper, Errors errors,
-			@RequestParam(value = "contentImg") List<MultipartFile> contentImg, Authentication auth)
+	public ModelAndView createLayout(@Valid @ModelAttribute("layoutWrapper") FormWrapperLayout layoutWrapper,
+			Errors errors, @RequestParam(value = "contentImg") List<MultipartFile> contentImg, Authentication auth)
 			throws BusinessException {
 
 		User userAuth = new User();
 		User userClient = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
-		
+
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
 			serviceLayout.createLayout(layoutWrapper, contentImg, userAuth);
@@ -160,7 +146,7 @@ public class LayoutController {
 			e.printStackTrace();
 			return new ModelAndView("/error/error.html");
 		}
-		
+
 		modelAndView.addObject("userClient", userClient);
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/layoutDashboard/create.html");
@@ -206,7 +192,7 @@ public class LayoutController {
 		User userAuth = new User();
 		Layout layoutSave = new Layout();
 		String username = auth.getName();
-		
+
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
 			layoutSave = serviceLayout.updateLayout(id, layout, contentImg, userAuth);
@@ -214,7 +200,7 @@ public class LayoutController {
 			e.printStackTrace();
 			return "/error/error.html";
 
-		}		
+		}
 
 		if (layoutSave.getStatus().equals(StatusType.TRANSFERRED_TO_PRODUCTION)) {
 			emailService.sendNotifyNewOrder(userAuth.getEmail(), userAuth.getName(), layoutSave.getName());
@@ -249,16 +235,16 @@ public class LayoutController {
 		User client = new User();
 		Layout layoutSave = new Layout();
 		String username = auth.getName();
-		
+
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
-			layoutSave = serviceLayout.updateProductorLayout(id,layout,userAuth);
+			layoutSave = serviceLayout.updateProductorLayout(id, layout, userAuth);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
 
-		}	
-		
+		}
+
 		for (User user : layoutSave.getUsers()) {
 			for (Role role : user.getRoles()) {
 				if (role.equals("CLIENT")) {
@@ -300,13 +286,13 @@ public class LayoutController {
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
-			layoutSave = serviceLayout.updateClientLayout(id,layout,userAuth);
+			layoutSave = serviceLayout.updateClientLayout(id, layout, userAuth);
 
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
 
-		}		
+		}
 
 		if (layoutSave.getCompleted() == true) {
 			emailService.sendChangeStatusOrder(userAuth.getEmail(), userAuth.getName(), layoutSave.getName(),

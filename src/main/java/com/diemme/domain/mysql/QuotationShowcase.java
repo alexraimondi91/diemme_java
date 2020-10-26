@@ -1,22 +1,13 @@
 package com.diemme.domain.mysql;
 
-import java.time.ZonedDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,17 +17,18 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "quotation_showcases")
-@Data @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(callSuper=true) 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class QuotationShowcase extends BaseModel{
+public class QuotationShowcase extends BaseModel {
 
-	
 	@Column(name = "name", nullable = false)
-	private String name;	
+	private String name;
 	@Column(name = "description", nullable = false)
-	private String description;	
-	
+	private String description;
+
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)

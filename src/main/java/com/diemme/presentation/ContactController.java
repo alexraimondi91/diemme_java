@@ -1,11 +1,7 @@
 package com.diemme.presentation;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
-
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -18,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -45,8 +39,8 @@ public class ContactController {
 	private PageModel pageModel;
 
 	@GetMapping("/contatti")
-	public String listContacts(Model model) throws BusinessException {
-		
+	public String activeContact(Model model) throws BusinessException {
+
 		ContactShowcase contactActive = new ContactShowcase();
 		try {
 			contactActive = serviceContact.findActiveContac();
@@ -64,7 +58,7 @@ public class ContactController {
 	@SuppressWarnings("static-access")
 	@GetMapping("/contattiGestione")
 	public String manageContacts(Model model) throws BusinessException {
-		
+
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
 		Page<ContactShowcase> contacts = serviceContact.getAllContactPageable(pageModel.getPAGE(), pageModel.getSIZE());
@@ -75,7 +69,7 @@ public class ContactController {
 
 	@GetMapping("/contattiCrea")
 	public String createContact(Model model) throws BusinessException {
-		
+
 		ContactShowcase contactShowcase = new ContactShowcase();
 		model.addAttribute("contact_showcase", contactShowcase);
 		return "/backoffice/contactDashboard/create.html";
@@ -84,19 +78,18 @@ public class ContactController {
 	@PostMapping("/contattiCrea")
 	public ModelAndView createContact(@Valid @ModelAttribute("contact_showcase") ContactShowcase contact, Errors errors,
 			Authentication auth) throws BusinessException {
-		
+
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
 		try {
-			
+
 			userAuth = serviceUser.findUserByUserName(username);
 			serviceContact.createContact(contact, userAuth);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new ModelAndView("/error/error.html");
-
 
 		}
 
@@ -107,7 +100,7 @@ public class ContactController {
 
 	@GetMapping("/contattiUpdate")
 	public String updateContactShocases(Long id, Model model) throws BusinessException {
-		
+
 		ContactShowcase contactShowcase = new ContactShowcase();
 		try {
 			contactShowcase = serviceContact.findContactShowcase(id);
@@ -125,15 +118,15 @@ public class ContactController {
 	public String update(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("contact_showcase_update") ContactShowcase contactShowcase, Errors errors,
 			Authentication auth) throws BusinessException {
-		
+
 		User userAuth = new User();
 		String username = auth.getName();
-		
+
 		try {
-			
+
 			userAuth = serviceUser.findUserByUserName(username);
-			serviceContact.updateContact(id,contactShowcase, userAuth);
-			
+			serviceContact.updateContact(id, contactShowcase, userAuth);
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
@@ -145,11 +138,11 @@ public class ContactController {
 
 	@PostMapping("/contattiDelete/{id}")
 	public String deleteProductShocases(@PathVariable(value = "id") Long id) throws BusinessException {
-		
+
 		try {
-			
+
 			serviceContact.deleteContactShowcase(id);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
@@ -162,7 +155,7 @@ public class ContactController {
 	@PostMapping("/sendEmail")
 	public String sendEmail(@Valid @ModelAttribute("contact") Contact contact, BindingResult result,
 			RedirectAttributes redirectAttributes) throws BusinessException {
-		
+
 		String from = contact.getEmail();
 		String object = contact.getObject();
 		String body = contact.getText();

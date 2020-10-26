@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.diemme.ResourceNotFoundException;
 import com.diemme.business.BusinessException;
@@ -31,6 +31,7 @@ import com.diemme.repository.mysql.ChatUserRepository;
 import com.diemme.wrapperForm.FormWrapperChat;
 
 @Service
+@Transactional
 public class ChatUserServiceImpl implements ChatUserService {
 
 	@Autowired
@@ -110,8 +111,8 @@ public class ChatUserServiceImpl implements ChatUserService {
 	}
 
 	@Override
-	public void saveNewChat(FormWrapperChat formWrapperChat,
-			MultipartFile contentImg, User userAuth) throws BusinessException {
+	public void saveNewChat(FormWrapperChat formWrapperChat, MultipartFile contentImg, User userAuth)
+			throws BusinessException {
 
 		Chat chatSave = new Chat();
 		ChatUser chatUser1 = new ChatUser();
@@ -162,10 +163,11 @@ public class ChatUserServiceImpl implements ChatUserService {
 		chatUserRepository.save(chatUser2);
 
 	}
-	
+
 	@Override
-	public void updateChat( User userAuth, String message, MultipartFile attachment,String id) throws BusinessException {
-		
+	public void updateChat(User userAuth, String message, MultipartFile attachment, String id)
+			throws BusinessException {
+
 		Chat chatUpdate = new Chat();
 		Chat chatOld = new Chat();
 		Query query = new Query();
@@ -173,12 +175,10 @@ public class ChatUserServiceImpl implements ChatUserService {
 		Message messageSave = new Message();
 		Set<Message> messageList = new HashSet<Message>();
 		String nameuser = new String();
-		
+
 		nameuser = userAuth.getName() + " " + userAuth.getSurname();
 
-		chatOld = chatRepository.findById(id)
-		.orElseThrow(() -> new ResourceNotFoundException("chat", "id", id));
-		
+		chatOld = chatRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("chat", "id", id));
 
 		messageSave.setDate(LocalDateTime.now());
 		messageSave.setIdUser(userAuth.getId());
@@ -205,9 +205,9 @@ public class ChatUserServiceImpl implements ChatUserService {
 		chatUpdate.setChatType(chatOld.getChatType());
 		chatUpdate.setId(id);
 		chatUpdate.setMessages(messageList);
-		
+
 		System.out.println("\n\n\n chat: " + chatUpdate);
-		
+
 		query.addCriteria(Criteria.where("_id").is(chatOld.getId()));
 		Update update = new Update();
 		update.set("messages", chatUpdate.getMessages());
@@ -215,7 +215,6 @@ public class ChatUserServiceImpl implements ChatUserService {
 
 	}
 
-	
 	@Override
 	public Message saveMessage(Message message) throws BusinessException {
 
@@ -224,7 +223,5 @@ public class ChatUserServiceImpl implements ChatUserService {
 
 		return messageSave;
 	}
-
-	
 
 }

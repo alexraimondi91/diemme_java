@@ -22,6 +22,10 @@ public interface UserService {
 
 	User getUser(Long id)throws BusinessException;
 
+	User createUser(User user) throws BusinessException;
+
+	User updateUser(Long id, User userUpdate, User userExists) throws BusinessException;
+
     
 
 }

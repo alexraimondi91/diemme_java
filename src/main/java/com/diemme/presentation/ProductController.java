@@ -1,7 +1,5 @@
 package com.diemme.presentation;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +26,6 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.ProductService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
-import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.ProductShowcase;
 import com.diemme.domain.mysql.User;
 
@@ -41,7 +38,6 @@ public class ProductController {
 	private UserService serviceUser;
 	@Autowired
 	private PageModel pageModel;
-
 
 	@GetMapping("/prodotti")
 	public String listProduct(Model model) throws BusinessException {
@@ -99,35 +95,35 @@ public class ProductController {
 	@PostMapping("/prodottiCrea")
 	public ModelAndView createProduct(@Valid @ModelAttribute("product_showcase") ProductShowcase product, Errors errors,
 			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
-		
+
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
-		
+
 		try {
-			
+
 			userAuth = serviceUser.findUserByUserName(username);
 			serviceProduct.createProduct(product, contentImg, userAuth);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new ModelAndView("/error/error.html");
 
-		}		
-		
+		}
+
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
-		modelAndView.setViewName("/backoffice/productDashboard/create.html");		
+		modelAndView.setViewName("/backoffice/productDashboard/create.html");
 		return modelAndView;
 	}
 
 	@PostMapping("/prodottiDelete/{id}")
 	public String deleteProduct(@PathVariable(value = "id") Long id) throws BusinessException {
-		
+
 		try {
-			
+
 			serviceProduct.deleteProduct(id);
-			
-		} catch (DataAccessException e) {			
+
+		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
 
@@ -138,13 +134,13 @@ public class ProductController {
 
 	@GetMapping("/prodottiUpdate")
 	public String updateProduct(Long id, Model model) throws BusinessException {
-		
+
 		ProductShowcase productShowcase = new ProductShowcase();
-		
+
 		try {
-			
+
 			productShowcase = serviceProduct.getProduct(id);
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
@@ -158,8 +154,8 @@ public class ProductController {
 	public String updateProduct(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("product_showcase_update") ProductShowcase product, Errors errors,
 			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
-		
-		User userAuth = new User();		
+
+		User userAuth = new User();
 		String username = auth.getName();
 
 		try {
@@ -171,7 +167,6 @@ public class ProductController {
 			return "/error/error.html";
 		}
 
-		
 		return "redirect:/prodottiGestione";
 	}
 }

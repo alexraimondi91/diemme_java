@@ -1,6 +1,5 @@
 package com.diemme.domain.mongo;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.Enumerated;
@@ -15,19 +14,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "chat")
-public class Chat {	
-	
+public class Chat {
+
 	@Id
-	private String id;	
+	private String id;
 	@Version
 	private long version;
-    @Field("chat_type")
-    @Enumerated
+	@Field("chat_type")
+	@Enumerated
 	private ChatType chatType;
-    @DBRef
-    @Field("messages")
-    private Set<Message> messages;
+	@DBRef
+	@Field("messages")
+	private Set<Message> messages;
 
 }

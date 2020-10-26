@@ -1,15 +1,14 @@
- package com.diemme.presentation;
+package com.diemme.presentation;
 
 import java.time.ZonedDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,8 +40,19 @@ public class UserController {
 
 	@GetMapping("/utenteCrea")
 	public String createUser(Model model) throws BusinessException {
+
 		User user = new User();
-		List<Role> roles = serviceRole.getAllRoles();
+		List<Role> roles = new ArrayList<Role>();
+
+		try {
+
+			roles = serviceRole.getAllRoles();
+
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return "/error/error.html";
+
+		}
 		model.addAttribute("roles", roles);
 		model.addAttribute("user", user);
 		return "/backoffice/userManage/create.html";
@@ -51,6 +61,7 @@ public class UserController {
 	@SuppressWarnings("static-access")
 	@GetMapping("/utentiGestione")
 	public String manageUsers(Model model) throws BusinessException {
+
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
 		Page<User> users = serviceUser.getAllUserPageable(pageModel.getPAGE(), pageModel.getSIZE());
@@ -61,29 +72,19 @@ public class UserController {
 	}
 
 	@PostMapping("/utenteCrea")
-	public ModelAndView create(@Valid @ModelAttribute("user") User user, BindingResult bindingResult)
+	public ModelAndView createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult)
 			throws BusinessException {
 
 		ModelAndView modelAndView = new ModelAndView();
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		User userExists = new User();
+
 		try {
 			userExists = serviceUser.findUserByUserName(user.getUserName());
+			user = serviceUser.createUser(user);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
-
-		Set<Role> roles = new HashSet<Role>();
-		roles.addAll(user.getRoles());
-		user.setRoles(roles);
-		user.setActive(true);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setAddressShipment(user.getAddressShipment());
-		user.setAddressShipment(user.getAddressShipment());
-		user.setFiscalCode(user.getFiscalCode());
-		user.setPIva(user.getPIva());
-		user.setCompanyName(user.getCompanyName());
 
 		if (userExists != null) {
 			bindingResult.rejectValue("userName", "error.user",
@@ -94,8 +95,11 @@ public class UserController {
 		} else {
 			try {
 				serviceUser.saveUser(user);
-			} catch (BusinessException e) {
+
+			} catch (DataAccessException e) {
 				e.printStackTrace();
+				return new ModelAndView("/error/error.html");
+
 			}
 
 			modelAndView.addObject("successMessage", "l'utente è stato creato!");
@@ -112,8 +116,10 @@ public class UserController {
 		User userUpdate = new User();
 		try {
 			userUpdate = serviceUser.getUser(id);
-		} catch (BusinessException e) {
+
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		List<Role> roles = serviceRole.getAllRoles();
@@ -133,64 +139,52 @@ public class UserController {
 		try {
 			userExists = serviceUser.getUser(id);
 			userActiveOld = userExists.getActive();
-	
-			
-		} catch (BusinessException e) {
+			userUpdate = serviceUser.updateUser(id, userUpdate, userExists);
+
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return new ModelAndView("/error/error.html");
 
 		}
 
-		ZonedDateTime dateCreation = userExists.getInsertDate();		
-		if(userUpdate.getRoles() != null) {
-			Set<Role> roles = new HashSet<Role>();
-			roles.addAll(userUpdate.getRoles());
-			userUpdate.setRoles(roles);
-
-		}	
-		
-
-		userUpdate.setActive(userUpdate.getActive());		
-		userUpdate.setPassword(userExists.getPassword());
-		userUpdate.setAddressShipment(userUpdate.getAddressShipment());
-		userUpdate.setFiscalCode(userUpdate.getFiscalCode());
-		userUpdate.setPIva(userUpdate.getPIva());
-		userUpdate.setCompanyName(userUpdate.getCompanyName());		
-		
-		
 		if (bindingResult.hasErrors()) {
-			
+
 			modelAndView.setViewName("/backoffice/userManage/update.html");
-			
+
 		} else {
-			
+
 			try {
 				userSave = serviceUser.saveUser(userUpdate);
-				userSave.setInsertDate(dateCreation);
-				userSave.setModifyDate(ZonedDateTime.now());				
-				serviceUser.saveUser(userSave);							
+				userSave.setInsertDate(userExists.getInsertDate());
+				userSave.setModifyDate(ZonedDateTime.now());
+				serviceUser.saveUser(userSave);
 
-				if(userActiveOld == false && userUpdate.getActive() == true) {
+				if (userActiveOld == false && userUpdate.getActive() == true) {
 					serviceEmail.sendUserActivated();
 				}
-				
-				
-			} catch (BusinessException e) {
+
+			} catch (DataAccessException e) {
 				e.printStackTrace();
+				return new ModelAndView("/error/error.html");
+
 			}
 
 			modelAndView.setViewName("redirect:/utentiGestione");
 
 		}
-		
+
 		return modelAndView;
 	}
-	
+
 	@PostMapping("/utentiDelete/{id}")
 	public String deleteUser(@PathVariable(value = "id") Long id) throws BusinessException {
 		try {
+
 			serviceUser.deleteUser(id);
-		} catch (BusinessException e) {
+
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		return "redirect:/utentiGestione";

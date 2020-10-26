@@ -1,10 +1,7 @@
 package com.diemme.presentation;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -21,7 +18,6 @@ import com.diemme.business.LayoutService;
 import com.diemme.component.PageModel;
 import com.diemme.domain.mysql.FileLayout;
 import com.diemme.domain.mysql.Layout;
-import com.diemme.domain.mysql.NewsShowcase;
 
 @Controller
 public class FileController {

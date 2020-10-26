@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 import com.diemme.domain.mysql.User;
 
 @Repository
-public interface UserRepository extends JpaRepository <User, Long>{
-	
-	User findByEmail(String email);
-    User findByUserName(String userName);
-    
-    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.role = :role" )
-    Set<User> findUserByRole(@Param("role") String role);
+public interface UserRepository extends JpaRepository<User, Long> {
 
+	User findByEmail(String email);
+
+	User findByUserName(String userName);
+
+	@Query("SELECT u FROM User u JOIN u.roles r WHERE r.role = :role")
+	Set<User> findUserByRole(@Param("role") String role);
 
 }

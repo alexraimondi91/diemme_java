@@ -1,7 +1,6 @@
 package com.diemme.presentation;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,8 +29,6 @@ import com.diemme.business.EmailService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
 import com.diemme.domain.mongo.Chat;
-import com.diemme.domain.mongo.ChatType;
-import com.diemme.domain.mongo.Message;
 import com.diemme.domain.mysql.ChatUser;
 import com.diemme.domain.mysql.Role;
 import com.diemme.domain.mysql.User;
@@ -80,14 +76,13 @@ public class ChatController {
 
 	@GetMapping("/chat/{id}")
 	@ResponseBody
-	public Chat getChat(@PathVariable("id") String id) throws BusinessException{
-		
+	public Chat getChat(@PathVariable("id") String id) throws BusinessException {
+
 		Chat chat = new Chat();
 		try {
 			chat = chatUserService.getChat(id);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			
 
 		}
 		return chat;
@@ -96,7 +91,7 @@ public class ChatController {
 	@PostMapping("/chatDelete/{id}/{idChatMongo}")
 	public String deleteChat(@PathVariable(value = "id") Long id,
 			@PathVariable(value = "idChatMongo") String idChatMongo) throws BusinessException {
-		
+
 		try {
 			chatUserService.deleteChat(id, idChatMongo);
 		} catch (DataAccessException e) {
@@ -109,7 +104,7 @@ public class ChatController {
 	}
 
 	@GetMapping("/chatVisione")
-	public String getChatView(String id, Model model, Authentication auth) throws BusinessException{
+	public String getChatView(String id, Model model, Authentication auth) throws BusinessException {
 		User userAuth = new User();
 		String username = auth.getName();
 		try {
@@ -118,7 +113,6 @@ public class ChatController {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return "/error/error.html";
-
 
 		}
 
@@ -131,7 +125,7 @@ public class ChatController {
 
 	@GetMapping("/fileVisione/{idChatMongo}/{index}")
 	public String getFile(String id, Model model, @PathVariable("idChatMongo") String idChatMongo,
-			@PathVariable("index") int index) throws BusinessException{
+			@PathVariable("index") int index) throws BusinessException {
 
 		model.addAttribute("idChatMongo", idChatMongo);
 		model.addAttribute("index", index);
@@ -141,26 +135,27 @@ public class ChatController {
 
 	@GetMapping("/chatFile/{idChatMongo}/{index}")
 	@ResponseBody
-	public byte[] getImageChat(@PathVariable("idChatMongo") String idChatMongo, @PathVariable("index") int index) throws BusinessException, IOException {
-		
-	    byte b[] = null;
+	public byte[] getImageChat(@PathVariable("idChatMongo") String idChatMongo, @PathVariable("index") int index)
+			throws BusinessException, IOException {
+
+		byte b[] = null;
 
 		try {
-			b = chatUserService.getImageChat(idChatMongo,index);
+			b = chatUserService.getImageChat(idChatMongo, index);
 
-		} catch (DataAccessException e ) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
 
 		}
-		
+
 		return b;
 	}
 
 	@PostMapping("/chat/{idChatMongo}")
 	@ResponseBody
-	public byte[] postMEssage(@PathVariable("idChatMongo") String idChatMongo)throws BusinessException , IOException{
-		
-	    byte b[] = null;
+	public byte[] postMEssage(@PathVariable("idChatMongo") String idChatMongo) throws BusinessException, IOException {
+
+		byte b[] = null;
 
 		try {
 			b = chatUserService.postMEssage(idChatMongo);
@@ -168,7 +163,7 @@ public class ChatController {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 
-		}		
+		}
 		return b;
 	}
 
@@ -185,7 +180,7 @@ public class ChatController {
 
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			return "/error/error.html";			
+			return "/error/error.html";
 
 		}
 		for (Role role : userAuth.getRoles()) {
@@ -214,22 +209,21 @@ public class ChatController {
 			@Valid @ModelAttribute("formWrapperChat") FormWrapperChat formWrapperChat, Errors errors,
 			@RequestParam(value = "contentImg") MultipartFile contentImg) throws BusinessException {
 
-		
-		User userAuth = new User();		
-		ModelAndView modelAndView = new ModelAndView();		
+		User userAuth = new User();
+		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
-		
+
 		try {
-			userAuth = serviceUser.findUserByUserName(username);			
+			userAuth = serviceUser.findUserByUserName(username);
 			chatUserService.saveNewChat(formWrapperChat, contentImg, userAuth);
 
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new ModelAndView("/error/error.html");
-		}		
-		
+		}
+
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
-		modelAndView.setViewName("/backoffice/chatDashboard/create.html");		
+		modelAndView.setViewName("/backoffice/chatDashboard/create.html");
 
 		for (Role role : userAuth.getRoles()) {
 
@@ -261,7 +255,6 @@ public class ChatController {
 			return new ModelAndView("/error/error.html");
 
 		}
-		
 
 		for (Role role : userAuth.getRoles()) {
 
