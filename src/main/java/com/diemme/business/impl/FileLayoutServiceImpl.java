@@ -21,7 +21,7 @@ public class FileLayoutServiceImpl implements FileLayoutService{
 	
 
 	@Override
-	public FileLayout getFileLayout(Long id) {
+	public FileLayout getFileLayout(Long id) throws BusinessException {
 		return fileLayoutRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FileLayout", "id", id));
 	}
 

@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.diemme.domain.mysql.ProductShowcase;
 import com.diemme.domain.mysql.TechnologyShowcase;
+import com.diemme.domain.mysql.User;
 
 
 public interface ProductService {
@@ -22,6 +24,11 @@ public interface ProductService {
 	void deleteProduct(Long id) throws BusinessException;
 
 	ProductShowcase getProduct(Long id) throws BusinessException;
+
+	void createProduct(ProductShowcase product, MultipartFile contentImg, User userAuth) throws BusinessException;
+
+	void updateProduct(Long id, ProductShowcase product, MultipartFile contentImg, User userAuth)
+			throws BusinessException;
 
 
 }

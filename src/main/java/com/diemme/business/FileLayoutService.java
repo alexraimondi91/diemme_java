@@ -10,7 +10,7 @@ import com.diemme.domain.mysql.NewsShowcase;
 
 public interface FileLayoutService {
 	
-	FileLayout getFileLayout (Long id);
+	FileLayout getFileLayout (Long id) throws BusinessException;
 	
 	FileLayout saveFileLayout(FileLayout fileLayout) throws BusinessException;
 

@@ -51,19 +51,18 @@
 								</div>
 							</div>
 							<div class="card-body">
-
-								<div class="form-group  @error('title') has-error @enderror">
-									<label for="inputName">Latitudine</label> <input required
+							
+							<div class="form-group  @error('title') has-error @enderror">
+									<label for="inputName">nome preventivo</label> <input required
 										th:field="*{name}" type="text" id="inputName" th:value="${quotation_showcase_update.name}"
 										class="form-control">
 								</div>
 								
 								<div class="form-group  @error('title') has-error @enderror">
-									<label for="inputName">Longitudine</label> <input required
+									<label for="inputName">descrizione</label> <input required
 										th:field="*{description}" type="text" id="inputName" th:value="${quotation_showcase_update.description}"
 										class="form-control">
-								</div>
-								
+								</div>								
 						        
 							</div>
 							<!-- /.card-body -->

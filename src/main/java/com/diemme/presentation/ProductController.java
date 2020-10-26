@@ -2,12 +2,14 @@ package com.diemme.presentation;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -26,105 +28,108 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.ProductService;
 import com.diemme.business.UserService;
 import com.diemme.component.PageModel;
+import com.diemme.domain.mysql.NewsShowcase;
 import com.diemme.domain.mysql.ProductShowcase;
 import com.diemme.domain.mysql.User;
 
 @Controller
 public class ProductController {
 
-	@Autowired 
+	@Autowired
 	private ProductService serviceProduct;
 	@Autowired
 	private UserService serviceUser;
 	@Autowired
 	private PageModel pageModel;
-	
-	private com.diemme.util.CompressionUtils CompressionUtils;
 
-	
+
 	@GetMapping("/prodotti")
-	public String listProductShowcase (Model model) throws BusinessException{
-		List<ProductShowcase> products = serviceProduct.findAllProductShowcases();
+	public String listProduct(Model model) throws BusinessException {
+
+		List<ProductShowcase> products = new ArrayList<ProductShowcase>();
+		try {
+			products = serviceProduct.findAllProductShowcases();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return "/error/error.html";
+
+		}
 		model.addAttribute("prods", products);
 		return "/frontoffice/prodotti/prodotti.html";
-		
+
 	}
-	
+
 	@SuppressWarnings("static-access")
 	@GetMapping("/prodottiGestione")
-	public String manageProductShocases(Model model) throws BusinessException {
+	public String manageProduct(Model model) throws BusinessException {
+
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
-
-		Page<ProductShowcase> products = serviceProduct.getAllProductPageable(pageModel.getPAGE(),
-				pageModel.getSIZE());
+		Page<ProductShowcase> products = serviceProduct.getAllProductPageable(pageModel.getPAGE(), pageModel.getSIZE());
 		pageModel.resetPAGE();
 		model.addAttribute("prod", products);
 		return "/backoffice/productDashboard/manage.html";
 
 	}
-	
+
 	@GetMapping("/prodotti/image/{id}")
 	@ResponseBody
-	public byte[] getImage (@PathVariable Long id) throws BusinessException{
-		
-		Optional<ProductShowcase> product = serviceProduct.findProductShowcase(id);
+	public byte[] getImage(@PathVariable Long id) throws BusinessException {
+
+		Optional<ProductShowcase> product = Optional.empty();
+		try {
+
+			product = serviceProduct.findProductShowcase(id);
+
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+
+		}
 		byte[] imageProduct = product.get().getContentImg();
 		return imageProduct;
 	}
-	
+
 	@GetMapping("/prodottiCrea")
-	public String createProductShocases(Model model) throws BusinessException {
+	public String createProduct(Model model) throws BusinessException {
 		ProductShowcase productShowcase = new ProductShowcase();
 		model.addAttribute("product_showcase", productShowcase);
 		return "/backoffice/productDashboard/create.html";
 	}
 
-	@SuppressWarnings("static-access")
 	@PostMapping("/prodottiCrea")
-	public ModelAndView create(@Valid @ModelAttribute("product_showcase") ProductShowcase products,
-			Errors errors, @RequestParam("contentImg") MultipartFile contentImg, Authentication auth)
-			throws BusinessException {
+	public ModelAndView createProduct(@Valid @ModelAttribute("product_showcase") ProductShowcase product, Errors errors,
+			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
+		
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
-		byte[] bytes = new byte[(int) contentImg.getSize()];
-		byte[] byteCompress = new byte[0];
-
-
-		try {
-			byteCompress = CompressionUtils.compress(bytes);
-			bytes = contentImg.getBytes();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		String username = auth.getName();
+		
 		try {
+			
 			userAuth = serviceUser.findUserByUserName(username);
-		} catch (BusinessException e) {
+			serviceProduct.createProduct(product, contentImg, userAuth);
+			
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return new ModelAndView("/error/error.html");
 
-		}
+		}		
+		
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
-		modelAndView.setViewName("/backoffice/productDashboard/create.html");
-		products.setContentImg(bytes);
-		products.setCompressImg(byteCompress);
-		products.setUser(userAuth);
-		try {
-			serviceProduct.saveProduct(products);
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
-
+		modelAndView.setViewName("/backoffice/productDashboard/create.html");		
 		return modelAndView;
 	}
 
 	@PostMapping("/prodottiDelete/{id}")
-	public String deleteProductShocases(@PathVariable(value = "id") Long id) throws BusinessException {
+	public String deleteProduct(@PathVariable(value = "id") Long id) throws BusinessException {
+		
 		try {
+			
 			serviceProduct.deleteProduct(id);
-		} catch (BusinessException e) {
+			
+		} catch (DataAccessException e) {			
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		return "redirect:/prodottiGestione";
@@ -132,75 +137,41 @@ public class ProductController {
 	}
 
 	@GetMapping("/prodottiUpdate")
-	public String updateProductShocases(Long id, Model model) throws BusinessException {
+	public String updateProduct(Long id, Model model) throws BusinessException {
+		
 		ProductShowcase productShowcase = new ProductShowcase();
+		
 		try {
+			
 			productShowcase = serviceProduct.getProduct(id);
-		} catch (BusinessException e) {
+			
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		model.addAttribute("product_showcase_update", productShowcase);
 		return "/backoffice/productDashboard/update.html";
 	}
 
-	@SuppressWarnings({ "static-access"})
 	@PostMapping("/prodottiUpdate/{id}")
-	public String update(@PathVariable("id") Long id,
-			@Valid @ModelAttribute("product_showcase_update") ProductShowcase productShowcase, Errors errors,
+	public String updateProduct(@PathVariable("id") Long id,
+			@Valid @ModelAttribute("product_showcase_update") ProductShowcase product, Errors errors,
 			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
-		byte[] bytes = new byte[(int) contentImg.getSize()];
-		byte[] byteCompress = new byte[0];
-		ProductShowcase productOld = new ProductShowcase();
-		ProductShowcase productSave = new ProductShowcase();
-		User userAuth = new User();
 		
-		try {
-			productOld = serviceProduct.getProduct(id);
-			
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
-		
-		ZonedDateTime dateCreation = productOld.getInsertDate();
-
-		
-		if (contentImg.isEmpty()) {
-
-			productShowcase.setContentImg(productOld.getContentImg());
-			productShowcase.setCompressImg(productOld.getCompressImg());
-			productShowcase.setModifyDate(ZonedDateTime.now());
-
-		} else {
-
-			try {
-				byteCompress = CompressionUtils.compress(bytes);
-				bytes = contentImg.getBytes();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			productShowcase.setContentImg(bytes);
-			productShowcase.setCompressImg(byteCompress);
-		}
+		User userAuth = new User();		
 		String username = auth.getName();
 
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
-		} catch (BusinessException e) {
-			e.printStackTrace();
+			serviceProduct.updateProduct(id, product, contentImg, userAuth);
 
-		}
-		productShowcase.setUser(userAuth);
-		try {
-			productSave = serviceProduct.saveProduct(productShowcase);
-			productSave.setInsertDate(dateCreation);
-			serviceProduct.saveProduct(productSave);
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
-
+			return "/error/error.html";
 		}
 
+		
 		return "redirect:/prodottiGestione";
 	}
 }

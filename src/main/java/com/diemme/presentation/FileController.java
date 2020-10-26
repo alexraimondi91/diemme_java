@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,42 +25,50 @@ import com.diemme.domain.mysql.NewsShowcase;
 
 @Controller
 public class FileController {
-	
+
 	@Autowired
 	private FileLayoutService fileService;
-	
+
 	@Autowired
 	private LayoutService layoutService;
 	@Autowired
 	private PageModel pageModel;
-	
+
 	@SuppressWarnings("static-access")
 	@GetMapping("/layoutVisione")
-	public String manageNewsShocases(Model model, Long idLayout) throws BusinessException {
+	public String manageLayouts(Model model, Long idLayout) throws BusinessException {
+
 		pageModel.setSIZE(1);
 		pageModel.initPageAndSize();
-		
-		List<Long> idFiles = new ArrayList<Long>();
-		
 
-		Layout Layout = layoutService.getLayout(idLayout);
-		
-		for(FileLayout file : Layout.getFileLayouts()) {
+		List<Long> idFiles = new ArrayList<Long>();
+		Layout layout = new Layout();
+		try {
+
+			layout = layoutService.getLayout(idLayout);
+
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return "/error/error.html";
+
+		}
+
+		for (FileLayout file : layout.getFileLayouts()) {
 			idFiles.add(file.getId());
 		}
-		
-		Page<FileLayout> files = fileService.getAllFileslayout(pageModel.getPAGE(),pageModel.getSIZE(), idFiles);
-		
+
+		Page<FileLayout> files = fileService.getAllFileslayout(pageModel.getPAGE(), pageModel.getSIZE(), idFiles);
+
 		model.addAttribute("idLayout", idLayout);
 		model.addAttribute("files", files);
 		pageModel.resetPAGE();
 		return "/backoffice/layoutDashboard/manageFileLayout.html";
 
 	}
-	
+
 	@GetMapping("/layout/image/{id}")
 	@ResponseBody
-	public byte[] getImage (@PathVariable Long id) throws BusinessException{
+	public byte[] getImage(@PathVariable Long id) throws BusinessException {
 		FileLayout file = fileService.getFileLayout(id);
 		byte[] imageFile = file.getContentImg();
 		return imageFile;

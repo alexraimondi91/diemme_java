@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -61,8 +62,9 @@ public class ChatController {
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
 
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 
@@ -78,23 +80,28 @@ public class ChatController {
 
 	@GetMapping("/chat/{id}")
 	@ResponseBody
-	public Chat getChat(@PathVariable("id") String id) {
+	public Chat getChat(@PathVariable("id") String id) throws BusinessException{
+		
 		Chat chat = new Chat();
 		try {
 			chat = chatUserService.getChat(id);
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			
+
 		}
 		return chat;
 	}
 
 	@PostMapping("/chatDelete/{id}/{idChatMongo}")
-	public String deletelayout(@PathVariable(value = "id") Long id,
+	public String deleteChat(@PathVariable(value = "id") Long id,
 			@PathVariable(value = "idChatMongo") String idChatMongo) throws BusinessException {
+		
 		try {
 			chatUserService.deleteChat(id, idChatMongo);
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		return "redirect:/chatGestione";
@@ -102,14 +109,16 @@ public class ChatController {
 	}
 
 	@GetMapping("/chatVisione")
-	public String getChatView(String id, Model model, Authentication auth) {
+	public String getChatView(String id, Model model, Authentication auth) throws BusinessException{
 		User userAuth = new User();
 		String username = auth.getName();
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
 
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
+
 
 		}
 
@@ -122,69 +131,49 @@ public class ChatController {
 
 	@GetMapping("/fileVisione/{idChatMongo}/{index}")
 	public String getFile(String id, Model model, @PathVariable("idChatMongo") String idChatMongo,
-			@PathVariable("index") int index) {
+			@PathVariable("index") int index) throws BusinessException{
 
 		model.addAttribute("idChatMongo", idChatMongo);
 		model.addAttribute("index", index);
-
 		return "/backoffice/chatDashboard/viewImage.html";
 
 	}
 
 	@GetMapping("/chatFile/{idChatMongo}/{index}")
 	@ResponseBody
-	public byte[] getImageChat(@PathVariable("idChatMongo") String idChatMongo, @PathVariable("index") int index) {
-		Chat chat = new Chat();
-		Message message = new Message();
-		try {
-			chat = chatUserService.getChat(idChatMongo);
+	public byte[] getImageChat(@PathVariable("idChatMongo") String idChatMongo, @PathVariable("index") int index) throws BusinessException, IOException {
+		
+	    byte b[] = null;
 
-		} catch (BusinessException e) {
+		try {
+			b = chatUserService.getImageChat(idChatMongo,index);
+
+		} catch (DataAccessException e ) {
 			e.printStackTrace();
 
 		}
-
-		if (!chat.getMessages().isEmpty() && chat.getMessages() != null) {
-			Message[] messages = chat.getMessages().toArray(new Message[chat.getMessages().size()]);
-
-			for (int i = 0; i < messages.length; i++) {
-
-				if (i == index) {
-					message = messages[i];
-					byte[] contentImg = message.getFile();
-					return contentImg;
-				}
-			}
-		}
-
-		return null;
-
+		
+		return b;
 	}
 
 	@PostMapping("/chat/{idChatMongo}")
 	@ResponseBody
-	public byte[] postMEssage(@PathVariable("idChatMongo") String idChatMongo, @RequestBody String messaggio) {
-		Chat chat = new Chat();
-		try {
-			chat = chatUserService.getChat(idChatMongo);
+	public byte[] postMEssage(@PathVariable("idChatMongo") String idChatMongo)throws BusinessException , IOException{
+		
+	    byte b[] = null;
 
-		} catch (BusinessException e) {
+		try {
+			b = chatUserService.postMEssage(idChatMongo);
+
+		} catch (DataAccessException e) {
 			e.printStackTrace();
 
-		}
-
-		if (!chat.getMessages().isEmpty() && chat.getMessages() != null) {
-			Message[] messages = chat.getMessages().toArray(new Message[chat.getMessages().size()]);
-
-			System.out.println(messaggio);
-		}
-
-		return null;
-
+		}		
+		return b;
 	}
 
 	@GetMapping("/chatCrea")
-	public String createNewsShocases(Model model, Authentication auth) throws BusinessException {
+	public String createChat(Model model, Authentication auth) throws BusinessException {
 		FormWrapperChat formWrapperChat = new FormWrapperChat();
 		User userAuth = new User();
 		String typeChat = new String();
@@ -194,8 +183,9 @@ public class ChatController {
 		try {
 			userAuth = serviceUser.findUserByUserName(userName);
 
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";			
 
 		}
 		for (Role role : userAuth.getRoles()) {
@@ -216,7 +206,6 @@ public class ChatController {
 		model.addAttribute("typeChat", typeChat);
 		model.addAttribute("userRole", userRole);
 		model.addAttribute("formWrapperChat", formWrapperChat);
-
 		return "/backoffice/chatDashboard/create.html";
 	}
 
@@ -225,67 +214,22 @@ public class ChatController {
 			@Valid @ModelAttribute("formWrapperChat") FormWrapperChat formWrapperChat, Errors errors,
 			@RequestParam(value = "contentImg") MultipartFile contentImg) throws BusinessException {
 
-		Chat chatSave = new Chat();
-		ChatUser chatUser1 = new ChatUser();
-		ChatUser chatUser2 = new ChatUser();
-		User userAuth = new User();
-		Message message = new Message();
-		String nameuser = new String();
-		Set<Message> messageList = new HashSet<Message>();
-		ModelAndView modelAndView = new ModelAndView();
-		byte[] bytes = new byte[(int) contentImg.getSize()];
+		
+		User userAuth = new User();		
+		ModelAndView modelAndView = new ModelAndView();		
 		String username = auth.getName();
-
+		
 		try {
-			userAuth = serviceUser.findUserByUserName(username);
+			userAuth = serviceUser.findUserByUserName(username);			
+			chatUserService.saveNewChat(formWrapperChat, contentImg, userAuth);
 
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
-
-		}
-
-		nameuser = userAuth.getName() + " " + userAuth.getSurname();
-
-		try {
-			bytes = contentImg.getBytes();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		for (Role role : userAuth.getRoles()) {
-			if (role.getRole().equals("CLIENT")) {
-				chatUser1.setUser(userAuth);
-				chatUser1.setNameProject(formWrapperChat.getNameProject());
-				chatUser2.setUser(formWrapperChat.getUser());
-				chatUser2.setNameProject(formWrapperChat.getNameProject());
-				chatSave.setChatType(ChatType.CLIENT_DESIGNER);
-			} else if (role.getRole().equals("DESIGNER")) {
-				chatUser1.setUser(userAuth);
-				chatUser1.setNameProject(formWrapperChat.getNameProject());
-				chatUser2.setUser(formWrapperChat.getUser());
-				chatUser2.setNameProject(formWrapperChat.getNameProject());
-				chatSave.setChatType(ChatType.DESIGNER_PRODUCTOR);
-
-			}
-		}
-
+			return new ModelAndView("/error/error.html");
+		}		
+		
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
-		modelAndView.setViewName("/backoffice/chatDashboard/create.html");
-		message.setMessage(formWrapperChat.getMessage());
-		message.setFile(bytes);
-		message.setIdUser(userAuth.getId());
-		message.setName(nameuser);
-		message.setDate(LocalDateTime.now());
-
-		try {
-			chatUserService.saveMessage(message);
-			messageList.add(message);
-			chatSave.setMessages(messageList);
-			chatUserService.saveNewChat(chatUser1, chatSave, chatUser2);
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
+		modelAndView.setViewName("/backoffice/chatDashboard/create.html");		
 
 		for (Role role : userAuth.getRoles()) {
 
@@ -296,7 +240,6 @@ public class ChatController {
 			}
 
 		}
-
 		return modelAndView;
 
 	}
@@ -304,64 +247,21 @@ public class ChatController {
 	@PostMapping("/chatUpdate/{id}")
 	public ModelAndView updateChat(ModelMap model, Authentication auth, String message,
 			@RequestParam(value = "attachment", required = false) MultipartFile attachment,
-			@PathVariable("id") String id) throws IOException {
-
-		Chat chatUpdate = new Chat();
-		Chat chatOld = new Chat();
+			@PathVariable("id") String id) throws BusinessException {
 
 		User userAuth = new User();
-		Message messageSave = new Message();
-		Set<Message> messageList = new HashSet<Message>();
 		String username = auth.getName();
-		String nameuser = new String();
 
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
+			chatUserService.updateChat(userAuth, message, attachment, id);
 
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return new ModelAndView("/error/error.html");
 
 		}
-
-		nameuser = userAuth.getName() + " " + userAuth.getSurname();
-
-		try {
-			chatOld = chatUserService.getChat(id);
-
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
-		messageSave.setDate(LocalDateTime.now());
-		messageSave.setIdUser(userAuth.getId());
-		messageSave.setName(nameuser);
-		messageSave.setMessage(message);
-
-		if (attachment != null) {
-
-			if (!attachment.isEmpty()) {
-
-				byte[] bytes = new byte[(int) attachment.getSize()];
-				bytes = attachment.getBytes();
-				messageSave.setFile(bytes);
-			}
-
-		}
-
-		messageList = chatOld.getMessages();
-		messageList.add(messageSave);
-
-		chatUpdate.setChatType(chatOld.getChatType());
-		chatUpdate.setId(id);
-		chatUpdate.setMessages(messageList);
-
-		try {
-			chatUserService.saveUpdateChat(chatOld, chatUpdate);
-
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
+		
 
 		for (Role role : userAuth.getRoles()) {
 

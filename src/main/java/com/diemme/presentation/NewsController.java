@@ -2,12 +2,14 @@ package com.diemme.presentation;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -31,98 +33,96 @@ import com.diemme.domain.mysql.User;
 
 @Controller
 public class NewsController {
-	
-	@Autowired 
+
+	@Autowired
 	private NewsService serviceNews;
 	@Autowired
 	private UserService serviceUser;
 	@Autowired
-	private PageModel pageModel;	
-    private com.diemme.util.CompressionUtils CompressionUtils;
+	private PageModel pageModel;
 
-	
 	@GetMapping("/news")
-	public String listNewsShowcase (Model model) throws BusinessException{
-		List<NewsShowcase> news = serviceNews.findAllNewsShowcases();
+	public String listNews(Model model) throws BusinessException {
+		
+		List<NewsShowcase> news = new ArrayList<NewsShowcase>();
+		try {
+			news = serviceNews.findAllNewsShowcases();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return "/error/error.html";
+
+		}
 		model.addAttribute("news_showcase", news);
 		return "/frontoffice/news/news.html";
-		
+
 	}
-	
+
 	@SuppressWarnings("static-access")
 	@GetMapping("/newsGestione")
-	public String manageNewsShocases(Model model) throws BusinessException {
+	public String manageNews(Model model) throws BusinessException {
+		
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
-		Page<NewsShowcase> news = serviceNews.getAllNewsPageable(pageModel.getPAGE(),
-				pageModel.getSIZE());
+		Page<NewsShowcase> news = serviceNews.getAllNewsPageable(pageModel.getPAGE(), pageModel.getSIZE());
 		model.addAttribute("news_showcase", news);
 		pageModel.resetPAGE();
 		return "/backoffice/newsDashboard/manage.html";
 
 	}
-	
+
 	@GetMapping("/news/image/{id}")
 	@ResponseBody
-	public byte[] getImage (@PathVariable Long id) throws BusinessException{
+	public byte[] getImage(@PathVariable Long id) throws BusinessException {
 		
-		Optional<NewsShowcase> product = serviceNews.findNewsShowcase(id);
-		byte[] imageProduct = product.get().getContentImg();
+		Optional<NewsShowcase> news = Optional.empty();
+		try {
+			news = serviceNews.findNewsShowcase(id);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+
+		}
+		byte[] imageProduct = news.get().getContentImg();
 		return imageProduct;
 	}
-	
+
 	@GetMapping("/newsCrea")
-	public String createNewsShocases(Model model) throws BusinessException {
+	public String createNews(Model model) throws BusinessException {
+		
 		NewsShowcase newsShowcase = new NewsShowcase();
 		model.addAttribute("news_showcase", newsShowcase);
 		return "/backoffice/newsDashboard/create.html";
 	}
 
-	@SuppressWarnings("static-access")
 	@PostMapping("/newsCrea")
-	public ModelAndView create(@Valid @ModelAttribute("news_showcase") NewsShowcase news,
-			Errors errors, @RequestParam("contentImg") MultipartFile contentImg, Authentication auth)
-			throws BusinessException {
+	public ModelAndView createNews(@Valid @ModelAttribute("news_showcase") NewsShowcase news, Errors errors,
+			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
+		
 		User userAuth = new User();
 		ModelAndView modelAndView = new ModelAndView();
-		byte[] bytes = new byte[(int) contentImg.getSize()];
-		byte[] byteCompress = new byte[0];
-
-
-		try {
-			byteCompress = CompressionUtils.compress(bytes);
-			bytes = contentImg.getBytes();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		String username = auth.getName();
+
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
-		} catch (BusinessException e) {
+			serviceNews.createNews(news, contentImg, userAuth);
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return new ModelAndView("/error/error.html");
 
 		}
+
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/newsDashboard/create.html");
-		news.setContentImg(bytes);
-		news.setCompressImg(byteCompress);
-		news.setUser(userAuth);
-		try {
-			serviceNews.saveNews(news);
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
-
 		return modelAndView;
 	}
 
 	@PostMapping("/newsDelete/{id}")
-	public String deleteNewsShocases(@PathVariable(value = "id") Long id) throws BusinessException {
+	public String deleteNews(@PathVariable(value = "id") Long id) throws BusinessException {
+		
 		try {
 			serviceNews.deleteNews(id);
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		return "redirect:/newsGestione";
@@ -130,72 +130,34 @@ public class NewsController {
 	}
 
 	@GetMapping("/newsUpdate")
-	public String updateNewsShocases(Long id, Model model) throws BusinessException {
+	public String updateNews(Long id, Model model) throws BusinessException {
+		
 		NewsShowcase newsShowcase = new NewsShowcase();
 		try {
 			newsShowcase = serviceNews.getNews(id);
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		model.addAttribute("news_showcase_update", newsShowcase);
 		return "/backoffice/newsDashboard/update.html";
 	}
 
-	@SuppressWarnings({ "static-access"})
 	@PostMapping("/newsUpdate/{id}")
-	public String update(@PathVariable("id") Long id,
-			@Valid @ModelAttribute("news_showcase_update") NewsShowcase newsShowcase, Errors errors,
+	public String updateNews(@PathVariable("id") Long id,
+			@Valid @ModelAttribute("news_showcase_update") NewsShowcase news, Errors errors,
 			@RequestParam("contentImg") MultipartFile contentImg, Authentication auth) throws BusinessException {
-		byte[] bytes = new byte[(int) contentImg.getSize()];
-		byte[] byteCompress = new byte[0];
-		NewsShowcase newsOld = new NewsShowcase();
-		NewsShowcase newsSave = new NewsShowcase();
+
 		User userAuth = new User();
-		
-		try {
-			newsOld = serviceNews.getNews(id);
-			
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
-		
-		ZonedDateTime dateCreation = newsOld.getInsertDate();
-
-		
-		if (contentImg.isEmpty()) {
-
-			newsShowcase.setContentImg(newsOld.getContentImg());
-			newsShowcase.setCompressImg(newsOld.getCompressImg());
-			newsShowcase.setModifyDate(ZonedDateTime.now());
-
-		} else {
-
-			try {
-				byteCompress = CompressionUtils.compress(bytes);
-				bytes = contentImg.getBytes();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			newsShowcase.setContentImg(bytes);
-			newsShowcase.setCompressImg(byteCompress);
-		}
 		String username = auth.getName();
 
 		try {
 			userAuth = serviceUser.findUserByUserName(username);
-		} catch (BusinessException e) {
+			serviceNews.updateNews(id, news, contentImg, userAuth);
+		} catch (DataAccessException e) {
 			e.printStackTrace();
-
-		}
-		newsShowcase.setUser(userAuth);
-		try {
-			newsSave = serviceNews.saveNews(newsShowcase);
-			newsSave.setInsertDate(dateCreation);
-			serviceNews.saveNews(newsSave);
-		} catch (BusinessException e) {
-			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 

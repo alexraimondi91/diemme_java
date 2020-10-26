@@ -1,5 +1,6 @@
 package com.diemme.business.impl;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.diemme.business.BusinessException;
 import com.diemme.business.QuotationService;
 import com.diemme.domain.mysql.QuotationShowcase;
 import com.diemme.domain.mysql.TechnologyShowcase;
+import com.diemme.domain.mysql.User;
 import com.diemme.repository.mysql.QuotationShowcaseRepository;
 
 @Service
@@ -42,6 +44,27 @@ public class QuotationServiceImpl implements QuotationService{
 	public  QuotationShowcase saveQuotation (QuotationShowcase quotation) throws BusinessException{
 		
         return quotationShowcaseRepository.save(quotation);
+    }
+	
+	@Override
+	public  void createQuotation (QuotationShowcase quotation, User userAuth) throws BusinessException{
+		
+		quotation.setUser(userAuth);
+		quotationShowcaseRepository.save(quotation);
+		
+    }
+	
+	@Override
+	public  void updateQuotation (Long id, QuotationShowcase quotation, User userAuth) throws BusinessException{
+		QuotationShowcase quotationOld = new QuotationShowcase();
+
+		quotationOld = quotationShowcaseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("QuotationShowcase", "id", id));
+		ZonedDateTime dateCreation = quotationOld.getInsertDate();		
+		quotation.setUser(userAuth);
+		quotation.setInsertDate(dateCreation);
+		quotation.setModifyDate(ZonedDateTime.now());
+		quotationShowcaseRepository.save(quotation);
+		
     }
 	
 	@Override

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -44,9 +45,16 @@ public class ContactController {
 	private PageModel pageModel;
 
 	@GetMapping("/contatti")
-	public String listContactsShowcases(Model model) throws BusinessException {
+	public String listContacts(Model model) throws BusinessException {
+		
+		ContactShowcase contactActive = new ContactShowcase();
+		try {
+			contactActive = serviceContact.findActiveContac();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return "/error/error.html";
 
-		ContactShowcase contactActive = serviceContact.findActiveContac();		
+		}
 		model.addAttribute("contact", new Contact());
 		model.addAttribute("contacts", contactActive);
 		return "/frontoffice/contatti/contatti.html";
@@ -55,173 +63,80 @@ public class ContactController {
 
 	@SuppressWarnings("static-access")
 	@GetMapping("/contattiGestione")
-	public String manageContactShocases(Model model) throws BusinessException {
+	public String manageContacts(Model model) throws BusinessException {
+		
 		pageModel.setSIZE(5);
 		pageModel.initPageAndSize();
 		Page<ContactShowcase> contacts = serviceContact.getAllContactPageable(pageModel.getPAGE(), pageModel.getSIZE());
-
 		model.addAttribute("cont", contacts);
 		return "/backoffice/contactDashboard/manage.html";
 
 	}
 
 	@GetMapping("/contattiCrea")
-	public String createProductShocases(Model model) throws BusinessException {
+	public String createContact(Model model) throws BusinessException {
+		
 		ContactShowcase contactShowcase = new ContactShowcase();
 		model.addAttribute("contact_showcase", contactShowcase);
 		return "/backoffice/contactDashboard/create.html";
 	}
 
 	@PostMapping("/contattiCrea")
-	public ModelAndView create(@Valid @ModelAttribute("contact_showcase") ContactShowcase contact, Errors errors,
+	public ModelAndView createContact(@Valid @ModelAttribute("contact_showcase") ContactShowcase contact, Errors errors,
 			Authentication auth) throws BusinessException {
+		
 		User userAuth = new User();
-		ContactShowcase contactShowcaseActive = new ContactShowcase();
 		ModelAndView modelAndView = new ModelAndView();
 		String username = auth.getName();
 		try {
+			
 			userAuth = serviceUser.findUserByUserName(username);
-		} catch (BusinessException e) {
+			serviceContact.createContact(contact, userAuth);
+			
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return new ModelAndView("/error/error.html");
+
 
 		}
 
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
 		modelAndView.setViewName("/backoffice/contactDashboard/create.html");
-		
-		if (contact.getActive()) {
-
-			if (serviceContact.findActiveContac() != null) {
-
-				try {
-					contactShowcaseActive = serviceContact.findActiveContac();
-					contactShowcaseActive.setActive(false);
-					serviceContact.saveContactShowcase(contactShowcaseActive);
-					contact.setActive(true);
-					contact.setUser(userAuth);
-					serviceContact.saveContactShowcase(contact);
-
-				} catch (BusinessException e) {
-					e.printStackTrace();
-
-				}
-
-			} else {
-
-				contact.setUser(userAuth);
-				contact.setActive(true);
-
-				try {
-					serviceContact.saveContactShowcase(contact);
-				} catch (BusinessException e) {
-					e.printStackTrace();
-
-				}
-
-			}
-
-		} else if (!contact.getActive()) {
-
-			contact.setUser(userAuth);
-			try {
-				serviceContact.saveContactShowcase(contact);
-			} catch (BusinessException e) {
-				e.printStackTrace();
-
-			}
-
-		}
-
 		return modelAndView;
 	}
-	
+
 	@GetMapping("/contattiUpdate")
 	public String updateContactShocases(Long id, Model model) throws BusinessException {
+		
 		ContactShowcase contactShowcase = new ContactShowcase();
-
 		try {
 			contactShowcase = serviceContact.findContactShowcase(id);
 
-		} catch (BusinessException e) {
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		model.addAttribute("contact_showcase_update", contactShowcase);
-
 		return "/backoffice/contactDashboard/update.html";
 	}
-	
+
 	@PostMapping("/contattiUpdate/{id}")
 	public String update(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("contact_showcase_update") ContactShowcase contactShowcase, Errors errors,
-			 Authentication auth) throws BusinessException {
+			Authentication auth) throws BusinessException {
+		
 		User userAuth = new User();
-		ContactShowcase contactShowcaseActive = new ContactShowcase();
-		ContactShowcase contactOld = new ContactShowcase();
-
 		String username = auth.getName();
-		try {
-			userAuth = serviceUser.findUserByUserName(username);
-		} catch (BusinessException e) {
-			e.printStackTrace();
-
-		}
 		
 		try {
-			contactOld = serviceContact.findContactShowcase(id);
 			
-		} catch (BusinessException e) {
+			userAuth = serviceUser.findUserByUserName(username);
+			serviceContact.updateContact(id,contactShowcase, userAuth);
+			
+		} catch (DataAccessException e) {
 			e.printStackTrace();
-
-		}
-		
-		ZonedDateTime dateCreation = contactOld.getInsertDate();
-		
-		if (contactShowcase.getActive()) {
-
-			if (serviceContact.findActiveContac() != null) {
-
-				try {
-					contactShowcaseActive = serviceContact.findActiveContac();
-					contactShowcaseActive.setActive(false);
-					serviceContact.saveContactShowcase(contactShowcaseActive);
-					contactShowcase.setActive(true);
-					contactShowcase.setUser(userAuth);
-					contactShowcase.setInsertDate(dateCreation);
-					serviceContact.saveContactShowcase(contactShowcase);
-
-				} catch (BusinessException e) {
-					e.printStackTrace();
-
-				}
-
-			} else {
-
-				contactShowcase.setUser(userAuth);
-				contactShowcase.setActive(true);
-				contactShowcase.setInsertDate(dateCreation);
-
-
-				try {
-					serviceContact.saveContactShowcase(contactShowcase);
-				} catch (BusinessException e) {
-					e.printStackTrace();
-
-				}
-
-			}
-
-		} else if (!contactShowcase.getActive()) {
-
-			contactShowcase.setUser(userAuth);
-			contactShowcase.setInsertDate(dateCreation);
-
-			try {
-				serviceContact.saveContactShowcase(contactShowcase);
-			} catch (BusinessException e) {
-				e.printStackTrace();
-
-			}
+			return "/error/error.html";
 
 		}
 
@@ -230,10 +145,14 @@ public class ContactController {
 
 	@PostMapping("/contattiDelete/{id}")
 	public String deleteProductShocases(@PathVariable(value = "id") Long id) throws BusinessException {
+		
 		try {
+			
 			serviceContact.deleteContactShowcase(id);
-		} catch (BusinessException e) {
+			
+		} catch (DataAccessException e) {
 			e.printStackTrace();
+			return "/error/error.html";
 
 		}
 		return "redirect:/contattiGestione";
@@ -243,6 +162,7 @@ public class ContactController {
 	@PostMapping("/sendEmail")
 	public String sendEmail(@Valid @ModelAttribute("contact") Contact contact, BindingResult result,
 			RedirectAttributes redirectAttributes) throws BusinessException {
+		
 		String from = contact.getEmail();
 		String object = contact.getObject();
 		String body = contact.getText();

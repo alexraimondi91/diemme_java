@@ -18,7 +18,6 @@ class ChatHTML5 {
         $.ajax({
             url: this.path,
             success: function (data) {
-                console.log(data);
                 this.cardFooter = new cardFooter(outputRef).get();
                 this.section = document.getElementById("chatHTML5");
                 this.cardTitle = new cardTitle("Chat").get();
@@ -236,7 +235,16 @@ function updateCardBody(path, Auth, asset) {
             cardBody.lastChild.remove();
             let M = new messages(data, Auth, asset).get();
             cardBody.appendChild(M);
-        }
+        },
+	    error: function (richiesta, stato, errori) {
+	        var check = document.getElementById("myModal");
+	        if (check)
+	            document.getElementById("myModal").remove();
+	        var warning = new modalWarning();
+	        this.section = document.getElementById("chatHTML5");
+	        this.section.appendChild(warning.get());
+	        $("#myModal").modal('show');
+    }
     });
 }
 
@@ -281,8 +289,8 @@ function validator() {
         return false;
     }
 
-    if (file.value.length > 4096) {
-        let avviso1 = new avviso("File d'immagine troppo grande! Inserire inferiore ai 4 MB");
+    if (filePath.length > 100) {
+        let avviso1 = new avviso("File immagine troppa lunga!");
         section.appendChild(avviso1.get());
         $("#send").modal('show');
         file.value = "";
