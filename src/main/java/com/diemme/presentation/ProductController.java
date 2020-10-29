@@ -1,5 +1,6 @@
 package com.diemme.presentation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +71,7 @@ public class ProductController {
 
 	@GetMapping("/prodotti/image/{id}")
 	@ResponseBody
-	public byte[] getImage(@PathVariable Long id) throws BusinessException {
+	public byte[] getImage(@PathVariable Long id) throws BusinessException, IOException {
 
 		Optional<ProductShowcase> product = Optional.empty();
 		try {

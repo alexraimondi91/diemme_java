@@ -1,5 +1,6 @@
 package com.diemme.presentation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class TechnologyController {
 
 	@GetMapping("/tecnologie/image/{id}")
 	@ResponseBody
-	public byte[] getImage(@PathVariable Long id) throws BusinessException {
+	public byte[] getImage(@PathVariable Long id) throws BusinessException, IOException {
 
 		TechnologyShowcase product = new TechnologyShowcase();
 

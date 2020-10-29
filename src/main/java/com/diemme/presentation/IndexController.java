@@ -1,5 +1,6 @@
 package com.diemme.presentation;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class IndexController {
 
 	@GetMapping("/showcase/{id}")
 	@ResponseBody
-	public byte[] listNewsShowcases(@PathVariable Long id, Model model) throws BusinessException {
+	public byte[] listNewsShowcases(@PathVariable Long id, Model model) throws BusinessException, IOException {
 		
 		Optional<NewsShowcase> showcase = Optional.empty();
 		
