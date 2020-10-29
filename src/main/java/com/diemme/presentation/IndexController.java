@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,15 @@ public class IndexController {
 	@GetMapping("/showcase/{id}")
 	@ResponseBody
 	public byte[] listNewsShowcases(@PathVariable Long id, Model model) throws BusinessException {
-		Optional<NewsShowcase> showcase = service.findNewsShowcase(id);
+		
+		Optional<NewsShowcase> showcase = Optional.empty();
+		
+		try {
+		showcase = service.findNewsShowcase(id);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+
+		}
 		byte[] byteImage = showcase.get().getContentImg();
 		return byteImage;
 

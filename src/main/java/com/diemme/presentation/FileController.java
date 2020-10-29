@@ -1,5 +1,6 @@
 package com.diemme.presentation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,8 +65,15 @@ public class FileController {
 
 	@GetMapping("/layout/image/{id}")
 	@ResponseBody
-	public byte[] getImage(@PathVariable Long id) throws BusinessException {
-		FileLayout file = fileService.getFileLayout(id);
+	public byte[] getImage(@PathVariable Long id) throws BusinessException, IOException {
+		FileLayout file = new FileLayout();
+		try {
+		file = fileService.getFileLayout(id);
+		
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+
+		}
 		byte[] imageFile = file.getContentImg();
 		return imageFile;
 	}
