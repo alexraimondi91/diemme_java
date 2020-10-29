@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,6 @@ public class CreateUsers implements CommandLineRunner {
 
 	@Autowired
 	private UserRepository userRepository;
-
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -45,8 +45,15 @@ public class CreateUsers implements CommandLineRunner {
 			userAdmin.setRoles(roleListUser1Test);
 			userAdmin.setUserName("alexraimondi91@gmail.com");
 
-			roleRepository.save(roleAdmin);
-			userRepository.save(userAdmin);
+			try {
+
+				roleRepository.save(roleAdmin);
+				userRepository.save(userAdmin);
+
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+				System.out.println("\n\n l'utente alexraimondi91@gmail.com non è stato creato!");
+			}
 
 		}
 
@@ -70,9 +77,17 @@ public class CreateUsers implements CommandLineRunner {
 			userClient.setAddressShipment("via ciao ciao");
 			userClient.setRoles(roleListUser2Test);
 			userClient.setUserName("ale_1994@gmail.com");
+			
+			try {
 
 			roleRepository.save(roleClient);
 			userRepository.save(userClient);
+			
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+				System.out.println("\n\n l'utente ale_1994@gmail.com non è stato creato!");
+			}
+
 		}
 
 		if (userRepository.findByEmail("a.raimondi@gunpowder.eu") == null) {
@@ -98,9 +113,16 @@ public class CreateUsers implements CommandLineRunner {
 			userDesigner.setFiscalCode("RMNLXA91A14E058I");
 			userDesigner.setPIva("12345678");
 			userDesigner.setCompanyName("Diemme S.R.L.");
+			
+			try {
 
 			roleRepository.save(roleDesigner);
 			userRepository.save(userDesigner);
+			
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+				System.out.println("\n\n l'utente a.raimondi@gunpowder.eu non è stato creato!");
+			}
 
 		}
 
@@ -125,21 +147,18 @@ public class CreateUsers implements CommandLineRunner {
 			userProductor.setFiscalCode("RMNLXA91A14E058I");
 			userProductor.setPIva("12345678");
 			userProductor.setCompanyName("Maglietta Factory S.R.C.");
+			
+			try {
 
 			roleRepository.save(roleProductor);
 			userRepository.save(userProductor);
+			
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+				System.out.println("\n\n l'utente alex@alex.it non è stato creato!");
+			}
 
 		}
-
-		/*
-		 * ChatType chatType = new ChatType(); Chat chat = new Chat(); Message message =
-		 * new Message(); Set<Message> messages = new HashSet<Message>();
-		 * 
-		 * chatType.setName("user/client"); chatTypeRepository.save(chatType);
-		 * message.setDate(LocalDateTime.now()); message.setMessage("prova");
-		 * messages.add(message); chat.setChatType(chatType);
-		 * chat.setMessages(messages); chatRepository.save(chat);
-		 */
 
 	}
 

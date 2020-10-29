@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.diemme.domain.mysql.FileLayout;
-import com.diemme.domain.mysql.Layout;
-import com.diemme.domain.mysql.NewsShowcase;
+
 
 public interface FileLayoutService {
 	

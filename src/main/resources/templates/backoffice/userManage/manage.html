@@ -45,8 +45,6 @@
 											<th>user name</th>
 											<th>email</th>
 											<th>attivo</th>
-											<th>codice fiscale</th>
-											<th>indirizzo di spedizione</th>
 											<th>partita iva</th>
 											<th>nome compagnia</th>
 
@@ -67,11 +65,8 @@
 
 											<td th:utext="${user.email}"></td>
 											<td th:text="${user.active ? 'X' : ''}" VALIGN=Middle
-												Align=Center style="color: red"></td>
-											<td
-												th:utext="${user.fiscalCode != null ? user.fiscalCode : ''}"></td>
-											<td
-												th:utext="${user.addressShipment != null ? user.addressShipment : ''}"></td>
+												Align=Center style="color: red"></td>											
+										
 											<td th:utext="${user.pIva != null ? user.pIva : ''}"></td>
 											<td
 												th:utext="${user.companyName != null ? user.companyName : ''}"></td>

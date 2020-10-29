@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.diemme.domain.mysql.ProductShowcase;
-import com.diemme.domain.mysql.TechnologyShowcase;
 import com.diemme.domain.mysql.User;
 
 
