@@ -95,13 +95,11 @@ public class CreateUsers implements CommandLineRunner {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 			Role roleDesigner = new Role();
-			Role roleAdmin = roleRepository.findByRole("ADMIN");
 			User userDesigner = new User();
 
 			roleDesigner.setRole("DESIGNER");
 			Set<Role> roleListUser3Test = new HashSet<Role>();
 			roleListUser3Test.add(roleDesigner);
-			roleListUser3Test.add(roleAdmin);
 
 			userDesigner.setActive(true);
 			userDesigner.setEmail("a.raimondi@gunpowder.eu");
