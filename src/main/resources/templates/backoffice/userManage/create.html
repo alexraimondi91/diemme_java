@@ -116,11 +116,7 @@
 									<label
 										th:if="${#fields.hasErrors('addressShipment')}"
 										th:errors="*{addressShipment}" class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-address-card"></span>
-										</div>
-									</div>
+									
 									<input type="text" th:field="*{addressShipment}"
 										placeholder="address shipment" class="form-control" /> 
 								</div>

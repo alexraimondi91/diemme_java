@@ -41,7 +41,7 @@
 								</div>
 							</div>
 							<div class="card-body">								
-								<div class="form-group  @error('title') has-error @enderror">
+								<div class="input-group mb-3  @error('title') has-error @enderror">
 									<label for="inputName">Completato</label> <input required
 										th:field="*{completed}" type="checkbox" id="inputName" th:value="${layout.completed}"
 										class="form-check-input">

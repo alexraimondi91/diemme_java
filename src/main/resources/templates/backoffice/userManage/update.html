@@ -24,8 +24,9 @@
 		</section>
 		<!-- Main content -->
 		<section class="content">
-			<form method="POST" action="" th:action="@{'/utenteUpdate/{id}'(id=${userUpdate.id})}"
-				th:object="${userUpdate}" id="myForm" >
+			<form method="POST" action=""
+				th:action="@{'/utenteUpdate/{id}'(id=${userUpdate.id})}"
+				th:object="${userUpdate}" id="myForm">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card card-primary">
@@ -41,108 +42,109 @@
 							</div>
 							<div class="card-body">
 
-								<div class="form-group">
+								<div class="input-group mb-3">
 									<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-										class="validation-message"></label> <input type="text"
-										th:field="*{name}" th:value="${userUpdate.name}" 
-										placeholder="Name" class="form-control" />
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-user"></span>
-										</div>
-
-									</div>
-								</div>
-								<div class="form-group">
-									<label th:if="${#fields.hasErrors('surname')}"
-										th:errors="*{surname}" class="validation-message"></label> <input
-										type="text" th:field="*{surname}" th:value="${userUpdate.surname}"
-										placeholder="Last Name"
-										class="form-control" />
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-user"></span>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<input type="text" th:field="*{email}" 
-									th:value="${userUpdate.email}"placeholder="Email"
-										class="form-control" /> <label 
-										th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
 										class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-id-card"></span>
-										</div>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-user-edit"></i></span>
 									</div>
+									<input type="text" th:field="*{name}"
+										th:value="${userUpdate.name}" placeholder="Name"
+										class="form-control" />
 								</div>
-								<div class="form-group">
-									<input type="text" th:field="*{userName}" th:value="${userUpdate.userName}"
-										placeholder="User Name" class="form-control" /> <label
-										th:if="${#fields.hasErrors('userName')}"
-										th:errors="*{userName}" class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-address-card"></span>
-										</div>
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('surname')}"
+										th:errors="*{surname}" class="validation-message"></label>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-user-edit"></i></span>
 									</div>
+									<input type="text" th:field="*{surname}"
+										th:value="${userUpdate.surname}" placeholder="Last Name"
+										class="form-control" />
+								</div>
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('email')}"
+										th:errors="*{email}" class="validation-message"></label>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-user-edit"></i></span>
+									</div>
+									<input type="text" th:field="*{email}"
+										th:value="${userUpdate.email}" placeholder="Email"
+										class="form-control" />
+								</div>
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('userName')}"
+										th:errors="*{userName}" class="validation-message"></label>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
+									</div>
+									<input type="text" th:field="*{userName}"
+										th:value="${userUpdate.userName}" placeholder="User Name"
+										class="form-control" />
 								</div>
 
-								<div class="form-group">
-									<input type="text" th:field="*{fiscalCode}" th:value="${userUpdate.fiscalCode}"
-										placeholder="fiscal code" class="form-control" /> <label
-										th:if="${#fields.hasErrors('fiscalCode')}"
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('fiscalCode')}"
 										th:errors="*{fiscalCode}" class="validation-message"></label>
-									<div class="input-group-append">
-										<div class="input-group-text">
-											<span class="fas fa-address-card"></span>
-										</div>
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
 									</div>
+									<input type="text" th:field="*{fiscalCode}"
+										th:value="${userUpdate.fiscalCode}" placeholder="fiscal code"
+										class="form-control" />
 								</div>
-								
+
 								<div class="form-group  @error('title') has-error @enderror">
-								    <label for="inputName">Ruolo</label>
-									<select th:field="*{roles}" >
+									<label for="inputName">Ruolo</label> <select
+										th:field="*{roles}">
 										<option th:each="role : ${roles}" th:value="${role.id}"
 											th:utext="${role.role}" />
 									</select>
 								</div>
 
-								<div class="form-group">
-									<input type="text" th:field="*{addressShipment}" th:value="${userUpdate.addressShipment}"
-										placeholder="address shipment" class="form-control" /> <label
-										th:if="${#fields.hasErrors('addressShipment')}"
+								<div class="input-group mb-3">
+									<label th:if="${#fields.hasErrors('addressShipment')}"
 										th:errors="*{addressShipment}" class="validation-message"></label>
 									<div class="input-group-append">
 										<div class="input-group-text">
 											<span class="fas fa-address-card"></span>
 										</div>
 									</div>
+									<input type="text" th:field="*{addressShipment}"
+										th:value="${userUpdate.addressShipment}"
+										placeholder="address shipment" class="form-control" />
 								</div>
-								
-								<div class="form-group">
-									<input type="text" th:field="*{pIva}" th:value="${userUpdate.pIva}"
-										placeholder="Partita iva" class="form-control" /> 
+
+								<div class="input-group mb-3">
 									<div class="input-group-append">
 										<div class="input-group-text">
+											<span class="fas fa-address-card"></span>
 										</div>
 									</div>
+									<input type="text" th:field="*{pIva}"
+										th:value="${userUpdate.pIva}" placeholder="Partita iva"
+										class="form-control" />
 								</div>
-								
-								<div class="form-group">
-									<input type="text" th:field="*{companyName}" th:value="${userUpdate.companyName}"
-										placeholder="Nome compagnia" class="form-control" /> 
+								<div class="input-group mb-3">
 									<div class="input-group-append">
 										<div class="input-group-text">
+											<span class="fas fa-address-card"></span>
 										</div>
 									</div>
+									<input type="text" th:field="*{companyName}"
+										th:value="${userUpdate.companyName}"
+										placeholder="Nome compagnia" class="form-control" />
 								</div>
-								
-								<div class="form-group  @error('title') has-error @enderror">
+
+								<div class="input-group mb-3  @error('title') has-error @enderror">
 									<label for="inputName">Attivato</label> <input required
-										th:field="*{active}" type="checkbox" id="inputName" th:value="${userUpdate.active}"
-										class="form-check-input">
+										th:field="*{active}" type="checkbox" id="inputName"
+										th:value="${userUpdate.active}" class="form-check-input">
 								</div>
 
 
