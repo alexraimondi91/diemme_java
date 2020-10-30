@@ -149,7 +149,7 @@ public class LayoutController {
 
 		modelAndView.addObject("userClient", userClient);
 		modelAndView.addObject("successMessage", "l'oggetto è stato creato!");
-		modelAndView.setViewName("/backoffice/layoutDashboard/create.html");
+		modelAndView.setViewName("redirect:/layoutGestione");
 		return modelAndView;
 	}
 
